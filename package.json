@@ -23,6 +23,9 @@
   "homepage": "https://github.com/brianwchou/Hangman#readme",
   "keywords": [],
   "description": "",
+  "devDependencies": {
+    "ganache-cli": "6.4.3"
+  },
   "dependencies": {
     "truffle": "^5.0.19",
     "truffle-assertions": "^0.9.0",

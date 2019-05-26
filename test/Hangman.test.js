@@ -14,6 +14,7 @@ contract('Hangman', async (accounts) => {
         snapShot = await helper.takeSnapshot();
         snapshotId = snapShot['result'];
     });
+
     afterEach(async() => {
         await helper.revertToSnapShot(snapshotId);
     });

@@ -1,0 +1,30 @@
+{
+  "name": "hangman",
+  "version": "1.0.0",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "truffle-migrate": "truffle migrate",
+    "truffle-compile": "truffle compile",
+    "truffle-test": "truffle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brianwchou/Hangman.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brianwchou/Hangman/issues"
+  },
+  "homepage": "https://github.com/brianwchou/Hangman#readme",
+  "keywords": [],
+  "description": "",
+  "dependencies": {
+    "truffle": "^5.0.19",
+    "truffle-assertions": "^0.9.0",
+    "web3": "^1.0.0-beta.37"
+  }
+}

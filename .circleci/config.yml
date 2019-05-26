@@ -2,7 +2,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: circleci/node:4.8.2-jessie
+      - image: circleci/node:8.16.0-jessie
     steps:
       - checkout
       - run:

@@ -31,4 +31,3 @@ workflows:
   smart_contract:
     jobs:
       - smart_contract:
-          context: Development

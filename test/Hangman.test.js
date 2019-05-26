@@ -62,6 +62,26 @@ contract('Hangman', async (accounts) => {
         });
     });
 
+    describe.only("Test make word guess", async () => {
+
+        it("Test that currentGuesses increases by 1", async () => {
+            let tx = await hangmanContract.makeWordGuess(web3.utils.fromAscii("world"));
+            truffleAssert.passes(tx, "Transaction failed");
+            var input = await hangmanContract.currentGuesses.call();
+            assert.equal(input.toNumber(), 1, `currentGuesses should be 1 not ${input.toNumber()}`);
+        });
+
+        it("Test correct word", async () => {
+            let tx = await hangmanContract.makeWordGuess(web3.utils.fromAscii("hello"));
+            truffleAssert.passes(tx, "Transaction failed");
+
+            // truffleAssert.eventEmitted(tx, 'Play', (ev) => {
+            //     return ev.player === bettingAccount && !ev.betNumber.eq(ev.winningNumber);
+            // });
+
+        });
+    });
+
 
     
     

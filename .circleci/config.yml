@@ -6,6 +6,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install
+          command: npm install
+      - run:
           name: Compile
           command: npm run truffle-compile
       - run:

@@ -16,7 +16,7 @@ jobs:
           command: npm run ganache > /dev/null & sleep 10 && npm run truffle-migrate
       - run:
           name: Test
-          command: npm run truffle-test
+          command: npm run ganache > /dev/null & sleep 10 && npm run truffle-test
 
 workflows:
   version: 2

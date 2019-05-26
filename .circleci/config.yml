@@ -1,33 +1,22 @@
-version: 2.1
-
-orbs:
-  slack: circleci/slack@0.1.1
-
-references:
-
-  container_config: &container_config
+version: 2
+jobs:
+  test:
     docker:
-      - image: circleci/node:10
-    working_directory: ~/repo
-
-  smart_contract: &smart_contract
-    <<: *container_config
+      - image: circleci/node:4.8.2-jessie
     steps:
       - checkout
       - run:
-          name: Migrations Test
-          command: |
-              npm run truffle-migrate
-      - run: 
-          name: Truffle Test
-          command: |
-            npm run truffle-test
-
-jobs:
-  smart_contract:
-    <<: *smart_contract
+          name: Compile
+          command: npm run truffle-compile
+      - run:
+          name: Migrate
+          command: npm run truffle-migrate
+      - run:
+          name: Test
+          command: npm run truffle-test
 
 workflows:
-  smart_contract:
+  version: 2
+  build_and_test:
     jobs:
-      - smart_contract:
+      - test

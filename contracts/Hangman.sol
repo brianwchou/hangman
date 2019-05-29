@@ -50,6 +50,7 @@ contract Hangman {
     function makeWordGuess(bytes calldata _string) external {
         require(currentGuesses < maxGuesses, "no more guesses available");
         require(playerInput < 2**(solution.length), "solution is found");
+        require(solution.length == _string.length, "invalid string length");
 
         currentGuesses += 1;
         for (uint i = 0; i < solution.length; i++) {

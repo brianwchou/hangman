@@ -14,6 +14,7 @@ contract('Hangman', async (accounts) => {
         snapShot = await helper.takeSnapshot();
         snapshotId = snapShot['result'];
     });
+
     afterEach(async() => {
         await helper.revertToSnapShot(snapshotId);
     });
@@ -59,6 +60,26 @@ contract('Hangman', async (accounts) => {
             truffleAssert.passes(tx, "Transaction failed");
             var input = await hangmanContract.playerInput.call();
             assert.equal(input.toNumber(), 12, "expected value is incorrect");
+        });
+    });
+
+    describe.only("Test make word guess", async () => {
+
+        it("Test that currentGuesses increases by 1", async () => {
+            let tx = await hangmanContract.makeWordGuess(web3.utils.fromAscii("world"));
+            truffleAssert.passes(tx, "Transaction failed");
+            var input = await hangmanContract.currentGuesses.call();
+            assert.equal(input.toNumber(), 1, `currentGuesses should be 1 not ${input.toNumber()}`);
+        });
+
+        it("Test correct word", async () => {
+            let tx = await hangmanContract.makeWordGuess(web3.utils.fromAscii("hello"));
+            truffleAssert.passes(tx, "Transaction failed");
+
+            // truffleAssert.eventEmitted(tx, 'Play', (ev) => {
+            //     return ev.player === bettingAccount && !ev.betNumber.eq(ev.winningNumber);
+            // });
+
         });
     });
 

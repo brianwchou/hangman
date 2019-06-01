@@ -105,15 +105,8 @@ contract('Hangman', async (accounts) => {
                 hangmanContract.makeCharGuess(web3.utils.fromAscii("l")),
                 "Transaction failed");
 
-            let usedCharacters = await hangmanContract.getUsedCharacters.call();
-            console.log(usedCharacters);
-        });
-
-        it("Test get myArray", async () => {
-            let usedCharacters = await hangmanContract.getMyArray.call();
+            let usedCharacters = await hangmanContract.getUsedCharacters.call(0);
             console.log(usedCharacters);
         });
     });
-    
-    
 });

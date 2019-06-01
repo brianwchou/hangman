@@ -65,4 +65,9 @@ contract Hangman {
     function getNumberOfCharacters() public view returns (uint) {
         return solution.length;
     }
+
+    function getCorrectlyGuessedCharacters() public view returns (bytes memory output) {
+        
+    }
+
 }

@@ -6,6 +6,9 @@ contract Hangman {
     uint public maxGuesses;
     uint public currentGuesses;
     uint public playerInput; // 256 bits
+    byte[] public usedLetters;
+
+
     //events
     event GameWin();
     event GameLose();

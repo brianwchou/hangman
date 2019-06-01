@@ -96,6 +96,23 @@ contract('Hangman', async (accounts) => {
               hangmanContract.makeCharGuess(web3.utils.fromAscii("e")),
               "character has aleady been guessed");
         });
+
+        it("Test get used characters", async () => {
+            await truffleAssert.passes(
+                hangmanContract.makeCharGuess(web3.utils.fromAscii("e")),
+                "Transaction failed");
+            await truffleAssert.passes(
+                hangmanContract.makeCharGuess(web3.utils.fromAscii("l")),
+                "Transaction failed");
+
+            let usedCharacters = await hangmanContract.getUsedCharacters.call();
+            console.log(usedCharacters);
+        });
+
+        it("Test get myArray", async () => {
+            let usedCharacters = await hangmanContract.getMyArray.call();
+            console.log(usedCharacters);
+        });
     });
     
     

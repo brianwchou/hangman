@@ -49,15 +49,17 @@ contract('Hangman', async (accounts) => {
     describe("Test make charcter guess", async () => {
 
         it("Test make chracter guess with e", async () => {
-            let tx = await hangmanContract.makeCharGuess(web3.utils.fromAscii("e"));
-            truffleAssert.passes(tx, "Transaction failed");
+            await truffleAssert.passes(
+              hangmanContract.makeCharGuess(web3.utils.fromAscii("e")),
+              "Transaction failed");
             var input = await hangmanContract.playerInput.call();
             assert.equal(input.toNumber(), 2, "expected value is incorrect");
         });
 
         it("Test make chracter guess with l", async () => {
-            let tx = await hangmanContract.makeCharGuess(web3.utils.fromAscii("l"));
-            truffleAssert.passes(tx, "Transaction failed");
+            await truffleAssert.passes(
+              hangmanContract.makeCharGuess(web3.utils.fromAscii("l")),
+              "Transaction failed");
             var input = await hangmanContract.playerInput.call();
             assert.equal(input.toNumber(), 12, "expected value is incorrect");
         });
@@ -66,15 +68,17 @@ contract('Hangman', async (accounts) => {
     describe.only("Test make word guess", async () => {
 
         it("Test that currentGuesses increases by 1", async () => {
-            let tx = await hangmanContract.makeWordGuess(web3.utils.fromAscii("world"));
-            truffleAssert.passes(tx, "Transaction failed");
+            await truffleAssert.passes(
+              hangmanContract.makeWordGuess(web3.utils.fromAscii("world")),
+              "Transaction failed");
             var input = await hangmanContract.currentGuesses.call();
             assert.equal(input.toNumber(), 1, `currentGuesses should be 1 not ${input.toNumber()}`);
         });
 
         it("Test correct word", async () => {
-            let tx = await hangmanContract.makeWordGuess(web3.utils.fromAscii("hello"));
-            truffleAssert.passes(tx, "Transaction failed");
+            await truffleAssert.passes(
+              hangmanContract.makeWordGuess(web3.utils.fromAscii("hello")),
+              "Transaction failed");
 
             // truffleAssert.eventEmitted(tx, 'Play', (ev) => {
             //     return ev.player === bettingAccount && !ev.betNumber.eq(ev.winningNumber);
@@ -83,7 +87,16 @@ contract('Hangman', async (accounts) => {
         });
     });
 
-
+    describe.only("Test used characters", async () => {
+        it("Test make duplicated character guess", async () => {
+            await truffleAssert.passes(
+              hangmanContract.makeCharGuess(web3.utils.fromAscii("e")),
+              "Transaction failed");
+            await truffleAssert.reverts(
+              hangmanContract.makeCharGuess(web3.utils.fromAscii("e")),
+              "character has aleady been guessed");
+        });
+    });
     
     
 });

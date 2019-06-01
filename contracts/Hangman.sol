@@ -25,6 +25,13 @@ contract Hangman {
         require(currentGuesses < maxGuesses, "no more guesses available");
         require(playerInput < 2**(solution.length), "solution is found"); // becareful of overflow
 
+        //go through and check if the character has already been guessed
+        for (uint i = 0; i < usedLetters.length; i++) {
+            require(usedLetters[i] != _character, "character has aleady been guessed");
+        }
+        //add the character if it hasn't been guessed
+        usedLetters.push(_character);
+
         currentGuesses += 1; // increment currentguesses by 1
 
         // uint check = 0; // check is the reverse representation of string inputs

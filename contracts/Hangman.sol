@@ -66,8 +66,23 @@ contract Hangman {
         return solution.length;
     }
 
-    function getCorrectlyGuessedCharacters() public view returns (bytes memory output) {
-        
+    function getCorrectlyGuessedCharacters() public view returns (bytes1[] memory) {
+        bytes1[] memory output = new bytes1[](solution.length);
+
+        for (uint i = 0; i < solution.length; i++) {
+            if (hasBitAtIndex(i)) {
+                output[i] = solution[i];
+            }
+        }
+
+        return output;
+    }
+
+    function hasBitAtIndex(uint i) private view returns (bool output) {
+        assembly {
+            // determine if bit is corerctly set or not n & (1 << (i - 1))
+            output := gt( and(sload(playerInput_slot) , shl( i , 1 )), 0)
+        }
     }
 
 }

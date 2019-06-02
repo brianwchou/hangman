@@ -63,7 +63,7 @@ contract('Hangman', async (accounts) => {
         });
     });
 
-    describe.only("Test make word guess", async () => {
+    describe("Test make word guess", async () => {
 
         it("Test that currentGuesses increases by 1", async () => {
             let tx = await hangmanContract.makeWordGuess(web3.utils.fromAscii("world"));
@@ -82,6 +82,15 @@ contract('Hangman', async (accounts) => {
 
         });
     });
+
+    describe.only('Test getCorrectlyGuessedCharacters', async () => {
+
+        it("Test ", async () => {
+            let tx = await hangmanContract.makeCharGuess(web3.utils.fromAscii("l"));
+            truffleAssert.passes(tx, "Transaction failed");
+            console.log(await hangmanContract.getCorrectlyGuessedCharacters());
+        })
+    }) 
 
 
     

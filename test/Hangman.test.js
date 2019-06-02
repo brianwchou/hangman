@@ -83,16 +83,16 @@ contract('Hangman', async (accounts) => {
         });
     });
 
-    describe.only('Test getCorrectlyGuessedCharacters', async () => {
+    describe('Test getCorrectlyGuessedCharacters', async () => {
 
-        it("Test ", async () => {
+        it("Test getCorrectlyGuessedCharacters retrives correctly when letter l is guessed", async () => {
             let tx = await hangmanContract.makeCharGuess(web3.utils.fromAscii("l"));
             truffleAssert.passes(tx, "Transaction failed");
-            console.log(await hangmanContract.getCorrectlyGuessedCharacters());
-        })
-    }) 
+            let guessedCharacters = await hangmanContract.getCorrectlyGuessedCharacters();
 
+            assert.equal(web3.utils.hexToAscii(guessedCharacters[2]), "l", `guessed character at index 2 is ${guessedCharacters[2]} and not l`);
+            assert.equal(web3.utils.hexToAscii(guessedCharacters[3]), "l", `guessed character at index 3 is ${guessedCharacters[3]} and not l`);
+        });
 
-    
-    
+    }); 
 });

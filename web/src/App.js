@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Game from './Game.js';
@@ -10,6 +10,7 @@ function App() {
 
   const [provider, setProvider] = useState();
   const [selectedAddress, setSelectedAddress] = useState();
+  const hangmanContext = useContext(HangmanContext);
 
   useEffect(() => {
     if (typeof window.ethereum !== 'undefined'
@@ -22,9 +23,10 @@ function App() {
   }, []);
 
   function startGame() {
+    console.log(hangmanContext);
     try{
       if(selectedAddress == undefined) {
-        console.log("Detected no selected address, asking for login")
+        console.log("No selected address, asking for login")
         window.ethereum.enable();
         setSelectedAddress(window.ethereum.selectedAddress);
       } else {

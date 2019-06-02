@@ -8,7 +8,6 @@ contract Hangman {
     uint public playerInput; // 256 bits
     bytes1[] public usedCharacters;
 
-
     //events
     event GameWin();
     event GameLose();

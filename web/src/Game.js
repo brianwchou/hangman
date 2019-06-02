@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function Game() {
 
+  const [hangmanString, setHangmanString] = useState("");
+
   return (
     <div>
+     { hangmanString }
+      <br />
       <input
           type = "text"
           name = "character"

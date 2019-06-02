@@ -6,6 +6,8 @@ contract Hangman {
     uint public maxGuesses;
     uint public currentGuesses;
     uint public playerInput; // 256 bits
+    bytes1[] public usedCharacters;
+
     //events
     event GameWin();
     event GameLose();
@@ -18,9 +20,24 @@ contract Hangman {
         currentGuesses = 0;
     }
 
+    function getUsedCharacters() external view returns (bytes1[] memory) {
+        bytes1[] memory characters = new bytes1[](usedCharacters.length);
+        for(uint i = 0; i < usedCharacters.length; i++) {
+            characters[i] = usedCharacters[i];
+        }
+        return characters;
+    }
+
     function makeCharGuess(byte _character) external {
         require(currentGuesses < maxGuesses, "no more guesses available");
         require(playerInput < 2**(solution.length), "solution is found"); // becareful of overflow
+
+        //go through and check if the character has already been guessed
+        for (uint i = 0; i < usedCharacters.length; i++) {
+            require(usedCharacters[i] != _character, "character has aleady been guessed");
+        }
+        //add the character if it hasn't been guessed
+        usedCharacters.push(_character);
 
         currentGuesses += 1; // increment currentguesses by 1
 
@@ -62,7 +79,7 @@ contract Hangman {
         emit GameWin();
     }
 
-    function getNumberOfCharacters() public view returns (uint) {
+    function getNumberOfCharacters() external view returns (uint) {
         return solution.length;
     }
 
@@ -74,7 +91,6 @@ contract Hangman {
                 output[i] = solution[i];
             }
         }
-
         return output;
     }
 

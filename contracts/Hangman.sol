@@ -91,7 +91,6 @@ contract Hangman {
                 output[i] = solution[i];
             }
         }
-
         return output;
     }
 

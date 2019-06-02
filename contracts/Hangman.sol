@@ -20,7 +20,7 @@ contract Hangman {
         currentGuesses = 0;
     }
 
-    function getUsedCharacters() view external returns (bytes1[] memory) {
+    function getUsedCharacters() external view returns (bytes1[] memory) {
         bytes1[] memory returnObj = new bytes1[](usedCharacters.length);
         for(uint i = 0; i < usedCharacters.length; i++) {
             returnObj[i] = usedCharacters[i];
@@ -79,7 +79,7 @@ contract Hangman {
         emit GameWin();
     }
 
-    function getNumberOfCharacters() public view returns (uint) {
+    function getNumberOfCharacters() external view returns (uint) {
         return solution.length;
     }
 

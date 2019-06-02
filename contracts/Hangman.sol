@@ -21,11 +21,11 @@ contract Hangman {
     }
 
     function getUsedCharacters() external view returns (bytes1[] memory) {
-        bytes1[] memory returnObj = new bytes1[](usedCharacters.length);
+        bytes1[] memory characters = new bytes1[](usedCharacters.length);
         for(uint i = 0; i < usedCharacters.length; i++) {
-            returnObj[i] = usedCharacters[i];
+            characters[i] = usedCharacters[i];
         }
-        return returnObj;
+        return characters;
     }
 
     function makeCharGuess(byte _character) external {

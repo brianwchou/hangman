@@ -65,7 +65,7 @@ contract('Hangman', async (accounts) => {
         });
     });
 
-    describe.only("Test make word guess", async () => {
+    describe("Test make word guess", async () => {
 
         it("Test that currentGuesses increases by 1", async () => {
             await truffleAssert.passes(
@@ -109,5 +109,20 @@ contract('Hangman', async (accounts) => {
             assert.equal(web3.utils.hexToAscii(usedCharacters[0]), "e", "expected value not matched")
             assert.equal(web3.utils.hexToAscii(usedCharacters[1]), "l", "expected value not matched")
         });
+
     });
+
+    describe('Test getCorrectlyGuessedCharacters', async () => {
+
+        it("Test getCorrectlyGuessedCharacters retrives correctly when letter l is guessed", async () => {
+            let tx = await hangmanContract.makeCharGuess(web3.utils.fromAscii("l"));
+            truffleAssert.passes(tx, "Transaction failed");
+            let guessedCharacters = await hangmanContract.getCorrectlyGuessedCharacters();
+
+            assert.equal(web3.utils.hexToAscii(guessedCharacters[2]), "l", `guessed character at index 2 is ${guessedCharacters[2]} and not l`);
+            assert.equal(web3.utils.hexToAscii(guessedCharacters[3]), "l", `guessed character at index 3 is ${guessedCharacters[3]} and not l`);
+        });
+
+    }); 
+});
 });

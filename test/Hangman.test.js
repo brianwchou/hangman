@@ -105,11 +105,11 @@ contract('Hangman', async (accounts) => {
             truffleAssert.passes(tx, "Transaction failed");
             let guessedCharacters = await hangmanContract.getCorrectlyGuessedCharacters();
 
-            assert.equal(web3.utils.hexToAscii(guessedCharacters[0]), "\0", `guessed character at index 0 is ${guessedCharacters[0]} and not h`);
-            assert.equal(web3.utils.hexToAscii(guessedCharacters[1]), "\0", `guessed character at index 1 is ${guessedCharacters[1]} and not e`);
+            assert.equal(web3.utils.hexToAscii(guessedCharacters[0]), "\0", `guessed character at index 0 is ${guessedCharacters[0]} and not null`);
+            assert.equal(web3.utils.hexToAscii(guessedCharacters[1]), "\0", `guessed character at index 1 is ${guessedCharacters[1]} and not null`);
             assert.equal(web3.utils.hexToAscii(guessedCharacters[2]), "l", `guessed character at index 2 is ${guessedCharacters[2]} and not l`);
             assert.equal(web3.utils.hexToAscii(guessedCharacters[3]), "l", `guessed character at index 3 is ${guessedCharacters[3]} and not l`);
-            assert.equal(web3.utils.hexToAscii(guessedCharacters[4]), "\0", `guessed character at index 3 is ${guessedCharacters[4]} and not o`);
+            assert.equal(web3.utils.hexToAscii(guessedCharacters[4]), "\0", `guessed character at index 3 is ${guessedCharacters[4]} and not null`);
         });
     }); 
 });

@@ -6,7 +6,7 @@ contract Hangman {
     uint public maxGuesses;
     uint public currentGuesses;
     uint public playerInput; // 256 bits
-    byte[] public usedCharacters;
+    bytes1[] public usedCharacters;
 
 
     //events
@@ -21,8 +21,12 @@ contract Hangman {
         currentGuesses = 0;
     }
 
-    function getUsedCharacters() external view returns (byte[] memory) {
-        return usedCharacters;
+    function getUsedCharacters() view external returns (bytes1[] memory) {
+        bytes1[] memory returnObj = new bytes1[](usedCharacters.length);
+        for(uint i = 0; i < usedCharacters.length; i++) {
+            returnObj[i] = usedCharacters[i];
+        }
+        return returnObj;
     }
 
     function makeCharGuess(byte _character) external {

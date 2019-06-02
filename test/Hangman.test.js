@@ -105,8 +105,9 @@ contract('Hangman', async (accounts) => {
                 hangmanContract.makeCharGuess(web3.utils.fromAscii("l")),
                 "Transaction failed");
 
-            let usedCharacters = await hangmanContract.getUsedCharacters.call(0);
-            console.log(usedCharacters);
+            let usedCharacters = await hangmanContract.getUsedCharacters.call();
+            assert.equal(web3.utils.hexToAscii(usedCharacters[0]), "e", "expected value not matched")
+            assert.equal(web3.utils.hexToAscii(usedCharacters[1]), "l", "expected value not matched")
         });
     });
 });

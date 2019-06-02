@@ -20,34 +20,28 @@ contract('Hangman', async (accounts) => {
     });
 
     describe("check initial state of contract", async () => {
-        
         it("check player address", async () => {
             let playerAddress = await hangmanContract.playerAddress.call();
-
             assert.equal(playerAddress, accounts[0], "playerAddress dont match");
         });
         
         it("check maxGuesses", async () => {
             let maxGuesses = await hangmanContract.maxGuesses.call();
-
             assert.equal(maxGuesses.toNumber(), 5, "maxGuesses dont match");
         });
 
         it("check currentGuesses", async () => {
             let currentGuesses = await hangmanContract.currentGuesses.call();
-
             assert.equal(currentGuesses.toNumber(), 0, "currentGuesses dont match");
         });
 
         it("check playerInput", async () => {
             let playerInput = await hangmanContract.playerInput.call();
-
             assert.equal(playerInput.toNumber(), 0, "playerInput dont match");
         });
     });
 
     describe("Test make charcter guess", async () => {
-
         it("Test make chracter guess with e", async () => {
             await truffleAssert.passes(
               hangmanContract.makeCharGuess(web3.utils.fromAscii("e")),
@@ -66,7 +60,6 @@ contract('Hangman', async (accounts) => {
     });
 
     describe("Test make word guess", async () => {
-
         it("Test that currentGuesses increases by 1", async () => {
             await truffleAssert.passes(
               hangmanContract.makeWordGuess(web3.utils.fromAscii("world")),
@@ -79,11 +72,6 @@ contract('Hangman', async (accounts) => {
             await truffleAssert.passes(
               hangmanContract.makeWordGuess(web3.utils.fromAscii("hello")),
               "Transaction failed");
-
-            // truffleAssert.eventEmitted(tx, 'Play', (ev) => {
-            //     return ev.player === bettingAccount && !ev.betNumber.eq(ev.winningNumber);
-            // });
-
         });
     });
 

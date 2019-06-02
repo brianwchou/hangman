@@ -8,21 +8,18 @@ const HangmanContext = React.createContext("gamestate");
 
 function App() {
 
-  const [provider, setProvider] = useState(null);
+  const [provider, setProvider] = useState();
 
   useEffect(() => {
     if (typeof window.ethereum !== 'undefined'
       || (typeof window.web3 !== 'undefined')) {
-        console.log(window.ethereum)
-        console.log(window.web3)
-        console.log(window.ethereum.selectedAddress);
-        // Web3 browser user detected. You can now use the provider.
-        let provider = window['ethereum'] || window.web3.currentProvider
-        provider = new ethers.providers.Web3Provider(provider);
-        console.log(provider);
-        setProvider(provider)
+      // Web3 browser user detected. You can now use the provider.
+      let provider = window['ethereum'] || window.web3.currentProvider
+      provider = new ethers.providers.Web3Provider(provider);
+      console.log(window.ethereum.selectedAddress);
+      setProvider(provider)
     }
-  }, provider);
+  }, []);
 
   return (
     <HangmanContext.Provider>

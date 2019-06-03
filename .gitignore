@@ -3,3 +3,4 @@
 package-lock.json
 *.swp
 *.orig
+web/src/

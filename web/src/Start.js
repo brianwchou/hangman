@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { EthersContext } from './EthersContext.js';
 import { ethers } from 'ethers';
+import HangmanContract from './contracts/Hangman.json';
 
 function Start() {
   const [ethersContext, setEthersContext] = useContext(EthersContext);
@@ -35,6 +36,11 @@ function Start() {
       } else {
         console.log("Selected Address is: " + selectedAddress);
       }
+
+      //deploy the contract here
+      let factory = new ethersContext.ContractFactory(HangmanContract.abi, HangmanContract.bytecode);
+      console.log(factory);
+      
     } catch (error) {
       console.log(error.reason === "User rejected provider access")
     }

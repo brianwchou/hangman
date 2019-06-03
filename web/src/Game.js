@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { EthersContext } from './EthersContext.js';
 
-export default function Game() {
+function Game() {
 
+  const [ethersContext, setEthersContext] = useContext(EthersContext);
   const [hangmanString, setHangmanString] = useState("");
+
+  function test() {
+    console.log(ethersContext);
+  }
 
   return (
     <div>
@@ -13,7 +19,7 @@ export default function Game() {
           name = "character"
           placeholder = "character"
       />&nbsp;
-      <button type="button">Guess Character</button>
+      <button type="button" onClick={ test }>Guess Character</button>
       <br />
 
       <input
@@ -21,9 +27,10 @@ export default function Game() {
           name = "character"
           placeholder = "word"
       />&nbsp;
-      <button type="button">Guess Word</button>
+      <button type="button" onClick={ test }>Guess Word</button>
       <br />
     </div>
   );
 }
 
+export default Game;

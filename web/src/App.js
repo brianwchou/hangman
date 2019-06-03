@@ -12,6 +12,12 @@ function App() {
   const [selectedAddress, setSelectedAddress] = useState();
   const hangmanContext = useContext(HangmanContext);
 
+  window.ethereum.on('accountsChanged', function (accounts) {
+    if(selectedAddress !== undefined) {
+      setSelectedAddress(accounts[0])
+    }
+  })
+
   useEffect(() => {
     if (typeof window.ethereum !== 'undefined'
       || (typeof window.web3 !== 'undefined')) {
@@ -29,7 +35,7 @@ function App() {
         console.log("No selected address, requesting log in")
         let account = await window.ethereum.enable();
         console.log("Selected Address is: " + account[0])
-        await setSelectedAddress(account[0]);
+        setSelectedAddress(account[0]);
       } else {
         console.log("Selected Address is: " + selectedAddress);
       }
@@ -41,6 +47,8 @@ function App() {
   return (
     <HangmanContext.Provider>
       <div>
+        Current Address: { selectedAddress }
+        <br />
         <button type="button" onClick={ startGame }>Start Game</button>
         <Game/>
       </div>

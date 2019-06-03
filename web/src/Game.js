@@ -12,7 +12,7 @@ export default function Game() {
           type = "text"
           name = "character"
           placeholder = "character"
-      />
+      />&nbsp;
       <button type="button">Guess Character</button>
       <br />
 
@@ -20,7 +20,7 @@ export default function Game() {
           type = "text"
           name = "character"
           placeholder = "word"
-      />
+      />&nbsp;
       <button type="button">Guess Word</button>
       <br />
     </div>

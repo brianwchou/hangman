@@ -22,15 +22,16 @@ function App() {
     }
   }, []);
 
-  function startGame() {
+  async function startGame() {
     console.log(hangmanContext);
     try{
-      if(selectedAddress == undefined) {
-        console.log("No selected address, asking for login")
-        window.ethereum.enable();
-        setSelectedAddress(window.ethereum.selectedAddress);
+      if(selectedAddress === undefined) {
+        console.log("No selected address, requesting log in")
+        let account = await window.ethereum.enable();
+        console.log("Selected Address is: " + account[0])
+        await setSelectedAddress(account[0]);
       } else {
-        console.log(selectedAddress);
+        console.log("Selected Address is: " + selectedAddress);
       }
     } catch (error) {
       console.log(error.reason === "User rejected provider access")

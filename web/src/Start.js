@@ -38,10 +38,14 @@ function Start() {
       }
 
       //deploy the contract here
+      let signer = ethersContext.getSigner(0);
+      console.log("output");
+      console.log("signer: " + signer);
       let factory = new ethersContext.ContractFactory(HangmanContract.abi, HangmanContract.bytecode);
-      console.log(factory);
+      console.log("factory: " + factory);
       
     } catch (error) {
+      console.log(error);
       console.log(error.reason === "User rejected provider access")
     }
   }

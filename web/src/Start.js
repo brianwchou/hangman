@@ -48,7 +48,6 @@ function Start() {
       setEthersContext(state => ({ ...ethersContext, contract: contract}));
     } catch (error) {
       console.log(error);
-      console.log(error.reason === "User rejected provider access")
     }
   }
 

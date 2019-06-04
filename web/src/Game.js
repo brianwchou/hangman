@@ -102,6 +102,7 @@ function Game() {
       />&nbsp;
       <button type="button" onClick={ guessWord }>Guess Word</button>
       <br />
+      <br />
 
       <GuessCounter 
         numerator={ currentGuesses }

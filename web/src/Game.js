@@ -8,7 +8,7 @@ function Game() {
 
   async function guessChar() {
     console.log(ethersContext.contract);
-    let guess = window.web3.toHex("h");
+    let guess = window.web3.fromAscii("h");
     let tx = await ethersContext.contract.makeCharGuess(guess);
     console.log(tx);
     await tx.wait();
@@ -16,7 +16,7 @@ function Game() {
 
   async function guessWord() {
     console.log(ethersContext.contract);
-    let guess = window.web3.toHex("h");
+    let guess = window.web3.fromAscii("h");
     let tx = await ethersContext.contract.makeWordGuess(guess);
     console.log(tx);
     await tx.wait();

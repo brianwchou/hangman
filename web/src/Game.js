@@ -64,6 +64,20 @@ function Game() {
     updateGuessCounter();
   }
 
+  function GuessCounter(props) {
+    if (props.numerator === 0 && props.denominator === 0) {
+      return null;
+    } else if (props.numerator !== 0 && props.numerator === props.denominator) {
+      return (<div>Game Over</div>);
+    } else {
+      return (
+        <div>
+        { props.numerator } of { props.denominator } guesses left
+        </div>
+      );
+    }
+  }
+
   return (
     <div>
      { hangmanString }
@@ -88,7 +102,11 @@ function Game() {
       />&nbsp;
       <button type="button" onClick={ guessWord }>Guess Word</button>
       <br />
-      { currentGuesses } / { maxGuesses } guesses left
+
+      <GuessCounter 
+        numerator={ currentGuesses }
+        denominator={ maxGuesses }
+      />
     </div>
   );
 }

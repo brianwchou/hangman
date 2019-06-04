@@ -20,7 +20,8 @@ function Start() {
       || (typeof window.web3 !== 'undefined')) {
       // Web3 browser user detected. You can now use the provider.
       let provider = window['ethereum'] || window.web3.currentProvider
-      provider = new ethers.providers.Web3Provider(provider);
+      //NOTE: must wrap window.etherm to get provider, not window.web3
+      provider = new ethers.providers.Web3Provider(window.ethereum);
       setEthersContext(state => ({ ...ethersContext, provider }));
     }
   }, []);
@@ -38,12 +39,9 @@ function Start() {
       }
 
       //deploy the contract here
-      let signer = ethersContext.getSigner(0);
-      console.log("output");
-      console.log("signer: " + signer);
-      let factory = new ethersContext.ContractFactory(HangmanContract.abi, HangmanContract.bytecode);
-      console.log("factory: " + factory);
-      
+      const signer = ethersContext.provider.getSigner();
+      let factory = new ethers.ContractFactory(HangmanContract.abi, HangmanContract.bytecode, signer);
+      let contract = await factory.deploy("hello", 10);
     } catch (error) {
       console.log(error);
       console.log(error.reason === "User rejected provider access")

@@ -10,6 +10,18 @@ function Game() {
   const [currentGuesses, setCurrentGuesses] = useState(0);
   const [maxGuesses, setMaxGuesses] = useState(0);
 
+  function clearInputs() {
+    setCharGuess("");
+    setWordGuess("");
+  }
+
+  async function updateGuessCounter() {
+    let numerator = await ethersContext.contract.currentGuesses();
+    setCurrentGuesses(numerator.toNumber());
+    let denominator = await ethersContext.contract.maxGuesses();
+    setMaxGuesses(denominator.toNumber());
+  }
+
   async function guessChar() {
     if(ethersContext.contract === undefined) {
       console.log("no contract deployed");
@@ -29,10 +41,8 @@ function Game() {
     console.log(tx);
     await tx.wait();
 
-    let numerator = await ethersContext.contract.currentGuesses();
-    setCurrentGuesses(numerator.toNumber());
-    let denominator = await ethersContext.contract.maxGuesses();
-    setMaxGuesses(denominator.toNumber());
+    clearInputs();
+    updateGuessCounter();
   }
 
   async function guessWord() {
@@ -50,10 +60,8 @@ function Game() {
     console.log(tx);
     await tx.wait();
 
-    let numerator = await ethersContext.contract.currentGuesses();
-    setCurrentGuesses(numerator.toNumber());
-    let denominator = await ethersContext.contract.maxGuesses();
-    setMaxGuesses(denominator.toNumber());
+    clearInputs();
+    updateGuessCounter();
   }
 
   return (
@@ -64,6 +72,7 @@ function Game() {
           type = "text"
           name = "character"
           placeholder = "character"
+          value = { charGuess }
           maxLength="1"
           onChange={ e => setCharGuess(e.target.value) }
       />&nbsp;
@@ -73,7 +82,8 @@ function Game() {
       <input
           type = "text"
           name = "character"
-          placeholder = "word"
+          placeholder = { (wordGuess === "")? "word": wordGuess }
+          value = { wordGuess }
           onChange={ e => setWordGuess(e.target.value) }
       />&nbsp;
       <button type="button" onClick={ guessWord }>Guess Word</button>

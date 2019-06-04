@@ -87,26 +87,26 @@ function Game() {
           name = "character"
           placeholder = "character"
           value = { charGuess }
-          maxLength="1"
-          onChange={ e => setCharGuess(e.target.value) }
+          maxLength = "1"
+          onChange = { e => setCharGuess(e.target.value) }
       />&nbsp;
       <button type="button" onClick={ guessChar }>Guess Character</button>
       <br />
 
       <input
           type = "text"
-          name = "character"
-          placeholder = { (wordGuess === "")? "word": wordGuess }
+          name = "word"
+          placeholder = "word"
           value = { wordGuess }
-          onChange={ e => setWordGuess(e.target.value) }
+          onChange = { e => setWordGuess(e.target.value) }
       />&nbsp;
       <button type="button" onClick={ guessWord }>Guess Word</button>
       <br />
       <br />
 
       <GuessCounter 
-        numerator={ currentGuesses }
-        denominator={ maxGuesses }
+        numerator = { currentGuesses }
+        denominator = { maxGuesses }
       />
     </div>
   );

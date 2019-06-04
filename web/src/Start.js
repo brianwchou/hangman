@@ -18,6 +18,7 @@ function Start() {
   useEffect(() => {
     if (typeof window.ethereum !== 'undefined'
       || (typeof window.web3 !== 'undefined')) {
+      console.log(window.web3.version);
       // Web3 browser user detected. You can now use the provider.
       let provider = window['ethereum'] || window.web3.currentProvider
       //NOTE: must wrap window.etherm to get provider, not window.web3
@@ -41,7 +42,9 @@ function Start() {
       //deploy the contract here
       const signer = ethersContext.provider.getSigner();
       let factory = new ethers.ContractFactory(HangmanContract.abi, HangmanContract.bytecode, signer);
-      let contract = await factory.deploy("hello", 10);
+      //can I do hex with ethers? or do I need to use web 0.20?
+      let hex = window.web3.toHex("hello");
+      let contract = await factory.deploy(hex, 10);
     } catch (error) {
       console.log(error);
       console.log(error.reason === "User rejected provider access")

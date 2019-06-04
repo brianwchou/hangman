@@ -7,6 +7,10 @@ function Game() {
   const [hangmanString, setHangmanString] = useState("");
 
   async function guessChar() {
+    if(ethersContext.contract === undefined) {
+      console.log("no contract deployed");
+      return;
+    }
     console.log(ethersContext.contract);
     let guess = window.web3.fromAscii("h");
     console.log(guess);
@@ -17,6 +21,10 @@ function Game() {
   }
 
   async function guessWord() {
+    if(ethersContext.contract === undefined) {
+      console.log("no contract deployed");
+      return;
+    }
     console.log(ethersContext.contract);
     let guess = window.web3.fromAscii("hel");
     console.log(guess);

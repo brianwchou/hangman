@@ -9,14 +9,17 @@ function Game() {
   async function guessChar() {
     console.log(ethersContext.contract);
     let guess = window.web3.fromAscii("h");
+    console.log(guess);
     let tx = await ethersContext.contract.makeCharGuess(guess);
     console.log(tx);
     await tx.wait();
+
   }
 
   async function guessWord() {
     console.log(ethersContext.contract);
-    let guess = window.web3.fromAscii("h");
+    let guess = window.web3.fromAscii("hel");
+    console.log(guess);
     let tx = await ethersContext.contract.makeWordGuess(guess);
     console.log(tx);
     await tx.wait();

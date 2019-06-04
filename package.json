@@ -29,6 +29,6 @@
   "dependencies": {
     "truffle": "^5.0.19",
     "truffle-assertions": "^0.9.0",
-    "web3": "^1.0.0-beta.37"
+    "web3": "^0.20.7"
   }
 }

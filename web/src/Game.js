@@ -10,6 +10,11 @@ function Game() {
   const [currentGuesses, setCurrentGuesses] = useState(0);
   const [maxGuesses, setMaxGuesses] = useState(0);
 
+  // Similar to componentDidMount and componentDidUpdate
+  useEffect(() => {
+    updateGuessCounter();
+  }, []);
+
   function clearInputs() {
     setCharGuess("");
     setWordGuess("");

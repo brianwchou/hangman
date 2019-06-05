@@ -9,6 +9,7 @@ function Game() {
   const [wordGuess, setWordGuess] = useState("");
   const [currentGuesses, setCurrentGuesses] = useState(0);
   const [maxGuesses, setMaxGuesses] = useState(0);
+  const [usedChars, setUsedChars] = useState([]);
 
   // Similar to componentDidMount and componentDidUpdate
   useEffect(() => {
@@ -25,6 +26,7 @@ function Game() {
     clearInputs();
     updateGuessCounter();
     updateVisibleChars();
+    updateUsedChars();
   }
 
   async function updateGuessCounter() {
@@ -53,6 +55,25 @@ function Game() {
     setHangmanString(result);
   }
 
+  async function updateUsedChars() {
+    let hexChars = await ethersContext.contract.getUsedCharacters();
+    console.log(hexChars);
+
+    //convert hex representation to char representation
+    let result = []
+    hexChars.forEach((hex) => {
+      console.log(hex);
+      if(hex !== "0x00") {
+        result.push(window.web3.toAscii(hex));
+      } else {
+        result.push("_");
+      }
+    })
+    console.log(result);
+    result = result.join(" ");
+    setUsedChars(result);
+  }
+
   async function guessChar() {
     if(ethersContext.contract === undefined) {
       console.log("no contract deployed");
@@ -71,7 +92,6 @@ function Game() {
     let tx = await ethersContext.contract.makeCharGuess(guess);
     console.log(tx);
     await tx.wait();
-
     handlePostActions();
   }
 
@@ -89,7 +109,6 @@ function Game() {
     let tx = await ethersContext.contract.makeWordGuess(guess);
     console.log(tx);
     await tx.wait();
-
     handlePostActions();
   }
 
@@ -105,6 +124,16 @@ function Game() {
         </div>
       );
     }
+  }
+
+  function UsedChars(props) {
+    return (
+      <div>
+      Used Characters:
+      <br />
+      [{ props.chars }]
+      </div>
+    );
   }
 
   return (
@@ -137,6 +166,9 @@ function Game() {
         numerator = { currentGuesses }
         denominator = { maxGuesses }
       />
+
+      <br />
+      <UsedChars chars = { usedChars }/>
     </div>
   );
 }

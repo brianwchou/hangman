@@ -10,9 +10,21 @@ function Game() {
   const [currentGuesses, setCurrentGuesses] = useState(0);
   const [maxGuesses, setMaxGuesses] = useState(0);
 
+  // Similar to componentDidMount and componentDidUpdate
+  useEffect(() => {
+    updateVisibleChars();
+    updateGuessCounter();
+  }, []);
+
   function clearInputs() {
     setCharGuess("");
     setWordGuess("");
+  }
+
+  async function handlePostActions() {
+    clearInputs();
+    updateGuessCounter();
+    updateVisibleChars();
   }
 
   async function updateGuessCounter() {
@@ -20,6 +32,25 @@ function Game() {
     setCurrentGuesses(numerator.toNumber());
     let denominator = await ethersContext.contract.maxGuesses();
     setMaxGuesses(denominator.toNumber());
+  }
+
+  async function updateVisibleChars() {
+    let hexChars = await ethersContext.contract.getCorrectlyGuessedCharacters();
+    console.log(hexChars);
+
+    //convert hex representation to char representation
+    let result = []
+    hexChars.forEach((hex) => {
+      console.log(hex);
+      if(hex !== "0x00") {
+        result.push(window.web3.toAscii(hex));
+      } else {
+        result.push("_");
+      }
+    })
+    console.log(result);
+    result = result.join(" ");
+    setHangmanString(result);
   }
 
   async function guessChar() {
@@ -41,8 +72,7 @@ function Game() {
     console.log(tx);
     await tx.wait();
 
-    clearInputs();
-    updateGuessCounter();
+    handlePostActions();
   }
 
   async function guessWord() {
@@ -60,8 +90,7 @@ function Game() {
     console.log(tx);
     await tx.wait();
 
-    clearInputs();
-    updateGuessCounter();
+    handlePostActions();
   }
 
   function GuessCounter(props) {

@@ -39,13 +39,19 @@ contract Hangman {
         //add the character if it hasn't been guessed
         usedCharacters.push(_character);
 
-        currentGuesses += 1; // increment currentguesses by 1
 
+        uint playerInputCheckpoint = playerInput;
         // uint check = 0; // check is the reverse representation of string inputs
         for (uint i = 0; i < solution.length; i++) {
             if (solution[i] == _character) {
+                //if they got a character correct
                 playerInput = computeGuess(i);
             }
+        }
+
+        //if player input is unchanged then the guess is marked against them
+        if (playerInputCheckpoint == playerInput) {
+            currentGuesses += 1; 
         }
 
         if (playerInput == 2**(solution.length) - 1) { //if input is ever greater then playerInput is always invalid
@@ -68,10 +74,9 @@ contract Hangman {
         require(currentGuesses < maxGuesses, "no more guesses available");
         require(playerInput < 2**(solution.length), "solution is found");
 
-        currentGuesses += 1;
-
         //compare the strings
         if(keccak256(abi.encodePacked(solution)) != keccak256(abi.encodePacked(_string))) {
+            currentGuesses += 1;
             emit TurnTaken();
             return;
         }

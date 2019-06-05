@@ -23,7 +23,7 @@ function Game() {
 
   ethersContext.contract.on('GameLose', () => {
     console.log("Game Lose");
-    setWinState(0)
+    setWinState(-1)
   });
 
 
@@ -130,21 +130,23 @@ function Game() {
     if (props.numerator === 0 && props.denominator === 0) {
       //if num and denom are 0 then we haven't loaded, don't show anything
       return null;
-    } else if (props.numerator !== 0 && props.numerator === props.denominator) {
-      if(winState > 0) {
-        return (<div>Game Won!</div>);
-      } else if(winState < 0) {
-        return (<div>Game Lost</div>);
-      } else {
-        return null
-      }
     } else {
       return (
         <div>
         { props.numerator } of { props.denominator } misses left
         </div>
       );
-    }
+    } 
+  }
+
+  function WinState() {
+      if(winState > 0) {
+        return (<div>Game Won!</div>);
+      } else if(winState < 0) {
+        return (<div>Game Lost</div>);
+      } else {
+        return null;
+      }
   }
 
   function UsedChars(props) {
@@ -190,6 +192,8 @@ function Game() {
 
       <br />
       <UsedChars chars = { usedChars }/>
+      <br />
+      <WinState/>
     </div>
   );
 }

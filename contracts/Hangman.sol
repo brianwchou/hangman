@@ -32,6 +32,8 @@ contract Hangman {
         require(currentMisses < maxAllowedMisses, "no more guesses available");
         require(playerInput < 2**(solution.length), "solution is found"); // becareful of overflow
 
+        emit TurnTaken();
+
         //go through and check if the character has already been guessed
         for (uint i = 0; i < usedCharacters.length; i++) {
             require(usedCharacters[i] != _character, "character has aleady been guessed");
@@ -58,8 +60,6 @@ contract Hangman {
             emit GameWin();
         } else if (currentMisses >= maxAllowedMisses) {
             emit GameLose();
-        } else {
-            emit TurnTaken();
         }
     }
 
@@ -74,10 +74,14 @@ contract Hangman {
         require(currentMisses < maxAllowedMisses, "no more guesses available");
         require(playerInput < 2**(solution.length), "solution is found");
 
+        emit TurnTaken();
+
         //compare the strings
         if(keccak256(abi.encodePacked(solution)) != keccak256(abi.encodePacked(_string))) {
             currentMisses += 1;
-            emit TurnTaken();
+            if (currentMisses >= maxAllowedMisses) {
+                emit GameLose();
+            }
             return;
         }
         emit GameWin();

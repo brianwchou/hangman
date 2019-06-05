@@ -12,17 +12,20 @@ function Game() {
   const [usedChars, setUsedChars] = useState([]);
   const [winState, setWinState] = useState(0); //-1 is lose, +1 is win
 
+  ethersContext.contract.on('TurnTaken', () => {
+    console.log("Turn Taken");
+  });
+
   ethersContext.contract.on('GameWin', () => {
+    console.log("Game Win");
     setWinState(1)
   });
 
   ethersContext.contract.on('GameLose', () => {
+    console.log("Game Lose");
     setWinState(0)
   });
 
-  ethersContext.contract.on('TurnTaken', () => {
-    console.log("Turn Taken");
-  });
 
   // Similar to componentDidMount and componentDidUpdate
   useEffect(() => {
@@ -128,8 +131,13 @@ function Game() {
       //if num and denom are 0 then we haven't loaded, don't show anything
       return null;
     } else if (props.numerator !== 0 && props.numerator === props.denominator) {
-      //if the num and denom are the same the game is over and we need to indicate a win or lose
-      return (<div>Game Over</div>);
+      if(winState > 0) {
+        return (<div>Game Won!</div>);
+      } else if(winState < 0) {
+        return (<div>Game Lost</div>);
+      } else {
+        return null
+      }
     } else {
       return (
         <div>

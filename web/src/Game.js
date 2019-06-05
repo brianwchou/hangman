@@ -7,8 +7,8 @@ function Game() {
   const [hangmanString, setHangmanString] = useState("");
   const [charGuess, setCharGuess] = useState("");
   const [wordGuess, setWordGuess] = useState("");
-  const [currentGuesses, setCurrentGuesses] = useState(0);
-  const [maxGuesses, setMaxGuesses] = useState(0);
+  const [currentMisses, setCurrentMisses] = useState(0);
+  const [maxMisses, setMaxMisses] = useState(0);
   const [usedChars, setUsedChars] = useState([]);
   const [winState, setWinState] = useState(0); //-1 is lose, +1 is win
 
@@ -43,10 +43,10 @@ function Game() {
   }
 
   async function updateGuessCounter() {
-    let numerator = await ethersContext.contract.currentGuesses();
-    setCurrentGuesses(numerator.toNumber());
-    let denominator = await ethersContext.contract.maxGuesses();
-    setMaxGuesses(denominator.toNumber());
+    let numerator = await ethersContext.contract.currentMisses();
+    setCurrentMisses(numerator.toNumber());
+    let denominator = await ethersContext.contract.maxAllowedMisses();
+    setMaxMisses(denominator.toNumber());
   }
 
   async function updateVisibleChars() {
@@ -133,7 +133,7 @@ function Game() {
     } else {
       return (
         <div>
-        { props.numerator } of { props.denominator } guesses left
+        { props.numerator } of { props.denominator } misses left
         </div>
       );
     }
@@ -176,8 +176,8 @@ function Game() {
       <br />
 
       <GuessCounter 
-        numerator = { currentGuesses }
-        denominator = { maxGuesses }
+        numerator = { currentMisses }
+        denominator = { maxMisses }
       />
 
       <br />

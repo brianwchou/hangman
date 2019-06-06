@@ -9,7 +9,10 @@
     "truffle-migrate": "truffle migrate",
     "truffle-compile": "truffle compile",
     "truffle-test": "truffle test",
-    "ganache": "ganache-cli -d"
+    "ganache": "ganache-cli -d",
+    "web:start": "cd ./web && npm start",
+    "web:test": "cd ./web && npm test",
+    "clean": "rm -r ./web/src/contracts"
   },
   "repository": {
     "type": "git",

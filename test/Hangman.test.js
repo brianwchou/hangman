@@ -117,8 +117,22 @@ contract('Hangman', async (accounts) => {
             await truffleAssert.eventEmitted(tx, 'TurnTaken');
         });
 
-        //TEST when game ends in win state
-        //TEST when game ends in lose state
+        it("Test make character game lose", async () => {
+            await hangmanContract.makeCharGuess(web3.fromAscii("a"));
+            await hangmanContract.makeCharGuess(web3.fromAscii("b"));
+            await hangmanContract.makeCharGuess(web3.fromAscii("c"));
+            await hangmanContract.makeCharGuess(web3.fromAscii("d"));
+            let tx = await hangmanContract.makeCharGuess(web3.fromAscii("f"));
+            await truffleAssert.eventEmitted(tx, 'GameLose');
+        });
+
+        it("Test make character game win", async () => {
+            await hangmanContract.makeCharGuess(web3.fromAscii("h"));
+            await hangmanContract.makeCharGuess(web3.fromAscii("e"));
+            await hangmanContract.makeCharGuess(web3.fromAscii("l"));
+            let tx = await hangmanContract.makeCharGuess(web3.fromAscii("o"));
+            await truffleAssert.eventEmitted(tx, 'GameWin');
+        });
     });
 
     describe("Test make word guess", async () => {

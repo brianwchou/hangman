@@ -64,6 +64,22 @@ contract('Hangman', async (accounts) => {
             var input = await hangmanContract.playerInput.call();
             assert.equal(input.toNumber(), 12, "expected value is incorrect");
         });
+
+        it("Test make chracter guess example 3", async () => {
+            await truffleAssert.passes(
+              hangmanContract.makeCharGuess(web3.fromAscii("h")),
+              "Transaction failed");
+            var input = await hangmanContract.playerInput.call();
+            assert.equal(input.toNumber(), 1, "expected value is incorrect");
+        });
+
+        it("Test make chracter guess example o", async () => {
+            await truffleAssert.passes(
+              hangmanContract.makeCharGuess(web3.fromAscii("o")),
+              "Transaction failed");
+            var input = await hangmanContract.playerInput.call();
+            assert.equal(input.toNumber(), 16, "expected value is incorrect");
+        });
     });
 
     describe("Test make character guess", async () => {

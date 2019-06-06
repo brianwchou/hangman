@@ -26,14 +26,14 @@ contract('Hangman', async (accounts) => {
             assert.equal(playerAddress, accounts[0], "playerAddress dont match");
         });
         
-        it("check maxGuesses", async () => {
-            let maxGuesses = await hangmanContract.maxGuesses.call();
-            assert.equal(maxGuesses.toNumber(), 5, "maxGuesses dont match");
+        it("check maxAllowedMisses", async () => {
+            let maxAllowedMisses = await hangmanContract.maxAllowedMisses.call();
+            assert.equal(maxAllowedMisses.toNumber(), 5, "maxAllowedMisses dont match");
         });
 
-        it("check currentGuesses", async () => {
-            let currentGuesses = await hangmanContract.currentGuesses.call();
-            assert.equal(currentGuesses.toNumber(), 0, "currentGuesses dont match");
+        it("check currentMisses", async () => {
+            let currentMisses = await hangmanContract.currentMisses.call();
+            assert.equal(currentMisses.toNumber(), 0, "currentMisses dont match");
         });
 
         it("check playerInput", async () => {
@@ -61,12 +61,12 @@ contract('Hangman', async (accounts) => {
     });
 
     describe("Test make word guess", async () => {
-        it("Test that currentGuesses increases by 1", async () => {
+        it("Test that currentMisses increases by 1", async () => {
             await truffleAssert.passes(
               hangmanContract.makeWordGuess(web3.fromAscii("world")),
               "Transaction failed");
-            var input = await hangmanContract.currentGuesses.call();
-            assert.equal(input.toNumber(), 1, `currentGuesses should be 1 not ${input.toNumber()}`);
+            var input = await hangmanContract.currentMisses.call();
+            assert.equal(input.toNumber(), 1, `currentMisses should be 1 not ${input.toNumber()}`);
         });
 
         it("Test correct word", async () => {

@@ -44,7 +44,7 @@ function Start() {
       let factory = new ethers.ContractFactory(HangmanContract.abi, HangmanContract.bytecode, signer);
       //can I do hex with ethers? or do I need to use web 0.20?
       let hex = window.web3.fromAscii("hello");
-      let contract = await factory.deploy(hex, 10);
+      let contract = await factory.deploy(hex, 2);
       setEthersContext(state => ({ ...ethersContext, contract: contract}));
     } catch (error) {
       console.log(error);

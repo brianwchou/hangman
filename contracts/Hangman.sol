@@ -3,8 +3,8 @@ pragma solidity ^0.5.0;
 contract Hangman {
     address public playerAddress; // public gets an automatic getter
     bytes private solution;
-    uint public maxGuesses;
-    uint public currentGuesses;
+    uint public maxAllowedMisses;
+    uint public currentMisses;
     uint public playerInput; // 256 bits
     bytes1[] public usedCharacters;
 
@@ -13,11 +13,11 @@ contract Hangman {
     event GameLose();
     event TurnTaken();
 
-    constructor(bytes memory _solution, uint _maxGuesses) public {
+    constructor(bytes memory _solution, uint _maxAllowedMisses) public {
         playerAddress = msg.sender;
         solution = _solution;
-        maxGuesses = _maxGuesses;
-        currentGuesses = 0;
+        maxAllowedMisses = _maxAllowedMisses;
+        currentMisses = 0;
     }
 
     function getUsedCharacters() external view returns (bytes1[] memory) {
@@ -29,8 +29,10 @@ contract Hangman {
     }
 
     function makeCharGuess(byte _character) external {
-        require(currentGuesses < maxGuesses, "no more guesses available");
+        require(currentMisses < maxAllowedMisses, "no more guesses available");
         require(playerInput < 2**(solution.length), "solution is found"); // becareful of overflow
+
+        emit TurnTaken();
 
         //go through and check if the character has already been guessed
         for (uint i = 0; i < usedCharacters.length; i++) {
@@ -39,21 +41,25 @@ contract Hangman {
         //add the character if it hasn't been guessed
         usedCharacters.push(_character);
 
-        currentGuesses += 1; // increment currentguesses by 1
 
+        uint playerInputCheckpoint = playerInput;
         // uint check = 0; // check is the reverse representation of string inputs
         for (uint i = 0; i < solution.length; i++) {
             if (solution[i] == _character) {
+                //if they got a character correct
                 playerInput = computeGuess(i);
             }
         }
 
+        //if player input is unchanged then the guess is marked against them
+        if (playerInputCheckpoint == playerInput) {
+            currentMisses += 1; 
+        }
+
         if (playerInput == 2**(solution.length) - 1) { //if input is ever greater then playerInput is always invalid
             emit GameWin();
-        } else if (currentGuesses >= maxGuesses) {
+        } else if (currentMisses >= maxAllowedMisses) {
             emit GameLose();
-        } else {
-            emit TurnTaken();
         }
     }
 
@@ -65,14 +71,17 @@ contract Hangman {
     }
 
     function makeWordGuess(bytes calldata _string) external {
-        require(currentGuesses < maxGuesses, "no more guesses available");
+        require(currentMisses < maxAllowedMisses, "no more guesses available");
         require(playerInput < 2**(solution.length), "solution is found");
 
-        currentGuesses += 1;
+        emit TurnTaken();
 
         //compare the strings
         if(keccak256(abi.encodePacked(solution)) != keccak256(abi.encodePacked(_string))) {
-            emit TurnTaken();
+            currentMisses += 1;
+            if (currentMisses >= maxAllowedMisses) {
+                emit GameLose();
+            }
             return;
         }
         emit GameWin();

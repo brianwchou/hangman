@@ -85,6 +85,8 @@ contract Hangman {
             }
             return;
         }
+        //set the playerInput to answer
+        playerInput = 2**(solution.length);
         emit GameWin();
     }
 

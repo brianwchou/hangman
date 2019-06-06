@@ -49,7 +49,7 @@ contract('Hangman', async (accounts) => {
     });
 
     describe("Test playerInput return values", async() => {
-        it("Test make chracter guess with e", async () => {
+        it("Test make chracter guess example 1", async () => {
             await truffleAssert.passes(
               hangmanContract.makeCharGuess(web3.fromAscii("e")),
               "Transaction failed");
@@ -57,7 +57,7 @@ contract('Hangman', async (accounts) => {
             assert.equal(input.toNumber(), 2, "expected value is incorrect");
         });
 
-        it("Test make chracter guess with l", async () => {
+        it("Test make chracter guess example 2", async () => {
             await truffleAssert.passes(
               hangmanContract.makeCharGuess(web3.fromAscii("l")),
               "Transaction failed");

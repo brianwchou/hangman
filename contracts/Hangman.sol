@@ -6,7 +6,7 @@ contract Hangman {
     uint public maxAllowedMisses;
     uint public currentMisses;
     uint public playerInput; // 256 bits
-    bytes1[] public usedCharacters;
+    bytes1[] private usedCharacters;
 
     //events
     event GameWin();

@@ -5,6 +5,7 @@ var web3 = helper.getWeb3();
 
 contract('Hangman', async (accounts) => {
 
+    const player = accounts[0];
     var hangmanContract;
 
     before(async() => {
@@ -23,7 +24,7 @@ contract('Hangman', async (accounts) => {
     describe("check initial state of contract", async () => {
         it("check player address", async () => {
             let playerAddress = await hangmanContract.playerAddress.call();
-            assert.equal(playerAddress, accounts[0], "playerAddress dont match");
+            assert.equal(playerAddress, player, "playerAddress dont match");
         });
         
         it("check maxAllowedMisses", async () => {
@@ -40,9 +41,14 @@ contract('Hangman', async (accounts) => {
             let playerInput = await hangmanContract.playerInput.call();
             assert.equal(playerInput.toNumber(), 0, "playerInput dont match");
         });
+
+        it("check usedCharacters", async () => {
+            let usedChars = await hangmanContract.getUsedCharacters.call();
+            assert.equal(usedChars.length, 0, "there should be no used characters");
+        });
     });
 
-    describe("Test make charcter guess", async () => {
+    describe("Test playerInput return values", async() => {
         it("Test make chracter guess with e", async () => {
             await truffleAssert.passes(
               hangmanContract.makeCharGuess(web3.fromAscii("e")),
@@ -60,6 +66,30 @@ contract('Hangman', async (accounts) => {
         });
     });
 
+    describe("Test make character guess", async () => {
+        it("Test make character guess valid", async () => {
+            await truffleAssert.passes(
+              hangmanContract.makeCharGuess(web3.fromAscii("e")),
+              "Transaction failed");
+            var input = await hangmanContract.playerInput.call();
+            assert.equal(input.toNumber(), 2, "expected value is incorrect");
+        });
+
+        it("Test make character guess invalid", async () => {
+            await truffleAssert.passes(
+              hangmanContract.makeCharGuess(web3.fromAscii("e")),
+              "Transaction failed");
+            await truffleAssert.reverts(
+              hangmanContract.makeCharGuess(web3.fromAscii("e")),
+              "character has aleady been guessed");
+        });
+
+        it("Test make character guess events", async () => {
+            let tx = await hangmanContract.makeCharGuess(web3.fromAscii("l"));
+            await truffleAssert.eventEmitted(tx, 'TurnTaken');
+        });
+    });
+
     describe("Test make word guess", async () => {
         it("Test that currentMisses increases by 1", async () => {
             await truffleAssert.passes(
@@ -74,18 +104,19 @@ contract('Hangman', async (accounts) => {
               hangmanContract.makeWordGuess(web3.fromAscii("hello")),
               "Transaction failed");
         });
+
+        it("Test make word guess events turn", async () => {
+            let tx = await hangmanContract.makeWordGuess(web3.fromAscii("testing"));
+            await truffleAssert.eventEmitted(tx, 'TurnTaken');
+        });
+
+        it("Test make word guess events win", async () => {
+            let tx = await hangmanContract.makeWordGuess(web3.fromAscii("hello"));
+            await truffleAssert.eventEmitted(tx, 'GameWin');
+        });
     });
 
     describe("Test used characters", async () => {
-        it("Test make duplicated character guess", async () => {
-            await truffleAssert.passes(
-              hangmanContract.makeCharGuess(web3.fromAscii("e")),
-              "Transaction failed");
-            await truffleAssert.reverts(
-              hangmanContract.makeCharGuess(web3.fromAscii("e")),
-              "character has aleady been guessed");
-        });
-
         it("Test get used characters", async () => {
             await truffleAssert.passes(
                 hangmanContract.makeCharGuess(web3.fromAscii("e")),

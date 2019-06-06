@@ -5,8 +5,8 @@ contract Hangman {
     bytes private solution;
     uint public maxAllowedMisses;
     uint public currentMisses;
-    uint public playerInput; // 256 bits
-    bytes1[] public usedCharacters;
+    bytes1[] private usedCharacters;
+    uint public playerInput; //represented an integer reverse binary of the string
 
     //events
     event GameWin();
@@ -41,9 +41,8 @@ contract Hangman {
         //add the character if it hasn't been guessed
         usedCharacters.push(_character);
 
-
         uint playerInputCheckpoint = playerInput;
-        // uint check = 0; // check is the reverse representation of string inputs
+        // check is the reverse representation of string inputs
         for (uint i = 0; i < solution.length; i++) {
             if (solution[i] == _character) {
                 //if they got a character correct
@@ -65,7 +64,9 @@ contract Hangman {
 
     function computeGuess(uint i) private view returns (uint output) {
         assembly {
-            //reference global
+            //reference playerInput storage variable
+            //NOTE: this saves the represnetation of the word backwards
+            //left most digit should be Most significant bit, instead it is the least significant bit
             output := or(sload(playerInput_slot), exp(2, i))
         }
     }
@@ -84,6 +85,8 @@ contract Hangman {
             }
             return;
         }
+        //set the playerInput to answer
+        playerInput = 2**(solution.length);
         emit GameWin();
     }
 

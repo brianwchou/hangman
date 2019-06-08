@@ -7,9 +7,9 @@ function App() {
 
   function ViewState() {
     const [ethersContext, setEthersContext] = useContext(EthersContext);
-    return(
+    return (
       <div>
-        { (ethersContext.contract === undefined)? <Start/> : <Game/> }
+        {(ethersContext.contract === undefined) ? <Start/> : <Game/>}
       </div>
     );
   }

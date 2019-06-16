@@ -11,6 +11,7 @@ function Game() {
   const [maxMisses, setMaxMisses] = useState(0);
   const [usedChars, setUsedChars] = useState([]);
   const [winState, setWinState] = useState(0); //-1 is lose, +1 is win
+  const [tx, setTx] = useState(null);
 
   ethersContext.contract.on('TurnTaken', () => {
     console.log("Turn Taken");
@@ -29,9 +30,11 @@ function Game() {
 
   // Similar to componentDidMount and componentDidUpdate
   useEffect(() => {
-    updateVisibleChars();
+    clearInputs();
     updateGuessCounter();
-  }, []);
+    updateVisibleChars();
+    updateUsedChars();
+  }, [tx]);
 
   function clearInputs() {
     setCharGuess("");
@@ -106,7 +109,8 @@ function Game() {
     let tx = await ethersContext.contract.makeCharGuess(guess);
     console.log(tx);
     await tx.wait();
-    handlePostActions();
+    setTx(tx);
+    //handlePostActions();
   }
 
   async function guessWord() {
@@ -123,7 +127,8 @@ function Game() {
     let tx = await ethersContext.contract.makeWordGuess(guess);
     console.log(tx);
     await tx.wait();
-    handlePostActions();
+    setTx(tx);
+    //handlePostActions();
   }
 
   function GuessCounter(props) {

@@ -2,7 +2,8 @@ const StartGame = artifacts.require("StartGame");
 const Hangman = artifacts.require("Hangman");
 const helper = require('ganache-time-traveler');
 const truffleAssert = require('truffle-assertions');
-const web3 = require('./utils.js');
+const utils = require('./utils.js');
+const web3 = utils.getWeb3();
 
 const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
 

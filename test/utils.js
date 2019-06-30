@@ -1,4 +1,4 @@
-web3 = () => {
+getWeb3 = () => {
   //purposefully don't use truffle's web3
   var Web3 = require('web3');
   //ganache cli as provider
@@ -9,5 +9,5 @@ web3 = () => {
 }
 
 module.exports = {
-  web3
+  getWeb3
 }

@@ -1,7 +1,8 @@
 pragma solidity ^0.5.0;
 
-contract Hangman {
-    address public playerAddress; // public gets an automatic getter
+import 'node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol';
+
+contract Hangman is Ownable {
     bytes private solution;
     uint public maxAllowedMisses;
     uint public currentMisses;
@@ -14,7 +15,6 @@ contract Hangman {
     event TurnTaken();
 
     constructor(bytes memory _solution, uint _maxAllowedMisses) public {
-        playerAddress = msg.sender;
         solution = _solution;
         maxAllowedMisses = _maxAllowedMisses;
         currentMisses = 0;

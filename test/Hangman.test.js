@@ -22,24 +22,24 @@ contract('Hangman', async (accounts) => {
     });
 
     describe("check initial state of contract", async () => {
-        it("check player address", async () => {
-            let playerAddress = await hangmanContract.playerAddress.call();
-            assert.equal(playerAddress, player, "playerAddress dont match");
+        it("check owner of contract", async () => {
+            let owner = await hangmanContract.owner.call();
+            assert.equal(owner, player, "owner doesnt match");
         });
         
         it("check maxAllowedMisses", async () => {
             let maxAllowedMisses = await hangmanContract.maxAllowedMisses.call();
-            assert.equal(maxAllowedMisses.toNumber(), 5, "maxAllowedMisses dont match");
+            assert.equal(maxAllowedMisses.toNumber(), 5, "maxAllowedMisses doesnt match");
         });
 
         it("check currentMisses", async () => {
             let currentMisses = await hangmanContract.currentMisses.call();
-            assert.equal(currentMisses.toNumber(), 0, "currentMisses dont match");
+            assert.equal(currentMisses.toNumber(), 0, "currentMisses doesnt match");
         });
 
         it("check playerInput", async () => {
             let playerInput = await hangmanContract.playerInput.call();
-            assert.equal(playerInput.toNumber(), 0, "playerInput dont match");
+            assert.equal(playerInput.toNumber(), 0, "playerInput doesnt match");
         });
 
         it("check usedCharacters", async () => {

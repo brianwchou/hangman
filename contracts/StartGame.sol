@@ -9,11 +9,11 @@ contract StartGame is ChainlinkClient, Ownable {
     string public path;
     address public oracleAddr;
 
-    constructor(address _link, address _oracle, string _url, string _path)  public {
+    constructor(address _link, address _oracle, string _url, string _path) public {
         setChainlinkToken(_link);
         setChainlinkOracle(_oracle);
         url = _url;
-        path = _path
+        path = _path;
     }
 
     function createWordRequest(uint256 payment) internal returns (bytes32) {

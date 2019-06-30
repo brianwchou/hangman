@@ -4,6 +4,7 @@ const EthersContext = React.createContext([{}, () => {}]);
 
 const EthersContextProvider = (props) => {
   const [state, setState] = useState({});
+  console.log("EthersContext:",state);
   return (
     <EthersContext.Provider value={[state, setState]}>
       {props.children}
@@ -11,4 +12,4 @@ const EthersContextProvider = (props) => {
   );
 }
 
-export { EthersContext, EthersContextProvider };
+export {EthersContext, EthersContextProvider};

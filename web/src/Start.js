@@ -9,7 +9,7 @@ function Start() {
 
   // Detect when account changes
   window.ethereum.on('accountsChanged', function (accounts) {
-    if(selectedAddress !== undefined) {
+    if (selectedAddress !== undefined) {
       setSelectedAddress(accounts[0])
     }
   })
@@ -29,8 +29,8 @@ function Start() {
 
   // Start Game function that collects address
   async function startGame() {
-    try{
-      if(selectedAddress === undefined) {
+    try {
+      if (selectedAddress === undefined) {
         console.log("No selected address, requesting log in")
         let account = await window.ethereum.enable();
         console.log("Selected Address is: " + account[0])
@@ -51,7 +51,7 @@ function Start() {
     }
   }
 
-  return(
+  return (
     <div>
       Current Address: { selectedAddress }
       <br />

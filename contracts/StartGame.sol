@@ -1,13 +1,14 @@
 pragma solidity ^0.5.0;
 
-import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
-import "chainlink/contracts/ChainlinkClient.sol";
 import "./Hangman.sol";
+import "chainlink/contracts/ChainlinkClient.sol";
+import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
 
 contract StartGame is ChainlinkClient, Ownable {
     string public url;
     string public path;
     address public oracleAddr;
+    bytes32 public constant CHAINLINK_JOB_ID = "013f25963613411badc2ece3a92d0800";
 
     constructor(address _link, address _oracle, string _url, string _path) public {
         setChainlinkToken(_link);
@@ -18,15 +19,18 @@ contract StartGame is ChainlinkClient, Ownable {
 
     function createWordRequest(uint256 payment) internal returns (bytes32) {
         // newRequest takes a JobID, a callback address, and callback function as input
-        Chainlink.Request memory req = buildChainlinkRequest(_jobId, this, this.fulfill.selector);
+        Chainlink.Request memory req = buildChainlinkRequest(CHAINLINK_JOB_ID, this, this.fulfill.selector);
         req.add("url", url);
         req.add("path", path);
-        requestId = sendChainlinkRequestTo(chainlinkOracleAddress(), req, payment);
+        bytes32 requestId = sendChainlinkRequestTo(chainlinkOracleAddress(), req, payment);
         return requestId;
     }
 
-    function fulfill(bytes32 _requestId, bytes32 _data) public recordChainlinkFulfillment(_requestId){
-        data = _data;
+    function fulfill(bytes32 _requestId, bytes32 _data)
+        public
+        recordChainlinkFulfillment(_requestId)
+        returns (bytes32) {
+        return _data;
     }
 
     function withdrawLink() public onlyOwner {

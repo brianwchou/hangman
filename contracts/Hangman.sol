@@ -43,10 +43,10 @@ contract Hangman is Ownable {
 
         uint playerInputCheckpoint = playerInput;
         // check is the reverse representation of string inputs
-        for (uint i = 0; i < solution.length; i++) {
-            if (solution[i] == _character) {
+        for (uint m = 0; m < solution.length; m++) {
+            if (solution[m] == _character) {
                 //if they got a character correct
-                playerInput = computeGuess(i);
+                playerInput = computeGuess(m);
             }
         }
 

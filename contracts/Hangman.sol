@@ -1,4 +1,4 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.4.24;
 
 import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
 
@@ -71,7 +71,7 @@ contract Hangman is Ownable {
         }
     }
 
-    function makeWordGuess(bytes calldata _string) external {
+    function makeWordGuess(bytes _string) external {
         require(currentMisses < maxAllowedMisses, "no more guesses available");
         require(playerInput < 2**(solution.length), "solution is found");
 

@@ -107,9 +107,8 @@ contract Hangman is Ownable {
 
     function hasBitAtIndex(uint i) private view returns (bool output) {
         assembly {
-            // determine if bit is corerctly set or not n & (1 << (i - 1))
+            // determine if bit is correctly set or not n & (1 << (i - 1))
             output := gt(and(sload(playerInput_slot), shl(i, 1)), 0)
         }
     }
-
 }

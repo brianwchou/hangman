@@ -33,7 +33,7 @@ contract('StartGame', async (accounts) => {
     })
   });
 
-  describe("Test creatHangmanContact", async () => {
+  describe("Test createHangmanContact", async () => {
     it("Test createHangmanContract does not return empty address", async() => {
         let startGame = await StartGame.new();
         let address = await startGame.createHangmanContract.call();

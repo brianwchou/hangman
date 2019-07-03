@@ -35,18 +35,16 @@ contract('StartGame', async (accounts) => {
 
   describe("Test createHangmanContact", async () => {
     it("Test createHangmanContract does not return empty address", async() => {
-        let startGame = await StartGame.new();
         let address = await startGame.createHangmanContract.call();
         assert.notEqual(address, EMPTY_ADDRESS, "address is not the null address");
     });
     
     it("Test owner of deployed contact", async() => {
-        let startGame = await StartGame.new();
         let address = await startGame.createHangmanContract.call();
         let trx = await startGame.createHangmanContract();
         let hangmanContract = await Hangman.at(address);
-        let isOwner = await hangmanContract.isOwner.call();
-        assert.equal(isOwner, true, "Is owner should be true");
+        let owner = await hangmanContract.owner.call();
+        assert.equal(owner, accounts[0], "Is owner should be true");
     });
   });
 });

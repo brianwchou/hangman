@@ -48,7 +48,7 @@ contract StartGame is ChainlinkClient, Ownable {
 
     function createHangmanContract() public returns (address) {
         bytes memory word = "cheese";
-        Hangman game = new Hangman(word , word.length);
+        Hangman game = new Hangman(word, word.length);
         game.transferOwnership(msg.sender);
         return address(game);
     }

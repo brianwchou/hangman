@@ -1,6 +1,6 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.4.24;
 
-import 'node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol';
+import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
 
 contract Hangman is Ownable {
     bytes private solution;
@@ -43,10 +43,10 @@ contract Hangman is Ownable {
 
         uint playerInputCheckpoint = playerInput;
         // check is the reverse representation of string inputs
-        for (uint i = 0; i < solution.length; i++) {
-            if (solution[i] == _character) {
+        for (uint m = 0; m < solution.length; m++) {
+            if (solution[m] == _character) {
                 //if they got a character correct
-                playerInput = computeGuess(i);
+                playerInput = computeGuess(m);
             }
         }
 
@@ -71,7 +71,7 @@ contract Hangman is Ownable {
         }
     }
 
-    function makeWordGuess(bytes calldata _string) external {
+    function makeWordGuess(bytes _string) external {
         require(currentMisses < maxAllowedMisses, "no more guesses available");
         require(playerInput < 2**(solution.length), "solution is found");
 
@@ -107,9 +107,8 @@ contract Hangman is Ownable {
 
     function hasBitAtIndex(uint i) private view returns (bool output) {
         assembly {
-            // determine if bit is corerctly set or not n & (1 << (i - 1))
+            // determine if bit is correctly set or not n & (1 << (i - 1))
             output := gt(and(sload(playerInput_slot), shl(i, 1)), 0)
         }
     }
-
 }

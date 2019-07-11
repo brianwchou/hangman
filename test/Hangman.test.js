@@ -1,7 +1,8 @@
-var Hangman = artifacts.require("Hangman");
-const helper = require('./utils.js');
+const Hangman = artifacts.require("Hangman");
+const helper = require('ganache-time-traveler');
 const truffleAssert = require('truffle-assertions');
-var web3 = helper.getWeb3();
+const utils = require('./utils.js');
+const web3 = utils.getWeb3();
 
 contract('Hangman', async (accounts) => {
 

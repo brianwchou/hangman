@@ -14,7 +14,7 @@ contract StartGame is ChainlinkClient, Ownable {
     string public path;
     address public oracleAddr;
     bytes32 public constant CHAINLINK_JOB_ID = "013f25963613411badc2ece3a92d0800";
-    mapping(bytes32 => GameRequest) public requestIdToGame;
+    mapping(bytes32 => Game) public requestIdToGame;
 
     //map job id to game struct
     //game struct will have address of the owner of that game and the hangman address
@@ -42,12 +42,13 @@ contract StartGame is ChainlinkClient, Ownable {
         public
         recordChainlinkFulfillment(_requestId)
         returns (bytes32) {
-            require(requestIdToGame[_requestId] != 0, "Id does not exist");
-
             //get the game instance
             Game storage gameInstance = requestIdToGame[_requestId];
+
+            require(gameInstance.player != 0, "Id does not exist");
+
             //create the new hangman with the word(data)
-            Hangman game = new Hangman(_data, _data.length);
+            Hangman game = new Hangman(abi.encodePacked(_data), _data.length);
             //save game into the request
             gameInstance.game = game;
             //update the owner of the game

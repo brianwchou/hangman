@@ -51,10 +51,10 @@ contract.only('StartGame', async (accounts) => {
     })
   });
 
-  describe("Test creatHangmanContact", async () => {
-    it("Test createHangmanContract does not return empty address", async() => {
-        //let address = await startGame.createHangmanContract.call();
-        //assert.notEqual(address, EMPTY_ADDRESS, "address is not the null address");
+  describe("Test createHangmanContract", async () => {
+    it("Test requestStartGame returns a requestId", async() => {
+        let requestId = await startGame.requestStartGame.call(1);
+        assert.isOk(requestId, "a request id was not returned");
     });
     
     it("Test owner of deployed contact", async() => {

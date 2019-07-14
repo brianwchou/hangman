@@ -10,8 +10,7 @@ const web3 = utils.getWeb3();
 
 const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
 
-contract('StartGame', async (accounts) => {
-
+contract.only('StartGame', async (accounts) => {
   let startGame;
   let mockLinkToken;
   let mockOracle = accounts[9];
@@ -22,9 +21,6 @@ contract('StartGame', async (accounts) => {
   before('deploy StartGame', async() => {
       let linkTokenTemplate = await LinkToken.new();
       mockLinkToken = await MockContract.new();
-
-      let oracleTemplate = await Oracle.new(EMPTY_ADDRESS);
-      mockOracle = await MockContract.new();
 
       //mock LinkToken.transferAndCall()
       let mockLink_transferAndCall = 
@@ -50,7 +46,7 @@ contract('StartGame', async (accounts) => {
     })
   });
 
-  describe.only("Test creation of hangman contract game", async () => {
+  describe("Test creation of hangman contract game", async () => {
     it("Test requestStartGame is successful in requesting to start a game", async() => {
         //perform a mock call to ensure we get a requestId
         let requestId = await startGame.requestStartGame.call(1);
@@ -63,7 +59,7 @@ contract('StartGame', async (accounts) => {
         assert.equal(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
     });
     
-    it("Test that hangman contract was created", async() => {
+    it("Test fullfillStartGame is susccessful in creating a Hangman contract", async() => {
         let requestId = await startGame.requestStartGame.call(1);
         let trx = await startGame.requestStartGame(1);
       
@@ -77,9 +73,10 @@ contract('StartGame', async (accounts) => {
 
         let hangman = await Hangman.at(game[1]);
         let owner = await hangman.owner.call();
-        console.log(owner);
-        console.log(player);
         assert.equal(owner, player, "player is not the owner of hangman contract");
+
+        trx = await hangman.makeWordGuess(web3.toHex("testing"));
+        console.log(trx);
     });
   });
 });

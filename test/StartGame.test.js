@@ -34,15 +34,13 @@ contract('StartGame', async (accounts) => {
 
   describe("Test initial values", async () => {
     it("Test url", async() => {
+        let val = await startGame.url.call();
+        assert.equal(val, url, "url not properly set");
     })
     
     it("Test path", async() => {
-    })
-
-    it("Test chainlink token address", async() => {
-    })
-
-    it("Test oracle address", async() => {
+        let val = await startGame.path.call();
+        assert.equal(val, path, "path not properly set");
     })
   });
 
@@ -59,7 +57,7 @@ contract('StartGame', async (accounts) => {
         assert.equal(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
     });
     
-    it.only("Test fullfillStartGame is susccessful in creating a Hangman contract", async() => {
+    it("Test fullfillStartGame is susccessful in creating a Hangman contract", async() => {
         let requestId = await startGame.requestStartGame.call(1);
         let trx = await startGame.requestStartGame(1);
       

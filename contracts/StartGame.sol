@@ -12,7 +12,6 @@ contract StartGame is ChainlinkClient, Ownable {
 
     string public url;
     string public path;
-    address public oracleAddr;
     bytes32 public constant CHAINLINK_JOB_ID = "013f25963613411badc2ece3a92d0800";
     mapping(bytes32 => Game) public requestIdToGame;
 

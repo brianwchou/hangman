@@ -1,8 +1,8 @@
 const StartGame = artifacts.require("StartGame");
 const Hangman = artifacts.require("Hangman");
+const MockContract = artifacts.require("MockContract");
 const Oracle = artifacts.require("Oracle");
 const LinkToken = artifacts.require("LinkToken");
-const MockContract = artifacts.require("MockContract");
 const helper = require('ganache-time-traveler');
 const truffleAssert = require('truffle-assertions');
 const utils = require('./utils.js');
@@ -62,7 +62,7 @@ contract('StartGame', async (accounts) => {
 
         console.log(requestId);
 
-        let trx = await startGame.requestStartGame();;
+        let trx = await startGame.requestStartGame();
 
         //let hangmanContract = await Hangman.at(address);
         //let isOwner = await hangmanContract.isOwner.call();

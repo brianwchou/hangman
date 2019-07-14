@@ -9,7 +9,7 @@
     "truffle-version": "truffle version",
     "truffle-migrate": "truffle migrate",
     "truffle-compile": "truffle compile",
-    "truffle-test": "yarn clean && yarn truffle-migrate && truffle test",
+    "truffle-test": "yarn clean; yarn truffle-migrate && truffle test",
     "ganache": "ganache-cli -d",
     "web:start": "cd ./web && npm start",
     "web:test": "cd ./web && npm test",

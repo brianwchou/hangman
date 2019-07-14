@@ -10,22 +10,21 @@ const web3 = utils.getWeb3();
 
 const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
 
-contract.only('StartGame', async (accounts) => {
+contract('StartGame', async (accounts) => {
 
   let startGame;
   let mockLinkToken;
-  let mockOracle;
-  let linkTokenAddress = accounts[2];
-  let oracleAddress = accounts[3];
+  let mockOracle = accounts[9];
+  let player = accounts[0];
   let url = "https://en.wikipedia.org/api/rest_v1/page/random/title";
   let path = "items[0].title";
 
   before('deploy StartGame', async() => {
       let linkTokenTemplate = await LinkToken.new();
-      let mockLinkToken = await MockContract.new();
+      mockLinkToken = await MockContract.new();
 
       let oracleTemplate = await Oracle.new(EMPTY_ADDRESS);
-      let mockOracle = await MockContract.new();
+      mockOracle = await MockContract.new();
 
       //mock LinkToken.transferAndCall()
       let mockLink_transferAndCall = 
@@ -34,7 +33,7 @@ contract.only('StartGame', async (accounts) => {
           .encodeABI();
       await mockLinkToken.givenMethodReturnBool(mockLink_transferAndCall, true);
 
-      startGame = await StartGame.new(mockLinkToken.address, mockOracle.address, url, path);
+      startGame = await StartGame.new(mockLinkToken.address, mockOracle, url, path);
   });
 
   describe("Test initial values", async () => {
@@ -51,22 +50,36 @@ contract.only('StartGame', async (accounts) => {
     })
   });
 
-  describe("Test createHangmanContract", async () => {
-    it("Test requestStartGame returns a requestId", async() => {
+  describe.only("Test creation of hangman contract game", async () => {
+    it("Test requestStartGame is successful in requesting to start a game", async() => {
+        //perform a mock call to ensure we get a requestId
         let requestId = await startGame.requestStartGame.call(1);
         assert.isOk(requestId, "a request id was not returned");
+
+        //perform actual transaction call
+        let trx = await startGame.requestStartGame(1);
+        let game = await startGame.requestIdToGame(requestId);
+        assert.equal(game[0], player, "saving game instance was unsuccessful");
+        assert.equal(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
     });
     
-    it("Test owner of deployed contact", async() => {
+    it("Test that hangman contract was created", async() => {
         let requestId = await startGame.requestStartGame.call(1);
+        let trx = await startGame.requestStartGame(1);
+      
+        //call the fullfillStartGame with data that mocks
+        let bytesVal = web3.toHex("testing");
+        console.log(bytesVal);
+        await startGame.fullfillStartGame(requestId, bytesVal, { from: mockOracle });
+        let game = await startGame.requestIdToGame(requestId);
+        assert.equal(game[0], player, "saving game instance was unsuccessful");
+        assert.isOk(game[1], "saving game instance was unsuccessful");
 
-        console.log(requestId);
-
-        //let trx = await startGame.requestStartGame();
-
-        //let hangmanContract = await Hangman.at(address);
-        //let isOwner = await hangmanContract.isOwner.call();
-        //assert.equal(isOwner, true, "Is owner should be true");
+        let hangman = await Hangman.at(game[1]);
+        let owner = await hangman.owner.call();
+        console.log(owner);
+        console.log(player);
+        assert.equal(owner, player, "player is not the owner of hangman contract");
     });
   });
 });

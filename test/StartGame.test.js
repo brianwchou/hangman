@@ -17,6 +17,7 @@ contract('StartGame', async (accounts) => {
   let player = accounts[0];
   let url = "https://en.wikipedia.org/api/rest_v1/page/random/title";
   let path = "items[0].title";
+  let snapshotId;
 
   before('deploy StartGame', async() => {
       let linkTokenTemplate = await LinkToken.new();
@@ -30,6 +31,15 @@ contract('StartGame', async (accounts) => {
       await mockLinkToken.givenMethodReturnBool(mockLink_transferAndCall, true);
 
       startGame = await StartGame.new(mockLinkToken.address, mockOracle, url, path);
+  });
+
+  beforeEach(async() => {
+    let snapShot = await helper.takeSnapshot();
+    snapshotId = snapShot['result'];
+  });
+
+  afterEach(async() => {
+      await helper.revertToSnapShot(snapshotId);
   });
 
   describe("Test initial values", async () => {

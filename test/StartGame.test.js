@@ -10,7 +10,7 @@ const web3 = utils.getWeb3();
 
 const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
 
-contract.only('StartGame', async (accounts) => {
+contract('StartGame', async (accounts) => {
   let startGame;
   let mockLinkToken;
   let mockOracle = accounts[9];
@@ -59,13 +59,13 @@ contract.only('StartGame', async (accounts) => {
         assert.equal(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
     });
     
-    it("Test fullfillStartGame is susccessful in creating a Hangman contract", async() => {
+    it.only("Test fullfillStartGame is susccessful in creating a Hangman contract", async() => {
         let requestId = await startGame.requestStartGame.call(1);
         let trx = await startGame.requestStartGame(1);
       
         //call the fullfillStartGame with data that mocks
-        let bytesVal = web3.toHex("testing");
-        console.log(bytesVal);
+        let givenWord = "testing";
+        let bytesVal = web3.toHex(givenWord);
         await startGame.fullfillStartGame(requestId, bytesVal, { from: mockOracle });
         let game = await startGame.requestIdToGame(requestId);
         assert.equal(game[0], player, "saving game instance was unsuccessful");
@@ -76,7 +76,7 @@ contract.only('StartGame', async (accounts) => {
         assert.equal(owner, player, "player is not the owner of hangman contract");
 
         trx = await hangman.makeWordGuess(web3.toHex("testing"));
-        console.log(trx);
+        truffleAssert.eventEmitted(trx, "GameWin");
     });
   });
 });

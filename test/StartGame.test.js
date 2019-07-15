@@ -26,7 +26,7 @@ contract('StartGame', async (accounts) => {
       //mock LinkToken.transferAndCall()
       let mockLink_transferAndCall = 
         linkTokenTemplate.contract.methods
-          .transferAndCall(EMPTY_ADDRESS, 0, web3.toHex("0"))
+          .transferAndCall(EMPTY_ADDRESS, 0, web3.fromAscii("0"))
           .encodeABI();
       await mockLinkToken.givenMethodReturnBool(mockLink_transferAndCall, true);
 
@@ -73,7 +73,7 @@ contract('StartGame', async (accounts) => {
       
         //call the fullfillStartGame with data that mocks
         let givenWord = "testing";
-        let bytesVal = web3.toHex(givenWord);
+        let bytesVal = web3.fromAscii(givenWord);
         await startGame.fullfillStartGame(requestId, bytesVal, { from: mockOracle });
         let game = await startGame.requestIdToGame(requestId);
         assert.equal(game[0], player, "saving game instance was unsuccessful");
@@ -83,7 +83,7 @@ contract('StartGame', async (accounts) => {
         let owner = await hangman.owner.call();
         assert.equal(owner, player, "player is not the owner of hangman contract");
 
-        trx = await hangman.makeWordGuess(web3.toHex("testing"));
+        trx = await hangman.makeWordGuess(web3.fromAscii("testing"));
         truffleAssert.eventEmitted(trx, "GameWin");
     });
   });

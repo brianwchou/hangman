@@ -47,11 +47,25 @@ contract StartGame is ChainlinkClient, Ownable {
             require(gameInstance.player != 0, "Id does not exist");
 
             //create the new hangman with the word(data)
-            Hangman game = new Hangman(abi.encodePacked(_data), _data.length);
+            Hangman game = new Hangman(bytes32ToBytes(_data), _data.length);
             //save game into the request
             gameInstance.game = game;
             //update the owner of the game
             game.transferOwnership(gameInstance.player);
+    }
+
+    function bytes32ToBytes(bytes32 data) private pure returns (bytes) {
+        uint i = 0;
+        while (i < 32 && uint(data[i]) != 0) {
+            ++i;
+        }
+        bytes memory result = new bytes(i);
+        i = 0;
+        while (i < 32 && data[i] != 0) {
+            result[i] = data[i];
+            ++i;
+        }
+        return result;
     }
 
     function withdrawLink() public onlyOwner {

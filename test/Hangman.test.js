@@ -8,13 +8,14 @@ contract('Hangman', async (accounts) => {
 
     const player = accounts[0];
     var hangmanContract;
+    let snapshotId;
 
     before(async() => {
         hangmanContract = await Hangman.new(web3.fromAscii("hello"), 5);
     });
 
     beforeEach(async() => {
-        snapShot = await helper.takeSnapshot();
+        let snapShot = await helper.takeSnapshot();
         snapshotId = snapShot['result'];
     });
 

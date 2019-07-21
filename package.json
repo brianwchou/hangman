@@ -11,8 +11,9 @@
     "truffle-compile": "truffle compile",
     "truffle-test": "yarn clean; yarn truffle-migrate && truffle test",
     "ganache": "ganache-cli -d",
-    "web:start": "cd ./web && npm start",
-    "web:test": "cd ./web && npm test",
+    "web:start": "cd ./web; yarn start",
+    "web:test": "cd ./web; yarn test",
+    "web:install": "cd ./web; yarn",
     "clean": "rm -r ./web/src/contracts"
   },
   "repository": {

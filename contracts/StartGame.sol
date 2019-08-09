@@ -14,10 +14,16 @@ contract StartGame is ChainlinkClient, Ownable {
     string public path;
     bytes32 public constant CHAINLINK_JOB_ID = "013f25963613411badc2ece3a92d0800";
     mapping(bytes32 => Game) public requestIdToGame;
-
     //map job id to game struct
     //game struct will have address of the owner of that game and the hangman address
 
+    /*
+     * @notice Initializes the StartGame contract
+     * @param address the Chainlink Token address
+     * @param address the Chainlink Oracle address
+     * @param string the url that will be used to pull words from
+     * @param string path the path in the returned result from url to grab the word
+     */
     constructor(address _link, address _oracle, string _url, string _path) public {
         setChainlinkToken(_link);
         setChainlinkOracle(_oracle);
@@ -25,6 +31,11 @@ contract StartGame is ChainlinkClient, Ownable {
         path = _path;
     }
 
+    /*
+     * @notice Requests to start a new hangman game
+     * @param uint256 the payment to the oracle in order to fetch a random word
+     * @return bytes32 the request id returned from the chainlink request
+     */
     function requestStartGame(uint256 payment) public returns (bytes32) {
         // newRequest takes a JobID, a callback address, and callback function as input
         Chainlink.Request memory req = buildChainlinkRequest(CHAINLINK_JOB_ID, this, this.fullfillStartGame.selector);
@@ -37,6 +48,11 @@ contract StartGame is ChainlinkClient, Ownable {
         return requestId;
     }
 
+    /*
+     * @notice The method called back when the chainlink oracles has a response
+     * @param bytes32 the request id that was returned earlier by the chainlink request
+     * @param bytes32 the data requested from the oracle
+     */
     function fullfillStartGame(bytes32 _requestId, bytes32 _data)
         public
         recordChainlinkFulfillment(_requestId)
@@ -54,6 +70,11 @@ contract StartGame is ChainlinkClient, Ownable {
             game.transferOwnership(gameInstance.player);
     }
 
+    /*
+     * @notice A helper method that convertes bytes32 to bytes
+     * @param bytes32 the data that we want to convert into bytes
+     * @return bytes the data that was input that is no longer bytes32
+     */
     function bytes32ToBytes(bytes32 data) private pure returns (bytes) {
         uint i = 0;
         while (i < 32 && uint(data[i]) != 0) {
@@ -68,15 +89,32 @@ contract StartGame is ChainlinkClient, Ownable {
         return result;
     }
 
+    /*
+     * @notice Withdraws link from the contact address back to the owner of the contract
+     * @dev only owner can call this method
+     */
     function withdrawLink() public onlyOwner {
         LinkTokenInterface link = LinkTokenInterface(chainlinkTokenAddress());
         require(link.transfer(msg.sender, link.balanceOf(address(this))), "Unable to transfer");
     }
 
+    /*
+     * @notice Sets the url to a new url to grab words from another source
+     * @dev only owner can call this method
+    */
     function setUrl(string _url) public onlyOwner {
         url = _url;
     }
 
+    /*
+     * @notice cancels the sent request 
+     * @dev only owner can call this method
+     * @param bytes32 the request id to cancel
+     * @param uint256 The amount of LINK sent for the request
+     * @param bytes4 The callback function specified for the request
+     * @param uint256 The time of the expiration for the request
+     *
+     */
     function cancelRequest(bytes32 _requestId, uint256 _payment, bytes4 _callbackFunctionId, uint256 _expiration) public onlyOwner {
         cancelChainlinkRequest(_requestId, _payment, _callbackFunctionId, _expiration);
     }

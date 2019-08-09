@@ -29,9 +29,7 @@
   "keywords": [],
   "description": "",
   "devDependencies": {
-    "ganache-cli": "6.4.3"
-  },
-  "dependencies": {
+    "ganache-cli": "6.4.3",
     "@gnosis.pm/mock-contract": "2.0.4",
     "chainlink": "^0.6.4",
     "ganache-time-traveler": "^1.0.0",

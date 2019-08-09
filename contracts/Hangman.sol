@@ -133,6 +133,11 @@ contract Hangman is Ownable {
         return output;
     }
 
+    /*
+     * @notice Determines if there is a bit at a given index
+     * @param uint the index in quesiton
+     * @return bool true if there is a bit at given index, false otherwise
+     */
     function hasBitAtIndex(uint i) private view returns (bool output) {
         assembly {
             // determine if bit is correctly set or not n & (1 << (i - 1))

@@ -7,19 +7,28 @@ contract Hangman is Ownable {
     uint public maxAllowedMisses;
     uint public currentMisses;
     bytes1[] private usedCharacters;
-    uint public playerInput; //represented an integer reverse binary of the string
+    uint public playerInput; //represented as an integer reverse binary of the string
 
     //events
     event GameWin();
     event GameLose();
     event TurnTaken();
 
+    /*
+     * @notice Initializes the Hangman Game
+     * @param bytes the solution
+     * @param uint the maximum allowed number of misses before it's game over
+     */
     constructor(bytes memory _solution, uint _maxAllowedMisses) public {
         solution = _solution;
         maxAllowedMisses = _maxAllowedMisses;
         currentMisses = 0;
     }
 
+    /*
+     * @notice retrieves the used characters
+     * @return bytes1[] an array of the used characters
+     */
     function getUsedCharacters() external view returns (bytes1[] memory) {
         bytes1[] memory characters = new bytes1[](usedCharacters.length);
         for(uint i = 0; i < usedCharacters.length; i++) {
@@ -28,6 +37,10 @@ contract Hangman is Ownable {
         return characters;
     }
 
+    /*
+     * @notice Makes a character guess against the word
+     * @param byte the character that is being guessed
+     */
     function makeCharGuess(byte _character) external {
         require(currentMisses < maxAllowedMisses, "no more guesses available");
         require(playerInput < 2**(solution.length), "solution is found"); // becareful of overflow
@@ -62,15 +75,22 @@ contract Hangman is Ownable {
         }
     }
 
+    /*
+     * @notice computes if the guessed character at an index mathces
+     * @return uint 1 if there is a match 0 otherwise
+     */
     function computeGuess(uint i) private view returns (uint output) {
         assembly {
             //reference playerInput storage variable
-            //NOTE: this saves the represnetation of the word backwards
+            //NOTE: this saves the representation of the word backwards
             //left most digit should be Most significant bit, instead it is the least significant bit
             output := or(sload(playerInput_slot), exp(2, i))
         }
     }
 
+    /*
+     * @notice Make a word guess
+     */
     function makeWordGuess(bytes _string) external {
         require(currentMisses < maxAllowedMisses, "no more guesses available");
         require(playerInput < 2**(solution.length), "solution is found");
@@ -90,10 +110,18 @@ contract Hangman is Ownable {
         emit GameWin();
     }
 
+    /*
+     * @notice Gets the total number of characters in the solution
+     * @return uint the total number of characters
+     */
     function getNumberOfCharacters() external view returns (uint) {
         return solution.length;
     }
 
+    /*
+     * @notice Gets all the correctly guessed characters at their positions
+     * @return bytes1[] all the correctly guessed characters at their indices
+     */
     function getCorrectlyGuessedCharacters() external view returns (bytes1[] memory) {
         bytes1[] memory output = new bytes1[](solution.length);
 

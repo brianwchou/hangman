@@ -56,25 +56,46 @@ contract('StartGame', async (accounts) => {
 
   describe("Test creation of hangman contract game", async () => {
     it("Test requestStartGame is successful in requesting to start a game", async() => {
-        //perform a mock call to ensure we get a requestId
-        let requestId = await startGame.requestStartGame.call(1);
-        assert.isOk(requestId, "a request id was not returned");
-
-        //perform actual transaction call
         let trx = await startGame.requestStartGame(1);
+
+        //listen for event and capture the requestId
+        let requestId
+        truffleAssert.eventEmitted(trx, 'RequestGame', (e) => {
+            //capture requestId
+            requestId = e.requestId;
+            return e.owner === player;
+        }); 
+
         let game = await startGame.requestIdToGame(requestId);
         assert.equal(game[0], player, "saving game instance was unsuccessful");
         assert.equal(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
+
+        // NOTE: at this point the user would be waiting for the oracle to call the contract back
     });
     
-    it("Test fullfillStartGame is susccessful in creating a Hangman contract", async() => {
-        let requestId = await startGame.requestStartGame.call(1);
+    it("Test fullfillStartGame is successful in creating a Hangman contract", async() => {
         let trx = await startGame.requestStartGame(1);
+
+        //listen for event and capture the requestId
+        let requestId
+        truffleAssert.eventEmitted(trx, 'RequestGame', (e) => {
+            //capture requestId
+            requestId = e.requestId;
+            return e.owner === player;
+        }); 
+
+        // NOTE: at this point the user would be waiting for the oracle to call the contract back
       
         //call the fullfillStartGame with data that mocks
         let givenWord = "testing";
         let bytesVal = web3.fromAscii(givenWord);
-        await startGame.fullfillStartGame(requestId, bytesVal, { from: mockOracle });
+        trx = await startGame.fullfillStartGame(requestId, bytesVal, { from: mockOracle });
+
+        //listen for event and capture new game
+        truffleAssert.eventEmitted(trx, 'ReceiveGame', (e) => {
+            return e.owner === player && e.requestId === requestId;
+        }); 
+
         let game = await startGame.requestIdToGame(requestId);
         assert.equal(game[0], player, "saving game instance was unsuccessful");
         assert.isOk(game[1], "saving game instance was unsuccessful");

@@ -10,6 +10,10 @@ contract StartGame is ChainlinkClient, Ownable {
         address game;
     }
 
+    // the owner of the contract, the request id generated against that sender
+    event RequestGame(address owner, bytes32 requestId);
+    event ReceiveGame(address owner, bytes32 requestId);
+
     string public url;
     string public path;
     bytes32 public constant CHAINLINK_JOB_ID = "013f25963613411badc2ece3a92d0800";
@@ -33,10 +37,10 @@ contract StartGame is ChainlinkClient, Ownable {
 
     /*
      * @notice Requests to start a new hangman game
+     * @dev remits requestId for a given sender
      * @param uint256 the payment to the oracle in order to fetch a random word
-     * @return bytes32 the request id returned from the chainlink request
      */
-    function requestStartGame(uint256 payment) public returns (bytes32) {
+    function requestStartGame(uint256 payment) public {
         // newRequest takes a JobID, a callback address, and callback function as input
         Chainlink.Request memory req = buildChainlinkRequest(CHAINLINK_JOB_ID, this, this.fullfillStartGame.selector);
         req.add("url", url);
@@ -44,8 +48,7 @@ contract StartGame is ChainlinkClient, Ownable {
         bytes32 requestId = sendChainlinkRequest(req, payment);
         //requestId will point to the player and the game address(which is pending)
         requestIdToGame[requestId] = Game(msg.sender, address(0));
-        //return request id as to check if we've gotten a game back
-        return requestId;
+        emit RequestGame(msg.sender, requestId);
     }
 
     /*
@@ -68,6 +71,7 @@ contract StartGame is ChainlinkClient, Ownable {
             gameInstance.game = game;
             //update the owner of the game
             game.transferOwnership(gameInstance.player);
+            emit ReceiveGame(gameInstance.player, _requestId);
     }
 
     /*

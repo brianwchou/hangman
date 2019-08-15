@@ -9,6 +9,8 @@ const utils = require('./utils.js');
 const web3 = utils.getWeb3();
 
 const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
+const CHAINLINK_HTTP_GET_JOB_ID = "013f25963613411badc2ece3a92d0800"; //this is mainnet jobid
+const PAYMENT = 1;
 
 contract('StartGame', async (accounts) => {
   let startGame;
@@ -56,7 +58,7 @@ contract('StartGame', async (accounts) => {
 
   describe("Test creation of hangman contract game", async () => {
     it("Test requestCreateGame is successful in requesting to start a game", async() => {
-        let trx = await startGame.requestCreateGame(1);
+        let trx = await startGame.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT);
 
         //listen for event and capture the requestId
         let requestId
@@ -74,7 +76,7 @@ contract('StartGame', async (accounts) => {
     });
     
     it("Test fullfillCreateGame is successful in creating a Hangman contract", async() => {
-        let trx = await startGame.requestCreateGame(1);
+        let trx = await startGame.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT);
 
         //listen for event and capture the requestId
         let requestId

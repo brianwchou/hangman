@@ -16,7 +16,6 @@ contract HangmanFactory is ChainlinkClient, Ownable {
 
     string public url;
     string public path;
-    bytes32 public constant CHAINLINK_JOB_ID = "013f25963613411badc2ece3a92d0800";
     mapping(bytes32 => Game) public requestIdToGame;
     //map job id to game struct
     //game struct will have address of the owner of that game and the hangman address
@@ -40,9 +39,9 @@ contract HangmanFactory is ChainlinkClient, Ownable {
      * @dev remits requestId for a given sender
      * @param uint256 the payment to the oracle in order to fetch a random word
      */
-    function requestCreateGame(uint256 payment) public {
+    function requestCreateGame(bytes32 job_id, uint256 payment) public {
         // newRequest takes a JobID, a callback address, and callback function as input
-        Chainlink.Request memory req = buildChainlinkRequest(CHAINLINK_JOB_ID, this, this.fullfillCreateGame.selector);
+        Chainlink.Request memory req = buildChainlinkRequest(job_id, this, this.fullfillCreateGame.selector);
         req.add("url", url);
         req.add("path", path);
         bytes32 requestId = sendChainlinkRequest(req, payment);

@@ -1,4 +1,4 @@
-const StartGame = artifacts.require("StartGame");
+const StartGame = artifacts.require("HangmanFactory");
 const Hangman = artifacts.require("Hangman");
 const MockContract = artifacts.require("MockContract");
 const Oracle = artifacts.require("Oracle");
@@ -9,6 +9,8 @@ const utils = require('./utils.js');
 const web3 = utils.getWeb3();
 
 const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
+const CHAINLINK_HTTP_GET_JOB_ID = "013f25963613411badc2ece3a92d0800"; //this is mainnet jobid
+const PAYMENT = 1;
 
 contract('StartGame', async (accounts) => {
   let startGame;
@@ -55,26 +57,47 @@ contract('StartGame', async (accounts) => {
   });
 
   describe("Test creation of hangman contract game", async () => {
-    it("Test requestStartGame is successful in requesting to start a game", async() => {
-        //perform a mock call to ensure we get a requestId
-        let requestId = await startGame.requestStartGame.call(1);
-        assert.isOk(requestId, "a request id was not returned");
+    it("Test requestCreateGame is successful in requesting to start a game", async() => {
+        let trx = await startGame.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT);
 
-        //perform actual transaction call
-        let trx = await startGame.requestStartGame(1);
+        //listen for event and capture the requestId
+        let requestId
+        truffleAssert.eventEmitted(trx, 'RequestCreateGame', (e) => {
+            //capture requestId
+            requestId = e.requestId;
+            return e.owner === player;
+        }); 
+
         let game = await startGame.requestIdToGame(requestId);
         assert.equal(game[0], player, "saving game instance was unsuccessful");
         assert.equal(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
+
+        // NOTE: at this point the user would be waiting for the oracle to call the contract back
     });
     
-    it("Test fullfillStartGame is susccessful in creating a Hangman contract", async() => {
-        let requestId = await startGame.requestStartGame.call(1);
-        let trx = await startGame.requestStartGame(1);
+    it("Test fullfillCreateGame is successful in creating a Hangman contract", async() => {
+        let trx = await startGame.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT);
+
+        //listen for event and capture the requestId
+        let requestId
+        truffleAssert.eventEmitted(trx, 'RequestCreateGame', (e) => {
+            //capture requestId
+            requestId = e.requestId;
+            return e.owner === player;
+        }); 
+
+        // NOTE: at this point the user would be waiting for the oracle to call the contract back
       
-        //call the fullfillStartGame with data that mocks
+        //call the fullfillCreateGame with data that mocks
         let givenWord = "testing";
         let bytesVal = web3.fromAscii(givenWord);
-        await startGame.fullfillStartGame(requestId, bytesVal, { from: mockOracle });
+        trx = await startGame.fullfillCreateGame(requestId, bytesVal, { from: mockOracle });
+
+        //listen for event and capture new game
+        truffleAssert.eventEmitted(trx, 'FulfillCreateGame', (e) => {
+            return e.owner === player && e.requestId === requestId;
+        }); 
+
         let game = await startGame.requestIdToGame(requestId);
         assert.equal(game[0], player, "saving game instance was unsuccessful");
         assert.isOk(game[1], "saving game instance was unsuccessful");

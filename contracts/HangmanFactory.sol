@@ -4,15 +4,15 @@ import "./Hangman.sol";
 import "chainlink/contracts/ChainlinkClient.sol";
 import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
 
-contract StartGame is ChainlinkClient, Ownable {
+contract HangmanFactory is ChainlinkClient, Ownable {
     struct Game {
         address player;
         address game;
     }
 
     // the owner of the contract, the request id generated against that sender
-    event RequestGame(address owner, bytes32 requestId);
-    event ReceiveGame(address owner, bytes32 requestId);
+    event RequestCreateGame(address owner, bytes32 requestId);
+    event FulfillCreateGame(address owner, bytes32 requestId);
 
     string public url;
     string public path;
@@ -40,15 +40,15 @@ contract StartGame is ChainlinkClient, Ownable {
      * @dev remits requestId for a given sender
      * @param uint256 the payment to the oracle in order to fetch a random word
      */
-    function requestStartGame(uint256 payment) public {
+    function requestCreateGame(uint256 payment) public {
         // newRequest takes a JobID, a callback address, and callback function as input
-        Chainlink.Request memory req = buildChainlinkRequest(CHAINLINK_JOB_ID, this, this.fullfillStartGame.selector);
+        Chainlink.Request memory req = buildChainlinkRequest(CHAINLINK_JOB_ID, this, this.fullfillCreateGame.selector);
         req.add("url", url);
         req.add("path", path);
         bytes32 requestId = sendChainlinkRequest(req, payment);
         //requestId will point to the player and the game address(which is pending)
         requestIdToGame[requestId] = Game(msg.sender, address(0));
-        emit RequestGame(msg.sender, requestId);
+        emit RequestCreateGame(msg.sender, requestId);
     }
 
     /*
@@ -56,7 +56,7 @@ contract StartGame is ChainlinkClient, Ownable {
      * @param bytes32 the request id that was returned earlier by the chainlink request
      * @param bytes32 the data requested from the oracle
      */
-    function fullfillStartGame(bytes32 _requestId, bytes32 _data)
+    function fullfillCreateGame(bytes32 _requestId, bytes32 _data)
         public
         recordChainlinkFulfillment(_requestId)
         returns (bytes32) {
@@ -71,7 +71,7 @@ contract StartGame is ChainlinkClient, Ownable {
             gameInstance.game = game;
             //update the owner of the game
             game.transferOwnership(gameInstance.player);
-            emit ReceiveGame(gameInstance.player, _requestId);
+            emit FulfillCreateGame(gameInstance.player, _requestId);
     }
 
     /*

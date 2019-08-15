@@ -1,4 +1,4 @@
-const StartGame = artifacts.require("StartGame");
+const StartGame = artifacts.require("HangmanFactory");
 const Hangman = artifacts.require("Hangman");
 const MockContract = artifacts.require("MockContract");
 const Oracle = artifacts.require("Oracle");
@@ -55,12 +55,12 @@ contract('StartGame', async (accounts) => {
   });
 
   describe("Test creation of hangman contract game", async () => {
-    it("Test requestStartGame is successful in requesting to start a game", async() => {
-        let trx = await startGame.requestStartGame(1);
+    it("Test requestCreateGame is successful in requesting to start a game", async() => {
+        let trx = await startGame.requestCreateGame(1);
 
         //listen for event and capture the requestId
         let requestId
-        truffleAssert.eventEmitted(trx, 'RequestGame', (e) => {
+        truffleAssert.eventEmitted(trx, 'RequestCreateGame', (e) => {
             //capture requestId
             requestId = e.requestId;
             return e.owner === player;
@@ -73,12 +73,12 @@ contract('StartGame', async (accounts) => {
         // NOTE: at this point the user would be waiting for the oracle to call the contract back
     });
     
-    it("Test fullfillStartGame is successful in creating a Hangman contract", async() => {
-        let trx = await startGame.requestStartGame(1);
+    it("Test fullfillCreateGame is successful in creating a Hangman contract", async() => {
+        let trx = await startGame.requestCreateGame(1);
 
         //listen for event and capture the requestId
         let requestId
-        truffleAssert.eventEmitted(trx, 'RequestGame', (e) => {
+        truffleAssert.eventEmitted(trx, 'RequestCreateGame', (e) => {
             //capture requestId
             requestId = e.requestId;
             return e.owner === player;
@@ -86,13 +86,13 @@ contract('StartGame', async (accounts) => {
 
         // NOTE: at this point the user would be waiting for the oracle to call the contract back
       
-        //call the fullfillStartGame with data that mocks
+        //call the fullfillCreateGame with data that mocks
         let givenWord = "testing";
         let bytesVal = web3.fromAscii(givenWord);
-        trx = await startGame.fullfillStartGame(requestId, bytesVal, { from: mockOracle });
+        trx = await startGame.fullfillCreateGame(requestId, bytesVal, { from: mockOracle });
 
         //listen for event and capture new game
-        truffleAssert.eventEmitted(trx, 'ReceiveGame', (e) => {
+        truffleAssert.eventEmitted(trx, 'FulfillCreateGame', (e) => {
             return e.owner === player && e.requestId === requestId;
         }); 
 

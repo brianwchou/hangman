@@ -5,7 +5,7 @@ Hangman is a game where a player has limited attempts to guess a secret word. Th
 
 ### Technical description
 This project is centered around these two contracts: `HangmanFactory.sol` and `Hangman.sol`. 
-From the React frontend, the user deploys a StartGame instance. HangmanFactory is a Chainlink Clientthat will provide a fetch random word from the [Wikipedia](Wikipedia.org) API. After the word is fetched, The factory will deploy an instance of Hangman with the random word and return the contract address to the UI. A new game display appears with guessword and letter inputs. A game over screen appears when the word has been guessed or there are no more avaliable attempts.
+HangmanFactory is a Chainlink Client that will fetch a random word from the [Wikipedia](Wikipedia.org) API. After the word is fetched, the factory will deploy an instance of Hangman with the random word and return the contract address to the UI. A new game display appears with guessword and letter inputs. A game over screen appears when the word has been guessed or there are no more avaliable attempts.
 
 ### Local Setup
 1. `npm install truffle -g`

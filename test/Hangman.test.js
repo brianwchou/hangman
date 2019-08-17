@@ -20,7 +20,7 @@ contract('Hangman', async (accounts) => {
     });
 
     afterEach(async() => {
-        await helper.revertToSnapShot(snapshotId);
+        await helper.revertToSnapshot(snapshotId);
     });
 
     describe("check initial state of contract", async () => {

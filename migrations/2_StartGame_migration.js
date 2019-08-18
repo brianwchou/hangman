@@ -1,6 +1,6 @@
 const HangmanFactory = artifacts.require("HangmanFactory");
 
-module.exports = function(deployer) {
+module.exports = async function(deployer) {
 
   //ROPSTEN TESTNET ADDRESSES
   const chainlinkTokenAddress = "0x20fE562d797A42Dcb3399062AE9546cd06f63280";

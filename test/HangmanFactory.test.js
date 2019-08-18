@@ -41,7 +41,7 @@ contract('StartGame', async (accounts) => {
   });
 
   afterEach(async() => {
-      await helper.revertToSnapShot(snapshotId);
+      await helper.revertToSnapshot(snapshotId);
   });
 
   describe("Test initial values", async () => {

@@ -11,8 +11,9 @@
     "truffle-compile": "truffle compile",
     "truffle-test": "yarn clean; yarn truffle-migrate && truffle test",
     "ganache": "ganache-cli -d",
-    "web:start": "cd ./web && npm start",
-    "web:test": "cd ./web && npm test",
+    "web:start": "cd ./web; yarn start",
+    "web:test": "cd ./web; yarn test",
+    "web:install": "cd ./web; yarn",
     "clean": "rm -r ./web/src/contracts"
   },
   "repository": {
@@ -28,12 +29,10 @@
   "keywords": [],
   "description": "",
   "devDependencies": {
-    "ganache-cli": "6.4.3"
-  },
-  "dependencies": {
+    "ganache-cli": "6.4.3",
     "@gnosis.pm/mock-contract": "2.0.4",
     "chainlink": "^0.6.4",
-    "ganache-time-traveler": "github:ejwessel/GanacheTimeTraveler",
+    "ganache-time-traveler": "^1.0.0",
     "openzeppelin-solidity": "1.12.0",
     "truffle": "^5.0.19",
     "truffle-assertions": "^0.9.0",

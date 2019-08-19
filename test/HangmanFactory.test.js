@@ -1,4 +1,4 @@
-const StartGame = artifacts.require("HangmanFactory");
+const HangmanFactory = artifacts.require("HangmanFactory");
 const Hangman = artifacts.require("Hangman");
 const MockContract = artifacts.require("MockContract");
 const Oracle = artifacts.require("Oracle");
@@ -12,7 +12,7 @@ const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
 const CHAINLINK_HTTP_GET_JOB_ID = "013f25963613411badc2ece3a92d0800"; //this is mainnet jobid
 const PAYMENT = 1;
 
-contract('StartGame', async (accounts) => {
+contract('HangmanFactory', async (accounts) => {
   let startGame;
   let mockLinkToken;
   let mockOracle = accounts[9];
@@ -21,7 +21,7 @@ contract('StartGame', async (accounts) => {
   let path = "items[0].title";
   let snapshotId;
 
-  before('deploy StartGame', async() => {
+  before('deploy HangmanFactory', async() => {
       let linkTokenTemplate = await LinkToken.new();
       mockLinkToken = await MockContract.new();
 

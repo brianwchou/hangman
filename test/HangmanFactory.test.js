@@ -13,7 +13,7 @@ const CHAINLINK_HTTP_GET_JOB_ID = "013f25963613411badc2ece3a92d0800"; //this is 
 const PAYMENT = 1;
 
 contract('HangmanFactory', async (accounts) => {
-  let startGame;
+  let hangmanFactory;
   let mockLinkToken;
   let mockOracle = accounts[9];
   let player = accounts[0];
@@ -32,7 +32,7 @@ contract('HangmanFactory', async (accounts) => {
           .encodeABI();
       await mockLinkToken.givenMethodReturnBool(mockLink_transferAndCall, true);
 
-      startGame = await StartGame.new(mockLinkToken.address, mockOracle, url, path);
+      hangmanFactory = await HangmanFactory.new(mockLinkToken.address, mockOracle, url, path);
   });
 
   beforeEach(async() => {
@@ -46,19 +46,19 @@ contract('HangmanFactory', async (accounts) => {
 
   describe("Test initial values", async () => {
     it("Test url", async() => {
-        let val = await startGame.url.call();
+        let val = await hangmanFactory.url.call();
         assert.equal(val, url, "url not properly set");
     })
     
     it("Test path", async() => {
-        let val = await startGame.path.call();
+        let val = await hangmanFactory.path.call();
         assert.equal(val, path, "path not properly set");
     })
   });
 
   describe("Test creation of hangman contract game", async () => {
     it("Test requestCreateGame is successful in requesting to start a game", async() => {
-        let trx = await startGame.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT);
+        let trx = await hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT);
 
         //listen for event and capture the requestId
         let requestId
@@ -68,7 +68,7 @@ contract('HangmanFactory', async (accounts) => {
             return e.owner === player;
         }); 
 
-        let game = await startGame.requestIdToGame(requestId);
+        let game = await hangmanFactory.requestIdToGame(requestId);
         assert.equal(game[0], player, "saving game instance was unsuccessful");
         assert.equal(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
 
@@ -76,7 +76,7 @@ contract('HangmanFactory', async (accounts) => {
     });
     
     it("Test fullfillCreateGame is successful in creating a Hangman contract", async() => {
-        let trx = await startGame.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT);
+        let trx = await hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT);
 
         //listen for event and capture the requestId
         let requestId
@@ -91,14 +91,14 @@ contract('HangmanFactory', async (accounts) => {
         //call the fullfillCreateGame with data that mocks
         let givenWord = "testing";
         let bytesVal = web3.fromAscii(givenWord);
-        trx = await startGame.fullfillCreateGame(requestId, bytesVal, { from: mockOracle });
+        trx = await hangmanFactory.fullfillCreateGame(requestId, bytesVal, { from: mockOracle });
 
         //listen for event and capture new game
         truffleAssert.eventEmitted(trx, 'FulfillCreateGame', (e) => {
             return e.owner === player && e.requestId === requestId;
         }); 
 
-        let game = await startGame.requestIdToGame(requestId);
+        let game = await hangmanFactory.requestIdToGame(requestId);
         assert.equal(game[0], player, "saving game instance was unsuccessful");
         assert.isOk(game[1], "saving game instance was unsuccessful");
 

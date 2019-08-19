@@ -1,3 +1,7 @@
+const HDWalletProvider = require("truffle-hdwallet-provider");
+
+require('dotenv').config()  // Store environment-specific variable from '.env' to process.env
+
 module.exports = {
   contracts_build_directory: "./web/src/contracts",
   networks: {
@@ -6,6 +10,12 @@ module.exports = {
       port: 8545,            // Standard Ethereum port (default: none)
       network_id: "*",       // Any network (default: none)
      },
+     ropsten: {
+     provider: () => new HDWalletProvider(
+       process.env.MNENOMIC,
+       "https://ropsten.infura.io/v3/" + process.env.INFURA_API_KEY),
+     network_id: 3,
+    }
   },
 
   mocha: {

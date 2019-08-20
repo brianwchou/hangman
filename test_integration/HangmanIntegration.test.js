@@ -9,12 +9,14 @@ const web3 = utils.getWeb3();
 const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
 const CHAINLINK_HTTP_GET_JOB_ID = "96bf1a27492142b095a8ada21631ebd0"; //this is the testnet jobid
 const PAYMENT = 1;
+const url = "https://en.wikipedia.org/api/rest_v1/page/random/title";
+const path = "items[0].title";
 
 contract('Hangman Integration Tests', async (accounts) => {
   let hangmanFactory;
-  let player = accounts[0];
-  let url = "https://en.wikipedia.org/api/rest_v1/page/random/title";
-  let path = "items[0].title";
+  let requestId;
+  let player = accounts[0]; //TODO: does this access the actual account?
+  //probably need to use truffle-hdwallet-provider
 
   before('deploy HangmanFactory', async() => {
       hangmanFactory = await HangmanFactory.deployed();
@@ -30,14 +32,21 @@ contract('Hangman Integration Tests', async (accounts) => {
         let val = await hangmanFactory.path.call();
         assert.equal(val, path, "path not properly set");
     })
+
+    it("Test chainlink token address") {
+      //TODO:
+    }
+
+    it("Test chainlink oracle address") {
+      //TODO:
+    }
   });
 
-  describe("Test creation of hangman contract game", async () => {
+  describe("Test factory and hangman game", async () => {
     it("Test requestCreateGame is successful in requesting to start a game", async() => {
         let trx = await hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT);
 
         //listen for event and capture the requestId
-        let requestId
         truffleAssert.eventEmitted(trx, 'RequestCreateGame', (e) => {
             //capture requestId
             requestId = e.requestId;
@@ -51,28 +60,8 @@ contract('Hangman Integration Tests', async (accounts) => {
         // NOTE: at this point the user would be waiting for the oracle to call the contract back
     });
     
-    it.skip("Test fullfillCreateGame is successful in creating a Hangman contract", async() => {
-        let trx = await hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT);
-
-        //listen for event and capture the requestId
-        let requestId
-        truffleAssert.eventEmitted(trx, 'RequestCreateGame', (e) => {
-            //capture requestId
-            requestId = e.requestId;
-            return e.owner === player;
-        }); 
-
-        // NOTE: at this point the user would be waiting for the oracle to call the contract back
-      
-        //call the fullfillCreateGame with data that mocks
-        let givenWord = "testing";
-        let bytesVal = web3.fromAscii(givenWord);
-        trx = await hangmanFactory.fullfillCreateGame(requestId, bytesVal, { from: mockOracle });
-
-        //listen for event and capture new game
-        truffleAssert.eventEmitted(trx, 'FulfillCreateGame', (e) => {
-            return e.owner === player && e.requestId === requestId;
-        }); 
+    it("Test fullfillCreateGame is successful in creating a Hangman contract", async() => {
+        //listen for event and capture new game OR poll the contract with requestId
 
         let game = await hangmanFactory.requestIdToGame(requestId);
         assert.equal(game[0], player, "saving game instance was unsuccessful");
@@ -83,7 +72,9 @@ contract('Hangman Integration Tests', async (accounts) => {
         assert.equal(owner, player, "player is not the owner of hangman contract");
 
         trx = await hangman.makeWordGuess(web3.fromAscii("testing"));
-        truffleAssert.eventEmitted(trx, "GameWin");
+
+        //TODO: add methods that call methods from the contract
+        //assert that a vowel can be found
     });
   });
 });

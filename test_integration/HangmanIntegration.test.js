@@ -53,6 +53,8 @@ contract('Hangman Integration Tests', async (accounts) => {
             return e.owner === player;
         }); 
 
+        console.log("Request ID: " + requestId)
+
         let game = await hangmanFactory.requestIdToGame(requestId);
         assert.equal(game[0], player, "saving game instance was unsuccessful");
         assert.equal(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");

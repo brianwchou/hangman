@@ -64,6 +64,10 @@ contract('Hangman Integration Tests', async (accounts) => {
         //listen for event and capture new game OR poll the contract with requestId
 
         let game = await hangmanFactory.requestIdToGame(requestId);
+        //wait until the game has been created
+        while(game[1] == EMPTY_ADDRESS) {
+          await hangmanFactory.requestIdToGame(requestId)
+        }
         assert.equal(game[0], player, "saving game instance was unsuccessful");
         assert.isOk(game[1], "saving game instance was unsuccessful");
 

@@ -15,18 +15,4 @@ module.exports = async function(deployer) {
     url, 
     path
   );
-
-//  //can be moved to tests
-//  //this will create a new hangman game and wait for the response
-//  let hangmanFactory = await HangmanFactory.deployed();
-//  const jobId = "96bf1a27492142b095a8ada21631ebd0";
-//  hangmanFactory.requestCreateCame(___, 1);
-//
-//  //listen for the event and grab the id
-//  let requestId;
-//
-//  //Poll the blockchain to determine when the game has been created
-//  let game = hangmanFactory.requestIdToGame(requestId);
-//
-//  //check that the game works.
 };

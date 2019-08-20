@@ -65,6 +65,7 @@ contract('Hangman Integration Tests', async (accounts) => {
 
         let game = await hangmanFactory.requestIdToGame(requestId);
         //wait until the game has been created
+        //either listen for the event or poll...
         while(game[1] == EMPTY_ADDRESS) {
           await hangmanFactory.requestIdToGame(requestId)
         }

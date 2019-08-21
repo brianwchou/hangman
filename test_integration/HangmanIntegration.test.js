@@ -43,7 +43,7 @@ contract('Hangman Integration Tests', async (accounts) => {
   });
 
   describe("Test factory and hangman game", async () => {
-    it("Test requestCreateGame is successful in requesting to start a game", async() => {
+    it.only("Test requestCreateGame is successful in requesting to start a game", async() => {
         let trx = await hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT);
 
         //listen for event and capture the requestId
@@ -55,7 +55,7 @@ contract('Hangman Integration Tests', async (accounts) => {
 
         console.log("Request ID: " + requestId)
 
-        let game = await hangmanFactory.requestIdToGame(requestId);
+        let game = await hangmanFactory.requestIdToGame.call(requestId);
         assert.equal(game[0], player, "saving game instance was unsuccessful");
         assert.equal(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
 

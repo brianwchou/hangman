@@ -68,7 +68,7 @@ contract('HangmanFactory', async (accounts) => {
             return e.owner === player;
         }); 
 
-        let game = await hangmanFactory.requestIdToGame(requestId);
+        let game = await hangmanFactory.requestIdToGame.call(requestId);
         assert.equal(game[0], player, "saving game instance was unsuccessful");
         assert.equal(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
 

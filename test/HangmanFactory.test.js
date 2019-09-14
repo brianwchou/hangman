@@ -32,6 +32,13 @@ contract('HangmanFactory', async (accounts) => {
           .encodeABI();
       await mockLinkToken.givenMethodReturnBool(mockLink_transferAndCall, true);
 
+      //mock LinkToken.transfer()
+      let mockLink_transfer = 
+        linkTokenTemplate.contract.methods
+          .transfer(EMPTY_ADDRESS, 0)
+          .encodeABI();
+      await mockLinkToken.givenMethodReturnBool(mockLink_transfer, true);
+
       hangmanFactory = await HangmanFactory.new(mockLinkToken.address, mockOracle, url, path);
   });
 

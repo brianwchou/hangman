@@ -19,7 +19,8 @@ contract('Hangman Integration Tests', async (accounts) => {
   //probably need to use truffle-hdwallet-provider
 
   before('deploy HangmanFactory', async() => {
-      hangmanFactory = await HangmanFactory.deployed();
+      hangmanFactory = await HangmanFactory.at("0xe6dae7329f72C8C2E114cf4CbAb84D13600607CC");
+      console.log(hangmanFactory.address)
   });
 
   describe("Test initial values", async () => {
@@ -43,7 +44,7 @@ contract('Hangman Integration Tests', async (accounts) => {
   });
 
   describe("Test factory and hangman game", async () => {
-    it.only("Test requestCreateGame is successful in requesting to start a game", async() => {
+    it("Test requestCreateGame is successful in requesting to start a game", async() => {
         let trx = await hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT);
 
         //listen for event and capture the requestId
@@ -69,11 +70,16 @@ contract('Hangman Integration Tests', async (accounts) => {
         //wait until the game has been created
         //either listen for the event or poll...
         while(game[1] == EMPTY_ADDRESS) {
-          await hangmanFactory.requestIdToGame(requestId)
+          console.log("no hangman address requesting again")
+          game = await hangmanFactory.requestIdToGame(requestId)
+          console.log(game[0])
+          console.log(game[1])
         }
         assert.equal(game[0], player, "saving game instance was unsuccessful");
-        assert.isOk(game[1], "saving game instance was unsuccessful");
+        assert.notStrictEqual(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
+    });
 
+    it("Test then Hangman Game that is created", async () => {
         let hangman = await Hangman.at(game[1]);
         let owner = await hangman.owner.call();
         assert.equal(owner, player, "player is not the owner of hangman contract");

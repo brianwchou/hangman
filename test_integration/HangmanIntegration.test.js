@@ -6,6 +6,12 @@ const truffleAssert = require('truffle-assertions');
 const utils = require('./utils.js');
 const web3 = utils.getWeb3();
 
+//ROPSTEN TESTNET ADDRESS
+const chainlinkTokenAddress = "0x20fE562d797A42Dcb3399062AE9546cd06f63280";
+const chainlinkOracleAddress = "0xc99B3D447826532722E41bc36e644ba3479E4365";
+const url = "https://en.wikipedia.org/api/rest_v1/page/random/title";
+const path = "items[0].title";
+
 const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
 const CHAINLINK_HTTP_GET_JOB_ID = "96bf1a27492142b095a8ada21631ebd0"; //this is the testnet jobid
 const PAYMENT = 1;
@@ -19,8 +25,14 @@ contract('Hangman Integration Tests', async (accounts) => {
   //probably need to use truffle-hdwallet-provider
 
   before('deploy HangmanFactory', async() => {
-      hangmanFactory = await HangmanFactory.at("0xe6dae7329f72C8C2E114cf4CbAb84D13600607CC");
-      console.log(hangmanFactory.address)
+      hangmanFactory = await HangmanFactory.new(
+        chainlinkTokenAddress,
+        chainlinkOracleAddress,
+        url,
+        path
+      );
+      //hangmanFactory = await HangmanFactory.at("0xe6dae7329f72C8C2E114cf4CbAb84D13600607CC");
+      console.log("HangmanFactory Address: " + hangmanFactory.address)
   });
 
   describe("Test initial values", async () => {
@@ -32,14 +44,6 @@ contract('Hangman Integration Tests', async (accounts) => {
     it("Test path", async() => {
         let val = await hangmanFactory.path.call();
         assert.equal(val, path, "path not properly set");
-    })
-
-    it("Test chainlink token address", async() => {
-      assert.equal(true, true);
-    })
-
-    it("Test chainlink oracle address", async() => {
-      assert.equal(true, true);
     })
   });
 

@@ -51,7 +51,11 @@ contract HangmanFactory is ChainlinkClient, Ownable {
         // newRequest takes a JobID, a callback address, and callback function as input
         Chainlink.Request memory req = buildChainlinkRequest(job_id, this, this.fullfillCreateGame.selector);
         req.add("url", url);
-        req.add("path", path);
+        string[] memory p = new string[](3);
+        p[0] = "items";
+        p[1] = "0";
+        p[2] = "title";
+        req.addStringArray("path", p);
         bytes32 requestId = sendChainlinkRequest(req, payment);
 
         //requestId will point to the player and the game address(which is pending)

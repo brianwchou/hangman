@@ -2,8 +2,8 @@ pragma solidity ^0.4.24;
 
 import "./Hangman.sol";
 import "chainlink/contracts/ChainlinkClient.sol";
+import "link_token/contracts/token/linkERC20.sol";
 import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
-import 'openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 
 contract HangmanFactory is ChainlinkClient, Ownable {
     struct Game {
@@ -46,7 +46,7 @@ contract HangmanFactory is ChainlinkClient, Ownable {
      */
     function requestCreateGame(bytes32 job_id, uint256 payment) public {
         //transfer LINK to this contract so it can request
-        ERC20(linkToken).transfer(this, payment);
+        require(linkERC20(linkToken).transferFrom(msg.sender, this, payment));
 
         // newRequest takes a JobID, a callback address, and callback function as input
         Chainlink.Request memory req = buildChainlinkRequest(job_id, this, this.fullfillCreateGame.selector);

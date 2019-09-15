@@ -32,6 +32,13 @@ contract('HangmanFactory', async (accounts) => {
           .encodeABI();
       await mockLinkToken.givenMethodReturnBool(mockLink_transferAndCall, true);
 
+      //mock LinkToken.transfer()
+      let mockLink_transferFrom = 
+        linkTokenTemplate.contract.methods
+          .transferFrom(EMPTY_ADDRESS, EMPTY_ADDRESS, 0)
+          .encodeABI();
+      await mockLinkToken.givenMethodReturnBool(mockLink_transferFrom, true);
+
       hangmanFactory = await HangmanFactory.new(mockLinkToken.address, mockOracle, url, path);
   });
 
@@ -68,7 +75,7 @@ contract('HangmanFactory', async (accounts) => {
             return e.owner === player;
         }); 
 
-        let game = await hangmanFactory.requestIdToGame(requestId);
+        let game = await hangmanFactory.requestIdToGame.call(requestId);
         assert.equal(game[0], player, "saving game instance was unsuccessful");
         assert.equal(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
 

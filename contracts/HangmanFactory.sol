@@ -2,6 +2,7 @@ pragma solidity ^0.4.24;
 
 import "./Hangman.sol";
 import "chainlink/contracts/ChainlinkClient.sol";
+import "link_token/contracts/token/linkERC20.sol";
 import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
 
 contract HangmanFactory is ChainlinkClient, Ownable {
@@ -16,6 +17,8 @@ contract HangmanFactory is ChainlinkClient, Ownable {
 
     string public url;
     string public path;
+    address public linkToken;
+    address public oracle;
     mapping(bytes32 => Game) public requestIdToGame;
     //map job id to game struct
     //game struct will have address of the owner of that game and the hangman address
@@ -30,6 +33,8 @@ contract HangmanFactory is ChainlinkClient, Ownable {
     constructor(address _link, address _oracle, string _url, string _path) public {
         setChainlinkToken(_link);
         setChainlinkOracle(_oracle);
+        linkToken = _link;
+        oracle = _oracle;
         url = _url;
         path = _path;
     }
@@ -40,11 +45,19 @@ contract HangmanFactory is ChainlinkClient, Ownable {
      * @param uint256 the payment to the oracle in order to fetch a random word
      */
     function requestCreateGame(bytes32 job_id, uint256 payment) public {
+        //transfer LINK to this contract so it can request
+        require(linkERC20(linkToken).transferFrom(msg.sender, this, payment));
+
         // newRequest takes a JobID, a callback address, and callback function as input
         Chainlink.Request memory req = buildChainlinkRequest(job_id, this, this.fullfillCreateGame.selector);
         req.add("url", url);
-        req.add("path", path);
+        string[] memory p = new string[](3);
+        p[0] = "items";
+        p[1] = "0";
+        p[2] = "title";
+        req.addStringArray("path", p);
         bytes32 requestId = sendChainlinkRequest(req, payment);
+
         //requestId will point to the player and the game address(which is pending)
         requestIdToGame[requestId] = Game(msg.sender, address(0));
         emit RequestCreateGame(msg.sender, requestId);

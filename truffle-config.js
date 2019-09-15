@@ -11,10 +11,10 @@ module.exports = {
       network_id: "*",       // Any network (default: none)
      },
      ropsten: {
-     provider: () => new HDWalletProvider(
-       process.env.MNENOMIC,
-       "https://ropsten.infura.io/v3/" + process.env.INFURA_API_KEY),
-     network_id: 3,
+       provider: () => new HDWalletProvider(
+         process.env.MNENOMIC,
+         "https://ropsten.infura.io/v3/" + process.env.INFURA_API_KEY),
+       network_id: 3,
     }
   },
 

@@ -46,7 +46,10 @@ contract HangmanFactory is ChainlinkClient, Ownable {
      */
     function requestCreateGame(bytes32 job_id, uint256 payment) public {
         //transfer LINK to this contract so it can request
-        require(linkERC20(linkToken).transferFrom(msg.sender, this, payment));
+        require(linkERC20(linkToken).transferFrom(msg.sender, this, payment), "Cannot tranfer link");
+
+        // Ready a contract for accepting a solution
+        Hangman game = new Hangman();
 
         // newRequest takes a JobID, a callback address, and callback function as input
         Chainlink.Request memory req = buildChainlinkRequest(job_id, this, this.fullfillCreateGame.selector);
@@ -59,7 +62,8 @@ contract HangmanFactory is ChainlinkClient, Ownable {
         bytes32 requestId = sendChainlinkRequest(req, payment);
 
         //requestId will point to the player and the game address(which is pending)
-        requestIdToGame[requestId] = Game(msg.sender, address(0));
+        requestIdToGame[requestId] = Game(msg.sender, game);
+
         emit RequestCreateGame(msg.sender, requestId);
     }
 
@@ -72,17 +76,15 @@ contract HangmanFactory is ChainlinkClient, Ownable {
         public
         recordChainlinkFulfillment(_requestId)
         returns (bytes32) {
-            //get the game instance
-            Game storage gameInstance = requestIdToGame[_requestId];
 
+            Game storage gameInstance = requestIdToGame[_requestId];
             require(gameInstance.player != 0, "Id does not exist");
 
-            //create the new hangman with the word(data)
-            Hangman game = new Hangman(bytes32ToBytes(_data), _data.length);
-            //save game into the request
-            gameInstance.game = game;
-            //update the owner of the game
-            game.transferOwnership(gameInstance.player);
+            gameInstance.setSolution(bytes32ToBytes(_data), _data.length);
+
+            // game is now ready to play, update the owner of the game
+            gameInstance.game.transferOwnership(gameInstance.player);
+
             emit FulfillCreateGame(gameInstance.player, _requestId);
     }
 

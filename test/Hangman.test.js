@@ -6,6 +6,7 @@ const web3 = utils.getWeb3();
 
 contract('Hangman', async (accounts) => {
     const player = accounts[0];
+    const notPlayer = accounts[1];
     var hangmanContract;
     let snapshotId;
 
@@ -24,7 +25,7 @@ contract('Hangman', async (accounts) => {
 
     describe("Test game with no solution set", async () => {
         it("check that only owner can set solution", async() => {
-            await truffleAssert.reverts(hangmanContract.setSolution(web3.fromAscii("hello"), 5, { from: accounts[1] }));
+            await truffleAssert.reverts(hangmanContract.setSolution(web3.fromAscii("hello"), 5, { from: notPlayer }));
         });
 
         it("check solution can be set if there is no solution", async() => {
@@ -57,7 +58,7 @@ contract('Hangman', async (accounts) => {
           await hangmanContract.setSolution(web3.fromAscii("hello"), 5);
       })
 
-      describe("check initial state of contract with solution", async () => {
+      describe("Test initial state of contract with solution", async () => {
           it("check owner of contract", async () => {
               let owner = await hangmanContract.owner.call();
               assert.equal(owner, player, "owner doesnt match");
@@ -136,6 +137,10 @@ contract('Hangman', async (accounts) => {
                 "character has aleady been guessed");
           });
 
+          it("Test make character guess with not owner", async () => {
+              await truffleAssert.reverts(hangmanContract.makeCharGuess(web3.fromAscii("e"), { from: notPlayer }));
+          })
+
           it("Test make character guess incorrect char", async () => {
               await hangmanContract.makeCharGuess(web3.fromAscii("p"));
               let misses = await hangmanContract.currentMisses.call();
@@ -188,6 +193,11 @@ contract('Hangman', async (accounts) => {
               let misses = await hangmanContract.currentMisses.call();
               assert.equal(misses.toNumber(), 0, "current misses should not have increased");
           });
+
+          it("Test make word guess with not owner", async () => {
+              await truffleAssert.reverts(
+                hangmanContract.makeWordGuess(web3.fromAscii("hello"), { from: notPlayer }))
+          })
 
           it("Test make word guess turn event", async () => {
               let tx = await hangmanContract.makeWordGuess(web3.fromAscii("testing"));

@@ -73,11 +73,11 @@ contract('HangmanFactory', async (accounts) => {
             //capture requestId
             requestId = e.requestId;
             return e.owner === player;
-        }); 
+        });
 
         let game = await hangmanFactory.requestIdToGame.call(requestId);
         assert.equal(game[0], player, "saving game instance was unsuccessful");
-        assert.equal(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
+        assert.notEqual(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
 
         // NOTE: at this point the user would be waiting for the oracle to call the contract back
     });

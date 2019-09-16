@@ -33,7 +33,7 @@
     "ganache-cli": "6.4.3",
     "@gnosis.pm/mock-contract": "2.0.4",
     "chainlink": "^0.6.4",
-    "ganache-time-traveler": "^1.0.0",
+    "ganache-time-traveler": "^1.0.5",
     "openzeppelin-solidity": "1.12.0",
     "truffle": "^5.0.19",
     "truffle-assertions": "^0.9.0",

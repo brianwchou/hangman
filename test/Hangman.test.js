@@ -298,5 +298,5 @@ contract('Hangman', async (accounts) => {
                   "solution is found");
           });
       });
-      });
+  });
 });

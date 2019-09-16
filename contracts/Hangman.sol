@@ -20,7 +20,7 @@ contract Hangman is Ownable {
      * @param bytes the solution
      * @param uint the maximum allowed number of misses before it's game over
      */
-    function setSolution(bytes _solution, uint _maxAllowedMisses) onlyOwner external {
+    function setSolution(bytes _solution, uint _maxAllowedMisses) external onlyOwner {
         require(solution.length == 0, "solution already set");
         solution = _solution;
         maxAllowedMisses = _maxAllowedMisses;

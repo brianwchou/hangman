@@ -8,7 +8,7 @@ import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
 contract HangmanFactory is ChainlinkClient, Ownable {
     struct Game {
         address player;
-        address game;
+        Hangman game;
     }
 
     // the owner of the contract, the request id generated against that sender
@@ -80,7 +80,7 @@ contract HangmanFactory is ChainlinkClient, Ownable {
             Game storage gameInstance = requestIdToGame[_requestId];
             require(gameInstance.player != 0, "Id does not exist");
 
-            gameInstance.setSolution(bytes32ToBytes(_data), _data.length);
+            gameInstance.game.setSolution(bytes32ToBytes(_data), _data.length);
 
             // game is now ready to play, update the owner of the game
             gameInstance.game.transferOwnership(gameInstance.player);
@@ -125,7 +125,7 @@ contract HangmanFactory is ChainlinkClient, Ownable {
     }
 
     /*
-     * @notice cancels the sent request 
+     * @notice cancels the sent request
      * @dev only owner can call this method
      * @param bytes32 the request id to cancel
      * @param uint256 The amount of LINK sent for the request

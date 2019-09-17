@@ -56,7 +56,7 @@ contract('HangmanFactory', async (accounts) => {
         let val = await hangmanFactory.url.call();
         assert.equal(val, url, "url not properly set");
     })
-    
+
     it("Test path", async() => {
         let val = await hangmanFactory.path.call();
         assert.equal(val, path, "path not properly set");
@@ -81,7 +81,7 @@ contract('HangmanFactory', async (accounts) => {
 
         // NOTE: at this point the user would be waiting for the oracle to call the contract back
     });
-    
+
     it("Test fullfillCreateGame is successful in creating a Hangman contract", async() => {
         let trx = await hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT);
 

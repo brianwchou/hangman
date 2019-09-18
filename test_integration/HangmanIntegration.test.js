@@ -14,8 +14,6 @@ const path = "items[0].title";
 
 //ROPSTEN TESTNET ADDRESS
 const chainlinkTokenAddress = "0x20fE562d797A42Dcb3399062AE9546cd06f63280";
-//const chainlinkOracleAddress = "0xc99B3D447826532722E41bc36e644ba3479E4365";
-//const CHAINLINK_HTTP_GET_JOB_ID = "96bf1a27492142b095a8ada21631ebd0";
 const chainlinkOracleAddress = "0xc99B3D447826532722E41bc36e644ba3479E4365";
 const CHAINLINK_HTTP_GET_JOB_ID = "96bf1a27492142b095a8ada21631ebd0";
 const PAYMENT = 1;
@@ -27,13 +25,13 @@ contract('Hangman Integration Tests', async (accounts) => {
   //probably need to use truffle-hdwallet-provider
 
   before('deploy HangmanFactory', async() => {
-      // hangmanFactory = await HangmanFactory.new(
-      //   chainlinkTokenAddress,
-      //   chainlinkOracleAddress,
-      //   url,
-      //   path
-      // );
-     hangmanFactory = await HangmanFactory.at("0xC195b590FAF87ff87572867ee217eb0B8Aab867B");
+       hangmanFactory = await HangmanFactory.new(
+         chainlinkTokenAddress,
+         chainlinkOracleAddress,
+         url,
+         path
+       );
+      //hangmanFactory = await HangmanFactory.at("0xC195b590FAF87ff87572867ee217eb0B8Aab867B");
       //transfer link to hangman factory address at the value it's going to use
       console.log("HangmanFactory Address: " + hangmanFactory.address)
   });

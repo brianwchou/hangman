@@ -33,7 +33,19 @@ contract('HangmanFactory', async (accounts) => {
           .encodeABI();
       await mockLinkToken.givenMethodReturnBool(mockLink_transferAndCall, true);
 
+      //mock LinkToken.balanceOf()
+      let mockLink_balanceOf = 
+        linkTokenTemplate.contract.methods
+        .balanceOf(EMPTY_ADDRESS)
+        .encodeABI();
+      await mockLinkToken.givenMethodReturnUint(mockLink_balanceOf, 1);
 
+      //mock LinkToken.transfer()
+      let mockLink_transferFrom = 
+      linkTokenTemplate.contract.methods
+        .transferFrom(EMPTY_ADDRESS, EMPTY_ADDRESS, 0)
+        .encodeABI();
+      await mockLinkToken.givenMethodReturnBool(mockLink_transferFrom, true);
 
       hangmanFactory = await HangmanFactory.new(mockLinkToken.address, mockOracle, url, path);
   });
@@ -61,20 +73,6 @@ contract('HangmanFactory', async (accounts) => {
 
   describe("Test creation of hangman contract game", async () => {
     it("Test requestCreateGame is successful in requesting to start a game", async() => {
-        //mock LinkToken.balanceOf()
-        let mockLink_balanceOf = 
-          linkTokenTemplate.contract.methods
-          .balanceOf(EMPTY_ADDRESS)
-          .encodeABI();
-        await mockLinkToken.givenMethodReturnUint(mockLink_balanceOf, 1);
-
-        //mock LinkToken.transfer()
-        let mockLink_transferFrom = 
-        linkTokenTemplate.contract.methods
-          .transferFrom(EMPTY_ADDRESS, EMPTY_ADDRESS, 0)
-          .encodeABI();
-        await mockLinkToken.givenMethodReturnBool(mockLink_transferFrom, true);
-
         let trx = await hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT);
 
         //listen for event and capture the requestId
@@ -93,52 +91,32 @@ contract('HangmanFactory', async (accounts) => {
     });
 
     it("Test requestCreateGame with insufficent LINK balance", async() => {
-      let mockLink_balanceOf = 
-        linkTokenTemplate.contract.methods
-        .balanceOf(EMPTY_ADDRESS)
-        .encodeABI();
-      await mockLinkToken.givenMethodReturnUint(mockLink_balanceOf, 0);
-
-      await truffleAssert.reverts(
-        hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT),
-        "User has insufficient LINK"
-      );
-    });
-
-    it("Test requestCreateGame with unsuccessful LINK transfer", async() => {
-      let mockLink_balanceOf = 
-        linkTokenTemplate.contract.methods
-        .balanceOf(EMPTY_ADDRESS)
-        .encodeABI();
-      await mockLinkToken.givenMethodReturnUint(mockLink_balanceOf, 1);
-
-      let mockLink_transferFrom = 
-      linkTokenTemplate.contract.methods
-        .transferFrom(EMPTY_ADDRESS, EMPTY_ADDRESS, 0)
-        .encodeABI();
-      await mockLinkToken.givenMethodReturnBool(mockLink_transferFrom, false);
-
-      await truffleAssert.reverts(
-        hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT),
-        "Cannot tranfer LINK"
-      );
-    });
-
-    it("Test fullfillCreateGame is successful in creating a Hangman contract", async() => {
-        //mock LinkToken.balanceOf()
         let mockLink_balanceOf = 
           linkTokenTemplate.contract.methods
           .balanceOf(EMPTY_ADDRESS)
           .encodeABI();
-        await mockLinkToken.givenMethodReturnUint(mockLink_balanceOf, 1);
+        await mockLinkToken.givenMethodReturnUint(mockLink_balanceOf, 0);
 
-        //mock LinkToken.transfer()
+        await truffleAssert.reverts(
+          hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT),
+          "User has insufficient LINK"
+        );
+    });
+
+    it("Test requestCreateGame with unsuccessful LINK transfer", async() => {
         let mockLink_transferFrom = 
         linkTokenTemplate.contract.methods
           .transferFrom(EMPTY_ADDRESS, EMPTY_ADDRESS, 0)
           .encodeABI();
-        await mockLinkToken.givenMethodReturnBool(mockLink_transferFrom, true);
+        await mockLinkToken.givenMethodReturnBool(mockLink_transferFrom, false);
 
+        await truffleAssert.reverts(
+          hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT),
+          "Cannot tranfer LINK"
+        );
+    });
+
+    it("Test fullfillCreateGame is successful in creating a Hangman contract", async() => {
         let trx = await hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT);
 
         //listen for event and capture the requestId

@@ -47,6 +47,12 @@ contract('HangmanFactory', async (accounts) => {
         .encodeABI();
       await mockLinkToken.givenMethodReturnBool(mockLink_transferFrom, true);
 
+      let mockLink_allowance = 
+      linkTokenTemplate.contract.methods
+        .allowance(EMPTY_ADDRESS, EMPTY_ADDRESS)
+        .encodeABI();
+      await mockLinkToken.givenMethodReturnUint(mockLink_allowance, 1);
+
       hangmanFactory = await HangmanFactory.new(mockLinkToken.address, mockOracle, url, path);
   });
 
@@ -88,6 +94,19 @@ contract('HangmanFactory', async (accounts) => {
         assert.notEqual(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
 
         // NOTE: at this point the user would be waiting for the oracle to call the contract back
+    });
+
+    it("Test requestCreateGame without LINK allowance", async() => {
+      let mockLink_allowance = 
+      linkTokenTemplate.contract.methods
+        .allowance(EMPTY_ADDRESS, EMPTY_ADDRESS)
+        .encodeABI();
+      await mockLinkToken.givenMethodReturnUint(mockLink_allowance, 0);
+
+      await truffleAssert.reverts(
+        hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT),
+        "Contract has not been given LINK allowance"
+      );
     });
 
     it("Test requestCreateGame with insufficent LINK balance", async() => {

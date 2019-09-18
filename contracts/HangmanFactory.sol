@@ -45,6 +45,9 @@ contract HangmanFactory is ChainlinkClient, Ownable {
      * @param uint256 the payment to the oracle in order to fetch a random word
      */
     function requestCreateGame(bytes32 job_id, uint256 payment) public {
+        // check that this contract has been given access to LINK
+        require(linkERC20(linkToken).allowance(msg.sender, this) >= 1, "Contract has not been given LINK allowance");
+
         // check that the user has enough LINK on account
         require(linkERC20(linkToken).balanceOf(msg.sender) >= payment, "User has insufficient LINK");
 

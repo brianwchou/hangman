@@ -45,11 +45,11 @@ contract HangmanFactory is ChainlinkClient, Ownable {
      * @param uint256 the payment to the oracle in order to fetch a random word
      */
     function requestCreateGame(bytes32 job_id, uint256 payment) public {
-        //transfer LINK to this contract so it can request
-        require(linkERC20(linkToken).transferFrom(msg.sender, this, payment), "Cannot tranfer link");
+        // check that the user has enough LINK on account
+        require(linkERC20(linkToken).balanceOf(msg.sender) >= payment, "User has insufficient LINK");
 
-        // Ready a contract for accepting a solution
-        Hangman game = new Hangman();
+        //transfer LINK to this contract so it can request
+        require(linkERC20(linkToken).transferFrom(msg.sender, this, payment), "Cannot tranfer LINK");
 
         // newRequest takes a JobID, a callback address, and callback function as input
         Chainlink.Request memory req = buildChainlinkRequest(job_id, this, this.fullfillCreateGame.selector);
@@ -60,6 +60,9 @@ contract HangmanFactory is ChainlinkClient, Ownable {
         p[2] = "title";
         req.addStringArray("path", p);
         bytes32 requestId = sendChainlinkRequest(req, payment);
+
+        // Ready a contract for accepting a solution
+        Hangman game = new Hangman();
 
         //requestId will point to the player and the game address(which is pending)
         requestIdToGame[requestId] = Game(msg.sender, game);

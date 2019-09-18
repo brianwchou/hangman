@@ -105,7 +105,7 @@ contract('HangmanFactory', async (accounts) => {
 
       await truffleAssert.reverts(
         hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT),
-        "Contract has not been given LINK allowance"
+        "CONTRACT_APPROVAL_ERROR"
       );
     });
 
@@ -118,7 +118,7 @@ contract('HangmanFactory', async (accounts) => {
 
         await truffleAssert.reverts(
           hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT),
-          "User has insufficient LINK"
+          "USER_INSUFFICIENT_FUNDS"
         );
     });
 
@@ -131,7 +131,7 @@ contract('HangmanFactory', async (accounts) => {
 
         await truffleAssert.reverts(
           hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT),
-          "Cannot tranfer LINK"
+          "TRANSFER_FUNDS_ERROR"
         );
     });
 

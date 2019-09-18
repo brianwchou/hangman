@@ -46,13 +46,13 @@ contract HangmanFactory is ChainlinkClient, Ownable {
      */
     function requestCreateGame(bytes32 job_id, uint256 payment) public {
         // check that this contract has been given access to LINK
-        require(linkERC20(linkToken).allowance(msg.sender, this) >= 1, "Contract has not been given LINK allowance");
+        require(linkERC20(linkToken).allowance(msg.sender, this) >= 1, "CONTRACT_APPROVAL_ERROR");
 
         // check that the user has enough LINK on account
-        require(linkERC20(linkToken).balanceOf(msg.sender) >= payment, "User has insufficient LINK");
+        require(linkERC20(linkToken).balanceOf(msg.sender) >= payment, "USER_INSUFFICIENT_FUNDS");
 
         //transfer LINK to this contract so it can request
-        require(linkERC20(linkToken).transferFrom(msg.sender, this, payment), "Cannot tranfer LINK");
+        require(linkERC20(linkToken).transferFrom(msg.sender, this, payment), "TRANSFER_FUNDS_ERROR");
 
         // newRequest takes a JobID, a callback address, and callback function as input
         Chainlink.Request memory req = buildChainlinkRequest(job_id, this, this.fullfillCreateGame.selector);

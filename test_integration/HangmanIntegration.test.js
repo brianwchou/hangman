@@ -25,13 +25,13 @@ contract('Hangman Integration Tests', async (accounts) => {
   //probably need to use truffle-hdwallet-provider
 
   before('deploy HangmanFactory', async() => {
-//       hangmanFactory = await HangmanFactory.new(
-//         chainlinkTokenAddress,
-//         chainlinkOracleAddress,
-//         url,
-//         path
-//       );
-      hangmanFactory = await HangmanFactory.at("0x5bcA907F30e2cD8eBcC424E167D9D8271F1f69f4");
+       hangmanFactory = await HangmanFactory.new(
+         chainlinkTokenAddress,
+         chainlinkOracleAddress,
+         url,
+         path
+       );
+      //hangmanFactory = await HangmanFactory.at("0x5bcA907F30e2cD8eBcC424E167D9D8271F1f69f4");
       //transfer link to hangman factory address at the value it's going to use
       console.log("HangmanFactory Address: " + hangmanFactory.address)
   });

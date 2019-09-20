@@ -31,7 +31,7 @@ contract('Hangman Integration Tests', async (accounts) => {
          url,
          path
        );
-      //hangmanFactory = await HangmanFactory.at("0xC195b590FAF87ff87572867ee217eb0B8Aab867B");
+      //hangmanFactory = await HangmanFactory.at("0x5bcA907F30e2cD8eBcC424E167D9D8271F1f69f4");
       //transfer link to hangman factory address at the value it's going to use
       console.log("HangmanFactory Address: " + hangmanFactory.address)
   });
@@ -103,15 +103,14 @@ contract('Hangman Integration Tests', async (accounts) => {
 
     it("Test then Hangman Game that is created", async () => {
         let game = await hangmanFactory.requestIdToGame(requestId);
-
+        console.log(game)
         let hangman = await Hangman.at(game[1]);
         let owner = await hangman.owner.call();
-        // assert.equal(owner, player, "player is not the owner of hangman contract");
 
-        trx = await hangman.makeWordGuess(web3.fromAscii("testing"));
+        assert.equal(owner, player, "player is not the owner of hangman contract");
 
-        //TODO: add methods that call methods from the contract
-        //assert that a vowel can be found
+        trx = await hangman.makeWordGuess(web3.fromAscii("Investing"));
+        truffleAssert.eventEmitted(trx, 'GameWin'); 
     });
   });
 });

@@ -103,7 +103,7 @@ contract('Hangman Integration Tests', async (accounts) => {
           owner = await hangman.owner.call();
           console.log(owner)
           console.log(player)
-          await delay(3000);
+          await delay(10000); // create a 10 second delay here so we dont over load the network?
         }
         const later = Date.now()
         const diff = Math.abs(now - later);

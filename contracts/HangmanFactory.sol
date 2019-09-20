@@ -8,12 +8,14 @@ import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
 contract HangmanFactory is ChainlinkClient, Ownable {
     struct Game {
         address player;
-        address game;
+        Hangman game;
     }
 
     // the owner of the contract, the request id generated against that sender
     event RequestCreateGame(address owner, bytes32 requestId);
     event FulfillCreateGame(address owner, bytes32 requestId);
+
+    event Log(address);
 
     string public url;
     string public path;
@@ -45,8 +47,14 @@ contract HangmanFactory is ChainlinkClient, Ownable {
      * @param uint256 the payment to the oracle in order to fetch a random word
      */
     function requestCreateGame(bytes32 job_id, uint256 payment) public {
+        // check that this contract has been given access to LINK
+        require(linkERC20(linkToken).allowance(msg.sender, this) >= 1, "CONTRACT_APPROVAL_ERROR");
+
+        // check that the user has enough LINK on account
+        require(linkERC20(linkToken).balanceOf(msg.sender) >= payment, "USER_INSUFFICIENT_FUNDS");
+
         //transfer LINK to this contract so it can request
-        require(linkERC20(linkToken).transferFrom(msg.sender, this, payment));
+        require(linkERC20(linkToken).transferFrom(msg.sender, this, payment), "TRANSFER_FUNDS_ERROR");
 
         // newRequest takes a JobID, a callback address, and callback function as input
         Chainlink.Request memory req = buildChainlinkRequest(job_id, this, this.fullfillCreateGame.selector);
@@ -58,8 +66,12 @@ contract HangmanFactory is ChainlinkClient, Ownable {
         req.addStringArray("path", p);
         bytes32 requestId = sendChainlinkRequest(req, payment);
 
+        // Ready a contract for accepting a solution
+        Hangman game = new Hangman();
+
         //requestId will point to the player and the game address(which is pending)
-        requestIdToGame[requestId] = Game(msg.sender, address(0));
+        requestIdToGame[requestId] = Game(msg.sender, game);
+
         emit RequestCreateGame(msg.sender, requestId);
     }
 
@@ -72,17 +84,23 @@ contract HangmanFactory is ChainlinkClient, Ownable {
         public
         recordChainlinkFulfillment(_requestId)
         returns (bytes32) {
-            //get the game instance
-            Game storage gameInstance = requestIdToGame[_requestId];
 
+            Game storage gameInstance = requestIdToGame[_requestId];
             require(gameInstance.player != 0, "Id does not exist");
 
-            //create the new hangman with the word(data)
-            Hangman game = new Hangman(bytes32ToBytes(_data), _data.length);
-            //save game into the request
-            gameInstance.game = game;
-            //update the owner of the game
-            game.transferOwnership(gameInstance.player);
+            Hangman hangman = Hangman(address(gameInstance.game));
+            hangman.setSolution(bytes32ToBytes(_data), _data.length);
+            hangman.transferOwnership(address(gameInstance.player));
+
+            emit Log(this);
+            emit Log(msg.sender);
+            emit Log(gameInstance.game);
+            //emit Log(address(hangman.owner)); //owner wont be reflected until after this transaction
+            emit Log(gameInstance.player);
+
+            //require(address(hangman.owner) == address(gameInstance.player), "Player was not transferred ownership");
+
+            //game is now ready to play
             emit FulfillCreateGame(gameInstance.player, _requestId);
     }
 
@@ -123,7 +141,7 @@ contract HangmanFactory is ChainlinkClient, Ownable {
     }
 
     /*
-     * @notice cancels the sent request 
+     * @notice cancels the sent request
      * @dev only owner can call this method
      * @param bytes32 the request id to cancel
      * @param uint256 The amount of LINK sent for the request

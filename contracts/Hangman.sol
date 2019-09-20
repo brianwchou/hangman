@@ -5,7 +5,7 @@ import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
 contract Hangman is Ownable {
     bytes private solution;
     uint public maxAllowedMisses;
-    uint public currentMisses;
+    uint public currentMisses; //defaults to 0
     bytes1[] private usedCharacters;
     uint public playerInput; //represented as an integer reverse binary of the string
 
@@ -15,14 +15,20 @@ contract Hangman is Ownable {
     event TurnTaken();
 
     /*
-     * @notice Initializes the Hangman Game
+     * @notice Initializes the Hangman Game with a solution
+     * @dev only the owner can set the game. This will be done by the factory
      * @param bytes the solution
      * @param uint the maximum allowed number of misses before it's game over
      */
-    constructor(bytes memory _solution, uint _maxAllowedMisses) public {
+    function setSolution(bytes _solution, uint _maxAllowedMisses) external onlyOwner {
+        require(solution.length == 0, "solution already set");
         solution = _solution;
         maxAllowedMisses = _maxAllowedMisses;
-        currentMisses = 0;
+    }
+
+    modifier gameReady() {
+        require(solution.length > 0, "solution not set");
+        _;
     }
 
     /*
@@ -41,7 +47,7 @@ contract Hangman is Ownable {
      * @notice Makes a character guess against the word
      * @param byte the character that is being guessed
      */
-    function makeCharGuess(byte _character) external {
+    function makeCharGuess(byte _character) external onlyOwner gameReady {
         require(currentMisses < maxAllowedMisses, "no more guesses available");
         require(playerInput < 2**(solution.length), "solution is found"); // becareful of overflow
 
@@ -91,7 +97,7 @@ contract Hangman is Ownable {
     /*
      * @notice Make a word guess
      */
-    function makeWordGuess(bytes _string) external {
+    function makeWordGuess(bytes _string) external onlyOwner gameReady {
         require(currentMisses < maxAllowedMisses, "no more guesses available");
         require(playerInput < 2**(solution.length), "solution is found");
 

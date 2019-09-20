@@ -6,6 +6,7 @@ const truffleAssert = require('truffle-assertions');
 const utils = require('./utils.js');
 const web3 = utils.getWeb3();
 const BigNumber = require('bignumber.js');
+const delay = m => new Promise(r => setTimeout(r, m));
 
 const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
 //const url = "https://en.wikipedia.org/api/rest_v1/page/random/title";
@@ -14,10 +15,8 @@ const path = "items[0].title";
 
 //ROPSTEN TESTNET ADDRESS
 const chainlinkTokenAddress = "0x20fE562d797A42Dcb3399062AE9546cd06f63280";
-//const chainlinkOracleAddress = "0xc99B3D447826532722E41bc36e644ba3479E4365";
-//const CHAINLINK_HTTP_GET_JOB_ID = "96bf1a27492142b095a8ada21631ebd0";
-const chainlinkOracleAddress = "0x4a3fbbb385b5efeb4bc84a25aaadcd644bd09721";
-const CHAINLINK_HTTP_GET_JOB_ID = "576a17f61fd9498198f7754d2b1b3f58";
+const chainlinkOracleAddress = "0xc99B3D447826532722E41bc36e644ba3479E4365";
+const CHAINLINK_HTTP_GET_JOB_ID = "96bf1a27492142b095a8ada21631ebd0";
 const PAYMENT = 1;
 
 contract('Hangman Integration Tests', async (accounts) => {
@@ -27,13 +26,13 @@ contract('Hangman Integration Tests', async (accounts) => {
   //probably need to use truffle-hdwallet-provider
 
   before('deploy HangmanFactory', async() => {
-      hangmanFactory = await HangmanFactory.new(
-        chainlinkTokenAddress,
-        chainlinkOracleAddress,
-        url,
-        path
-      );
-//      hangmanFactory = await HangmanFactory.at("0x4d1d55e1f916d388ae5d236610dbf7c3c58d05a6");
+        hangmanFactory = await HangmanFactory.new(
+          chainlinkTokenAddress,
+          chainlinkOracleAddress,
+          url,
+          path
+        );
+      //hangmanFactory = await HangmanFactory.at("0xd723d7DE8C0811484dF4FBfa174555a2BCBF8aBA");
       //transfer link to hangman factory address at the value it's going to use
       console.log("HangmanFactory Address: " + hangmanFactory.address)
   });
@@ -82,36 +81,41 @@ contract('Hangman Integration Tests', async (accounts) => {
 
         let game = await hangmanFactory.requestIdToGame.call(requestId);
         assert.equal(game[0], player, "saving game instance was unsuccessful");
-        assert.equal(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
+        assert.notEqual(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
 
         // NOTE: at this point the user would be waiting for the oracle to call the contract back
     });
     
-    it("Test fullfillCreateGame is successful in creating a Hangman contract", async() => {
+    it("Test oracle callback fullfillCreateGame", async() => {
         //listen for event and capture new game OR poll the contract with requestId
 
         let game = await hangmanFactory.requestIdToGame(requestId);
         //wait until the game has been created
         //either listen for the event or poll...
-        while(game[1] == EMPTY_ADDRESS) {
-          console.log("no hangman address requesting again")
-          game = await hangmanFactory.requestIdToGame(requestId)
-          console.log(game[0])
-          console.log(game[1])
-        }
-        assert.equal(game[0], player, "saving game instance was unsuccessful");
-        assert.notStrictEqual(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
-    });
-
-    it("Test then Hangman Game that is created", async () => {
+        // get game instance
         let hangman = await Hangman.at(game[1]);
         let owner = await hangman.owner.call();
+
+        const now = Date.now();
+        while(owner !== player) {
+          console.log("waiting on change of owner")
+          owner = await hangman.owner.call();
+          console.log("Current Owner: " + owner)
+          console.log("Expected Owner: " + player)
+          await delay(10000); // create a 10 second delay here so we dont over load the network?
+        }
+        const later = Date.now()
+        const diff = Math.abs(now - later);
+        console.log(`polling time: ${diff / 1000} seconds`);
+
         assert.equal(owner, player, "player is not the owner of hangman contract");
+    });
 
-        trx = await hangman.makeWordGuess(web3.fromAscii("testing"));
-
-        //TODO: add methods that call methods from the contract
-        //assert that a vowel can be found
+    it("Test the Hangman Game is playable and the correct solution has been set", async () => {
+        let game = await hangmanFactory.requestIdToGame(requestId);
+        let hangman = await Hangman.at(game[1]);
+        trx = await hangman.makeWordGuess(web3.fromAscii("Investing"));
+        truffleAssert.eventEmitted(trx, 'GameWin'); 
     });
   });
 });

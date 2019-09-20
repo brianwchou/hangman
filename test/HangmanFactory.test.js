@@ -14,6 +14,7 @@ const PAYMENT = 1;
 
 contract('HangmanFactory', async (accounts) => {
   let hangmanFactory;
+  let linkTokenTemplate;
   let mockLinkToken;
   let mockOracle = accounts[9];
   let player = accounts[0];
@@ -22,7 +23,7 @@ contract('HangmanFactory', async (accounts) => {
   let snapshotId;
 
   before('deploy HangmanFactory', async() => {
-      let linkTokenTemplate = await LinkToken.new();
+      linkTokenTemplate = await LinkToken.new();
       mockLinkToken = await MockContract.new();
 
       //mock LinkToken.transferAndCall()
@@ -32,12 +33,25 @@ contract('HangmanFactory', async (accounts) => {
           .encodeABI();
       await mockLinkToken.givenMethodReturnBool(mockLink_transferAndCall, true);
 
+      //mock LinkToken.balanceOf()
+      let mockLink_balanceOf = 
+        linkTokenTemplate.contract.methods
+        .balanceOf(EMPTY_ADDRESS)
+        .encodeABI();
+      await mockLinkToken.givenMethodReturnUint(mockLink_balanceOf, 1);
+
       //mock LinkToken.transfer()
       let mockLink_transferFrom = 
-        linkTokenTemplate.contract.methods
-          .transferFrom(EMPTY_ADDRESS, EMPTY_ADDRESS, 0)
-          .encodeABI();
+      linkTokenTemplate.contract.methods
+        .transferFrom(EMPTY_ADDRESS, EMPTY_ADDRESS, 0)
+        .encodeABI();
       await mockLinkToken.givenMethodReturnBool(mockLink_transferFrom, true);
+
+      let mockLink_allowance = 
+      linkTokenTemplate.contract.methods
+        .allowance(EMPTY_ADDRESS, EMPTY_ADDRESS)
+        .encodeABI();
+      await mockLinkToken.givenMethodReturnUint(mockLink_allowance, 1);
 
       hangmanFactory = await HangmanFactory.new(mockLinkToken.address, mockOracle, url, path);
   });
@@ -56,7 +70,7 @@ contract('HangmanFactory', async (accounts) => {
         let val = await hangmanFactory.url.call();
         assert.equal(val, url, "url not properly set");
     })
-    
+
     it("Test path", async() => {
         let val = await hangmanFactory.path.call();
         assert.equal(val, path, "path not properly set");
@@ -73,15 +87,54 @@ contract('HangmanFactory', async (accounts) => {
             //capture requestId
             requestId = e.requestId;
             return e.owner === player;
-        }); 
+        });
 
         let game = await hangmanFactory.requestIdToGame.call(requestId);
         assert.equal(game[0], player, "saving game instance was unsuccessful");
-        assert.equal(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
+        assert.notEqual(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
 
         // NOTE: at this point the user would be waiting for the oracle to call the contract back
     });
-    
+
+    it("Test requestCreateGame without LINK allowance", async() => {
+      let mockLink_allowance = 
+      linkTokenTemplate.contract.methods
+        .allowance(EMPTY_ADDRESS, EMPTY_ADDRESS)
+        .encodeABI();
+      await mockLinkToken.givenMethodReturnUint(mockLink_allowance, 0);
+
+      await truffleAssert.reverts(
+        hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT),
+        "CONTRACT_APPROVAL_ERROR"
+      );
+    });
+
+    it("Test requestCreateGame with insufficent LINK balance", async() => {
+        let mockLink_balanceOf = 
+          linkTokenTemplate.contract.methods
+          .balanceOf(EMPTY_ADDRESS)
+          .encodeABI();
+        await mockLinkToken.givenMethodReturnUint(mockLink_balanceOf, 0);
+
+        await truffleAssert.reverts(
+          hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT),
+          "USER_INSUFFICIENT_FUNDS"
+        );
+    });
+
+    it("Test requestCreateGame with unsuccessful LINK transfer", async() => {
+        let mockLink_transferFrom = 
+        linkTokenTemplate.contract.methods
+          .transferFrom(EMPTY_ADDRESS, EMPTY_ADDRESS, 0)
+          .encodeABI();
+        await mockLinkToken.givenMethodReturnBool(mockLink_transferFrom, false);
+
+        await truffleAssert.reverts(
+          hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT),
+          "TRANSFER_FUNDS_ERROR"
+        );
+    });
+
     it("Test fullfillCreateGame is successful in creating a Hangman contract", async() => {
         let trx = await hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT);
 

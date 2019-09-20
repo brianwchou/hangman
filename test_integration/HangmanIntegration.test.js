@@ -6,6 +6,7 @@ const truffleAssert = require('truffle-assertions');
 const utils = require('./utils.js');
 const web3 = utils.getWeb3();
 const BigNumber = require('bignumber.js');
+const delay = m => new Promise(r => setTimeout(r, m));
 
 const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
 //const url = "https://en.wikipedia.org/api/rest_v1/page/random/title";
@@ -95,8 +96,6 @@ contract('Hangman Integration Tests', async (accounts) => {
         let hangman = await Hangman.at(game[1]);
         let owner = await hangman.owner.call();
 
-        const delay = m => new Promise(r => setTimeout(r, m));
-
         const now = Date.now();
         while(owner !== player) {
           console.log("waiting on change of owner")
@@ -109,8 +108,7 @@ contract('Hangman Integration Tests', async (accounts) => {
         const diff = Math.abs(now - later);
         console.log(`time difference: ${diff / 1000} seconds`);
 
-        assert.equal(game[0], player, "saving game instance was unsuccessful");
-        assert.notStrictEqual(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
+        assert.equal(owner, player, "game transfer was unsuccessful");
     });
 
     it("Test then Hangman Game that is created", async () => {

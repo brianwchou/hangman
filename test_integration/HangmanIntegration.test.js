@@ -106,7 +106,7 @@ contract('Hangman Integration Tests', async (accounts) => {
         }
         const later = Date.now()
         const diff = Math.abs(now - later);
-        console.log(`time difference: ${diff / 1000} seconds`);
+        console.log(`polling time: ${diff / 1000} seconds`);
 
         assert.equal(owner, player, "player is not the owner of hangman contract");
     });

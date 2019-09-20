@@ -153,8 +153,6 @@ contract('HangmanFactory', async (accounts) => {
         let bytesVal = web3.fromAscii(givenWord);
         trx = await hangmanFactory.fullfillCreateGame(requestId, bytesVal, { from: mockOracle });
 
-        truffleAssert.prettyPrintEmittedEvents(trx)
-
         //listen for event and capture new game
         truffleAssert.eventEmitted(trx, 'FulfillCreateGame', (e) => {
             return e.owner === player && e.requestId === requestId;

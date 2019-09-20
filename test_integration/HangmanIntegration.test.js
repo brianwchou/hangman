@@ -6,6 +6,7 @@ const truffleAssert = require('truffle-assertions');
 const utils = require('./utils.js');
 const web3 = utils.getWeb3();
 const BigNumber = require('bignumber.js');
+const delay = m => new Promise(r => setTimeout(r, m));
 
 const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
 //const url = "https://en.wikipedia.org/api/rest_v1/page/random/title";
@@ -94,8 +95,6 @@ contract('Hangman Integration Tests', async (accounts) => {
         // get game instance
         let hangman = await Hangman.at(game[1]);
         let owner = await hangman.owner.call();
-
-        const delay = m => new Promise(r => setTimeout(r, m));
 
         const now = Date.now();
         while(owner !== player) {

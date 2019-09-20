@@ -25,13 +25,13 @@ contract('Hangman Integration Tests', async (accounts) => {
   //probably need to use truffle-hdwallet-provider
 
   before('deploy HangmanFactory', async() => {
-       hangmanFactory = await HangmanFactory.new(
-         chainlinkTokenAddress,
-         chainlinkOracleAddress,
-         url,
-         path
-       );
-      //hangmanFactory = await HangmanFactory.at("0x5bcA907F30e2cD8eBcC424E167D9D8271F1f69f4");
+      //  hangmanFactory = await HangmanFactory.new(
+      //    chainlinkTokenAddress,
+      //    chainlinkOracleAddress,
+      //    url,
+      //    path
+      //  );
+      hangmanFactory = await HangmanFactory.at("0xd723d7DE8C0811484dF4FBfa174555a2BCBF8aBA");
       //transfer link to hangman factory address at the value it's going to use
       console.log("HangmanFactory Address: " + hangmanFactory.address)
   });
@@ -91,12 +91,20 @@ contract('Hangman Integration Tests', async (accounts) => {
         let game = await hangmanFactory.requestIdToGame(requestId);
         //wait until the game has been created
         //either listen for the event or poll...
-        while(game[1] == EMPTY_ADDRESS) {
-          console.log("no hangman address requesting again")
-          game = await hangmanFactory.requestIdToGame(requestId)
+        // get game instance
+        let hangman = await Hangman.at(game[1]);
+        let owner = await hangman.owner.call();
+
+        const now = Date.now();
+        while(owner !== player) {
+          console.log("waiting on change of owner")
+          owner = await hangman.owner.call();
           console.log(game[0])
           console.log(game[1])
         }
+        const diff = Math.abs(now - later);
+        console.log(`time difference: ${diff / 1000} seconds`);
+
         assert.equal(game[0], player, "saving game instance was unsuccessful");
         assert.notStrictEqual(game[1], EMPTY_ADDRESS, "saving game instance was unsuccessful");
     });

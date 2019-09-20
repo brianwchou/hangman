@@ -99,9 +99,10 @@ contract('Hangman Integration Tests', async (accounts) => {
         while(owner !== player) {
           console.log("waiting on change of owner")
           owner = await hangman.owner.call();
-          console.log(game[0])
-          console.log(game[1])
+          console.log(owner)
+          console.log(player)
         }
+        const later = Date.now()
         const diff = Math.abs(now - later);
         console.log(`time difference: ${diff / 1000} seconds`);
 

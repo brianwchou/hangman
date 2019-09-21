@@ -11,7 +11,7 @@ const delay = m => new Promise(r => setTimeout(r, m));
 const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
 //const url = "https://en.wikipedia.org/api/rest_v1/page/random/title";
 const url = "https://en.wikipedia.org/api/rest_v1/page/title/Investing";
-const path = "items[0].title";
+const path = ["items", "0", "title"];
 
 //ROPSTEN TESTNET ADDRESS
 const chainlinkTokenAddress = "0x20fE562d797A42Dcb3399062AE9546cd06f63280";
@@ -44,8 +44,12 @@ contract('Hangman Integration Tests', async (accounts) => {
     })
     
     it("Test path", async() => {
-        let val = await hangmanFactory.path.call();
-        assert.equal(val, path, "path not properly set");
+        let val_0 = await hangmanFactory.path.call(0);
+        assert.equal(val_0, path[0], "path not properly set");
+        let val_1 = await hangmanFactory.path.call(1);
+        assert.equal(val_1, path[1], "path not properly set");
+        let val_2 = await hangmanFactory.path.call(2);
+        assert.equal(val_2, path[2], "path not properly set");
     })
 
     it("Test LinkToken", async() => {

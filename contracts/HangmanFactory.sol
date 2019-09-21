@@ -1,4 +1,5 @@
 pragma solidity ^0.4.24;
+pragma experimental ABIEncoderV2;
 
 import "./Hangman.sol";
 import "chainlink/contracts/ChainlinkClient.sol";
@@ -16,7 +17,7 @@ contract HangmanFactory is ChainlinkClient, Ownable {
     event FulfillCreateGame(address owner, bytes32 requestId);
 
     string public url;
-    string public path;
+    string[] public path;
     address public linkToken;
     address public oracle;
     mapping(bytes32 => Game) public requestIdToGame;
@@ -30,7 +31,7 @@ contract HangmanFactory is ChainlinkClient, Ownable {
      * @param string the url that will be used to pull words from
      * @param string path the path in the returned result from url to grab the word
      */
-    constructor(address _link, address _oracle, string _url, string _path) public {
+    constructor(address _link, address _oracle, string _url, string[] _path) public {
         setChainlinkToken(_link);
         setChainlinkOracle(_oracle);
         linkToken = _link;
@@ -57,11 +58,7 @@ contract HangmanFactory is ChainlinkClient, Ownable {
         // newRequest takes a JobID, a callback address, and callback function as input
         Chainlink.Request memory req = buildChainlinkRequest(job_id, this, this.fullfillCreateGame.selector);
         req.add("url", url);
-        string[] memory p = new string[](3);
-        p[0] = "items";
-        p[1] = "0";
-        p[2] = "title";
-        req.addStringArray("path", p);
+        req.addStringArray("path", path);
         bytes32 requestId = sendChainlinkRequest(req, payment);
 
         // Ready a contract for accepting a solution

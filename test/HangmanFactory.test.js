@@ -19,7 +19,7 @@ contract('HangmanFactory', async (accounts) => {
   let mockOracle = accounts[9];
   let player = accounts[0];
   let url = "https://en.wikipedia.org/api/rest_v1/page/random/title";
-  let path = "items[0].title";
+  let path = ["items", "0", "title"];
   let snapshotId;
 
   before('deploy HangmanFactory', async() => {
@@ -72,8 +72,12 @@ contract('HangmanFactory', async (accounts) => {
     })
 
     it("Test path", async() => {
-        let val = await hangmanFactory.path.call();
-        assert.equal(val, path, "path not properly set");
+        let val_0 = await hangmanFactory.path.call(0);
+        assert.equal(val_0, path[0], "path not properly set");
+        let val_1 = await hangmanFactory.path.call(1);
+        assert.equal(val_1, path[1], "path not properly set");
+        let val_2 = await hangmanFactory.path.call(2);
+        assert.equal(val_2, path[2], "path not properly set");
     })
   });
 

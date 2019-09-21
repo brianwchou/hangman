@@ -44,8 +44,12 @@ contract('Hangman Integration Tests', async (accounts) => {
     })
     
     it("Test path", async() => {
-        let val = await hangmanFactory.path.call();
-        assert.equal(val, path, "path not properly set");
+        let val_0 = await hangmanFactory.path.call(0);
+        assert.equal(val_0, path[0], "path not properly set");
+        let val_1 = await hangmanFactory.path.call(1);
+        assert.equal(val_1, path[1], "path not properly set");
+        let val_2 = await hangmanFactory.path.call(2);
+        assert.equal(val_2, path[2], "path not properly set");
     })
 
     it("Test LinkToken", async() => {

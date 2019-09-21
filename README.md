@@ -26,3 +26,28 @@ HangmanFactory is a Chainlink Client that will fetch a random word from the [Wik
 - react
 - ethers.js
 
+### Contracts
+```javascript
+ +  HangmanFactory (ChainlinkClient, Ownable)
+    - [Pub] <Constructor> #
+    - [Pub] requestCreateGame #
+    - [Pub] fullfillCreateGame #
+    - [Prv] bytes32ToBytes
+    - [Pub] withdrawLink #
+    - [Pub] setUrl #
+    - [Pub] cancelRequest #
+
+ +  Hangman (Ownable)
+    - [Ext] setSolution #
+    - [Ext] getUsedCharacters
+    - [Ext] makeCharGuess #
+    - [Prv] computeGuess
+    - [Ext] makeWordGuess #
+    - [Ext] getNumberOfCharacters
+    - [Ext] getCorrectlyGuessedCharacters
+    - [Prv] hasBitAtIndex
+
+ ($) = payable function
+ # = non-constant function
+```
+

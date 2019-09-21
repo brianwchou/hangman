@@ -11,7 +11,7 @@ const delay = m => new Promise(r => setTimeout(r, m));
 const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
 //const url = "https://en.wikipedia.org/api/rest_v1/page/random/title";
 const url = "https://en.wikipedia.org/api/rest_v1/page/title/Investing";
-const path = "items[0].title";
+const path = ["items", "0", "title"];
 
 //ROPSTEN TESTNET ADDRESS
 const chainlinkTokenAddress = "0x20fE562d797A42Dcb3399062AE9546cd06f63280";

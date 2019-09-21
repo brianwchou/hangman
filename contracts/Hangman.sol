@@ -3,7 +3,7 @@ pragma solidity ^0.4.24;
 import 'openzeppelin-solidity/contracts/ownership/Ownable.sol';
 
 contract Hangman is Ownable {
-    bytes private solution;
+    bytes public solution;
     uint public maxAllowedMisses;
     uint public currentMisses; //defaults to 0
     bytes1[] private usedCharacters;

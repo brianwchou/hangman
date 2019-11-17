@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { EthersContext, EthersContextProvider } from './EthersContext.js';
 import Game from './Game.js';
 import Start from './Start.js';
 
@@ -15,9 +14,7 @@ function App() {
   }
 
   return (
-    <EthersContextProvider>
-      <ViewState/>
-    </EthersContextProvider>
+    <ViewState/>
   );
 }
 

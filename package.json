@@ -6,11 +6,11 @@
     "test": "test"
   },
   "scripts": {
-    "truffle-version": "truffle version",
-    "truffle-migrate": "truffle migrate",
-    "truffle-compile": "truffle compile",
-    "truffle-test": "yarn clean; yarn truffle-migrate && truffle test test/*",
-    "truffle-test-integration": "yarn clean; yarn truffle-migrate && truffle test test_integration/*",
+    "version": "truffle version",
+    "migrate": "truffle migrate",
+    "compile": "truffle compile",
+    "test": "yarn clean; yarn migrate && truffle test test/*",
+    "test-integration": "yarn clean; yarn migrate && truffle test test_integration/*",
     "ganache": "ganache-cli -d",
     "web:start": "cd ./web; yarn start",
     "web:test": "cd ./web; yarn test",

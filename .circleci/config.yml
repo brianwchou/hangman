@@ -7,16 +7,16 @@ jobs:
       - checkout
       - run:
           name: Install
-          command: npm install
+          command: yarn
       - run:
           name: Compile
-          command: npm run truffle-compile
+          command: yarn compile
       - run:
           name: Migrate
-          command: npm run ganache > /dev/null & sleep 10 && npm run truffle-migrate
+          command: npm run ganache > /dev/null & sleep 10 && yarn migrate
       - run:
           name: Test
-          command: npm run ganache > /dev/null & sleep 10 && npm run truffle-test
+          command: npm run ganache > /dev/null & sleep 10 && yarn test
 
 workflows:
   version: 2

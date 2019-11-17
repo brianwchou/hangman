@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { EthersContext } from './EthersContext.js';
+import { Context } from './context.js';
 import UsedChars from './UsedChars';
 import WinState from './WinState';
 import GuessCounter from './GuessCounter';
 
 function Game() {
-  const [ethersContext, setEthersContext] = useContext(EthersContext);
+  const [context, setContext] = useContext(Context);
   const [hangmanString, setHangmanString] = useState("");
   const [charGuess, setCharGuess] = useState("");
   const [wordGuess, setWordGuess] = useState("");
@@ -14,16 +14,16 @@ function Game() {
   const [usedChars, setUsedChars] = useState([]);
   const [winState, setWinState] = useState(0); //-1 is lose, +1 is win
 
-  ethersContext.contract.on('TurnTaken', () => {
+  context.contract.on('TurnTaken', () => {
     console.log("Turn Taken");
   });
 
-  ethersContext.contract.on('GameWin', () => {
+  context.contract.on('GameWin', () => {
     console.log("Game Win");
     setWinState(1)
   });
 
-  ethersContext.contract.on('GameLose', () => {
+  context.contract.on('GameLose', () => {
     console.log("Game Lose");
     setWinState(-1)
   });
@@ -48,14 +48,14 @@ function Game() {
   }
 
   async function updateGuessCounter() {
-    let numerator = await ethersContext.contract.currentMisses();
+    let numerator = await context.contract.currentMisses();
     setCurrentMisses(numerator.toNumber());
-    let denominator = await ethersContext.contract.maxAllowedMisses();
+    let denominator = await context.contract.maxAllowedMisses();
     setMaxMisses(denominator.toNumber());
   }
 
   async function updateVisibleChars() {
-    let hexChars = await ethersContext.contract.getCorrectlyGuessedCharacters();
+    let hexChars = await context.contract.getCorrectlyGuessedCharacters();
     console.log(hexChars);
 
     //convert hex representation to char representation
@@ -67,7 +67,7 @@ function Game() {
   }
 
   async function updateUsedChars() {
-    let hexChars = await ethersContext.contract.getUsedCharacters();
+    let hexChars = await context.contract.getUsedCharacters();
     console.log(hexChars);
 
     //convert hex representation to char representation
@@ -79,7 +79,7 @@ function Game() {
   }
 
   async function guessChar() {
-    if (ethersContext.contract === undefined) {
+    if (context.contract === undefined) {
       console.log("no contract deployed");
       return;
     } else if (charGuess === "") {
@@ -90,27 +90,27 @@ function Game() {
       return;
     }
 
-    console.log(ethersContext.contract);
+    console.log(context.contract);
     let guess = window.web3.fromAscii(charGuess);
     console.log(guess);
-    let tx = await ethersContext.contract.makeCharGuess(guess);
+    let tx = await context.contract.makeCharGuess(guess);
     console.log(tx);
     await tx.wait();
     handlePostActions();
   }
 
   async function guessWord() {
-    if (ethersContext.contract === undefined) {
+    if (context.contract === undefined) {
       console.log("no contract deployed");
       return;
     }  else if (wordGuess === "") {
       console.log("no word in box");
       return;
     }
-    console.log(ethersContext.contract);
+    console.log(context.contract);
     let guess = window.web3.fromAscii(wordGuess);
     console.log(guess);
-    let tx = await ethersContext.contract.makeWordGuess(guess);
+    let tx = await context.contract.makeWordGuess(guess);
     console.log(tx);
     await tx.wait();
     handlePostActions();

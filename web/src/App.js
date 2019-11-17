@@ -1,23 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { EthersContext, EthersContextProvider } from './EthersContext.js';
+import React, { useContext } from 'react';
+import { Context } from './context';
 import Game from './Game.js';
 import Start from './Start.js';
 
 function App() {
 
-  function ViewState() {
-    const [ethersContext, setEthersContext] = useContext(EthersContext);
-    return (
-      <div>
-        {(ethersContext.contract === undefined) ? <Start/> : <Game/>}
-      </div>
-    );
-  }
+  const [context, setContext] = useContext(Context);
 
   return (
-    <EthersContextProvider>
-      <ViewState/>
-    </EthersContextProvider>
+    <div>
+      {(context.contract === undefined) ? <Start/> : <Game/>}
+    </div>
   );
 }
 

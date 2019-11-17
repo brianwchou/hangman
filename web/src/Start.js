@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { EthersContext } from './EthersContext.js';
+import { Context } from './context.js';
 import { ethers } from 'ethers';
 import HangmanContract from './contracts/Hangman.json';
 
 function Start() {
-  const [ethersContext, setEthersContext] = useContext(EthersContext);
+  const [context, setContext] = useContext(Context);
   const [selectedAddress, setSelectedAddress] = useState();
 
   // Detect when account changes
@@ -23,7 +23,7 @@ function Start() {
       let provider = window['ethereum'] || window.web3.currentProvider
       //NOTE: must wrap window.etherm to get provider, not window.web3
       provider = new ethers.providers.Web3Provider(window.ethereum);
-      setEthersContext(state => ({ ...ethersContext, provider }));
+      setContext(state => ({ ...context, provider }));
     }
   }, []);
 
@@ -40,12 +40,12 @@ function Start() {
       }
 
       //deploy the contract here
-      const signer = ethersContext.provider.getSigner();
+      const signer = context.provider.getSigner();
       let factory = new ethers.ContractFactory(HangmanContract.abi, HangmanContract.bytecode, signer);
       //can I do hex with ethers? or do I need to use web 0.20?
       let hex = window.web3.fromAscii("hello");
       let contract = await factory.deploy(hex, 2);
-      setEthersContext(state => ({ ...ethersContext, contract: contract}));
+      setContext(state => ({ ...context, contract: contract}));
     } catch (error) {
       console.log(error);
     }

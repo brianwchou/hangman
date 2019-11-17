@@ -5,3 +5,4 @@ yarn.lock
 *.swp
 *.orig
 .env
+/web/src/contracts/*.json

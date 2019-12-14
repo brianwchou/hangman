@@ -5,12 +5,13 @@ import GameOptions from './GameOptions.js';
 
 function StartScreen() {
   const [context, setContext] = useContext(Context)
+  return (
+    <div>
+      {/*
+        Game Options
+      */}
+    </div>
+  )
 }
 
-return {
-  <div>
-    {/*
-      Game Options
-    */}
-  </div>
-}
+export default StartScreen;

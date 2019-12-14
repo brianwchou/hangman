@@ -3,16 +3,16 @@ import { Context } from './context.js';
 
 function GameOptions() {
   const [context, setContext] = useContext(Context)
-}
 
-return {
-  <div>
-    {/*
-      Connect Wallet
-      Player Address
-      Start Game Button
-    */}
-  </div>
+  return (
+    <div>
+      {/*
+        Connect Wallet
+        Player Address
+        Start Game Button
+      */}
+    </div>
+  )
 }
 
 export default GameOptions;

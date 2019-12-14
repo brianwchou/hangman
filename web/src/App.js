@@ -9,7 +9,6 @@ function App() {
 
   return (
     <div>
-      {(context.contract === undefined) ? <Start/> : <Game/>}
     </div>
   );
 }

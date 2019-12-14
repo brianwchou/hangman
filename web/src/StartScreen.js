@@ -9,6 +9,8 @@ function StartScreen() {
 
 return {
   <div>
-    { <!-- Game Options --> }
+    {/*
+      Game Options
+    */}
   </div>
 }

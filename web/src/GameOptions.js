@@ -7,8 +7,12 @@ function GameOptions() {
 
 return {
   <div>
-    { <!-- Connect Wallet --> }
-    { <!-- Player Address --> }
-    { <!-- Start Game Button --> }
+    {/*
+      Connect Wallet
+      Player Address
+      Start Game Button
+    */}
   </div>
 }
+
+export default GameOptions;

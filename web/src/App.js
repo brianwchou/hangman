@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Context } from './context';
-import Game from './Game.js';
-import Start from './Start.js';
+import StartScreen from './StartScreen.js';
+import GameScreen from './GameScreen.js';
 
 function App() {
 
@@ -9,6 +9,8 @@ function App() {
 
   return (
     <div>
+      <!-- Start Screen -->
+      <!-- Game Screen -->
     </div>
   );
 }

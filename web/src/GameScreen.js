@@ -1,14 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';	
 import { Context } from './context.js';
 
-function GameOptions() {
+function GameScreen() {
   const [context, setContext] = useContext(Context)
+
 }
 
 return {
   <div>
-    <!-- Connect Wallet -->
-    <!-- Player Address -->
-    <!-- Start Game Button -->
+    <!-- Ascii Image -->
+    <!-- Visible Word -->
+    <!-- Num of Guesses -->
+    <!-- Char Used -->
+    <!-- Guess Char Input -->
+    <!-- Guess Word Input -->
   </div>
 }

@@ -8,11 +8,11 @@ function GameScreen() {
 
 return {
   <div>
-    <!-- Ascii Image -->
-    <!-- Visible Word -->
-    <!-- Num of Guesses -->
-    <!-- Char Used -->
-    <!-- Guess Char Input -->
-    <!-- Guess Word Input -->
+    { <!-- Ascii Image --> }
+    { <!-- Visible Word --> }
+    { <!-- Num of Guesses --> }
+    { <!-- Char Used --> }
+    { <!-- Guess Char Input --> }
+    { <!-- Guess Word Input --> }
   </div>
 }

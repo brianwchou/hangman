@@ -9,8 +9,8 @@ function App() {
 
   return (
     <div>
-      <!-- Start Screen -->
-      <!-- Game Screen -->
+      { <!-- Start Screen --> }
+      { <!-- Game Screen --> }
     </div>
   );
 }

@@ -4,7 +4,7 @@ import GameOptions from './GameOptions.js';
 import { makeStyles } from '@material-ui/core/styles';
 import {Grid, Paper, Typography} from '@material-ui/core';
 
-function StartScreen() {
+function StartScreen(name) {
   const [context, setContext] = useContext(Context);
 
   return (
@@ -20,7 +20,7 @@ function StartScreen() {
         <Grid item>
           <Paper elevation={0}>
             <Typography variant="h1">
-              Hangman
+              {name}
             </Typography>
           </Paper>
         </Grid>

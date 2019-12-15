@@ -5,14 +5,13 @@ import GameScreen from './GameScreen.js';
 import Hangman from './Hangman.js';
 import { ethers } from 'ethers';
 
-
 function App() {
   const [context, setContext] = useContext(Context);
   const screens = {
     START: StartScreen,
     GAME: GameScreen,
   }
-  const [currentScreen, setCurrentScreen] = useState(screens.START);
+  const [currentScreen, setCurrentScreen] = useState(() => screens.START);
   
 
   if (typeof window.ethereum !== 'undefined') {
@@ -87,7 +86,7 @@ function App() {
   }, []);
 
   //context.contract = ""
-  return currentScreen;
+  return currentScreen("guillotine");
 }
 
 export default App;

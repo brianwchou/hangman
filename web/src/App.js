@@ -8,7 +8,7 @@ function App() {
 
   return (
     <div>
-      <StartScreen />
+    {(context.contract == undefined) ? <StartScreen/> : <GameScreen/>}
     </div>
   );
 }

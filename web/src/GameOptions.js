@@ -11,11 +11,11 @@ function GameOptions() {
         <Paper elevation={0}>
           <List>
             <ListItem>address: 0xb893D8F6779842959C1dfC3095b1c62ceAA16703</ListItem>
-            <ListItem selected>start new game</ListItem>
-            <ListItem>play unfinished contract</ListItem>
           </List>
         </Paper>
         <Button variant='contained' color='primary'>Connect Wallet</Button>
+        <Button variant='contained' color='primary'>New Game</Button>
+        <Button variant='contained' color='primary'>Continue Game</Button>
       </Grid>
     </div>
   )

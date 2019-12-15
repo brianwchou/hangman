@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Context } from './context.js';
 import {Grid, Paper, Typography, Button, List, ListItem, TextField} from '@material-ui/core';
 
-function GameOptions() {
+function GameOptions(setScreen) {
   const [context, setContext] = useContext(Context)
 
   return (

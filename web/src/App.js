@@ -1,16 +1,11 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { Context } from './context';
-import StartScreen from './StartScreen.js';
-import GameScreen from './GameScreen.js';
+import screens from './ScreenTypes';
 import Hangman from './Hangman.js';
 import { ethers } from 'ethers';
 
 function App() {
   const [context, setContext] = useContext(Context);
-  const screens = {
-    START: StartScreen,
-    GAME: GameScreen,
-  }
   const [currentScreen, setCurrentScreen] = useState(() => screens.START);
   
 
@@ -85,7 +80,7 @@ function App() {
     load();
   }, []);
 
-  return currentScreen("Guillotine.eth");
+  return currentScreen(setCurrentScreen);
 }
 
 export default App;

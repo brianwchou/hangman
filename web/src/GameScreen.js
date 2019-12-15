@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function GameScreen() {
+function GameScreen(setScreen) {
   const [context, setContext] = useContext(Context)
   const classes = useStyles();
 

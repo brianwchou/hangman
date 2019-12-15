@@ -25,9 +25,9 @@ function App() {
       if (typeof window.ethereum !== 'undefined') {
         let address = '';
         try {
-          address = await window.ethereum.enable();
-          // eslint-disable-next-line no-console
-          console.log(`address ${address}`);
+//          address = await window.ethereum.enable();
+//          // eslint-disable-next-line no-console
+//          console.log(`address ${address}`);
         } catch (error) {
           setContext(state => ({
             ...state,

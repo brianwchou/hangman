@@ -24,7 +24,7 @@ function StartScreen(setScreen, classes) {
           </Paper>
         </Grid>
         <Grid item>
-          <GameOptions setScreen={setScreen} classes={classes}/>
+          <GameOptions setScreen={setScreen}/>
         </Grid>
       </Grid>
     </div>

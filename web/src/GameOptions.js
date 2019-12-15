@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';	
 import { Context } from './context.js';
-import {Grid, Paper, Typography, Button, List, ListItem} from '@material-ui/core';
+import {Grid, Paper, Typography, Button, List, ListItem, TextField} from '@material-ui/core';
 
 function GameOptions() {
   const [context, setContext] = useContext(Context)
@@ -8,14 +8,15 @@ function GameOptions() {
   return (
     <div>
       <Grid item>
-        <Paper elevation={0}>
-          <List>
-            <ListItem>address: 0xb893D8F6779842959C1dfC3095b1c62ceAA16703</ListItem>
-          </List>
-        </Paper>
         <Button variant='contained' color='primary'>Connect Wallet</Button>
+
+        <Typography align='center'>
+          player address: 0xb893D8F6779842959C1dfC3095b1c62ceAA16703
+        </Typography>
+
         <Button variant='contained' color='primary'>New Game</Button>
         <Button variant='contained' color='primary'>Continue Game</Button>
+        <TextField id="outlined-basic" label="Contract Address" variant="outlined" />
       </Grid>
     </div>
   )

@@ -80,6 +80,8 @@ function App() {
     load();
   }, []);
 
+  context.contract = ""
+
   return (
     <div>
     {(context.contract == undefined) ? <StartScreen/> : <GameScreen/>}

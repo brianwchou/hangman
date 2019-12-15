@@ -80,7 +80,7 @@ function App() {
     load();
   }, []);
 
-  context.contract = ""
+  //context.contract = ""
 
   return (
     <div>

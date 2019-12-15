@@ -7,16 +7,29 @@ function GameOptions() {
 
   return (
     <div>
-      <Grid item>
-        <Button variant='contained' color='primary'>Connect Wallet</Button>
-
-        <Typography align='center'>
-          player address: 0xb893D8F6779842959C1dfC3095b1c62ceAA16703
-        </Typography>
-
-        <Button variant='contained' color='primary'>New Game</Button>
-        <Button variant='contained' color='primary'>Continue Game</Button>
-        <TextField id="outlined-basic" label="Contract Address" variant="outlined" />
+      <Grid container
+        justify='center'
+        direction='column'
+        spacing={1}
+        alignItems='center'
+      >
+        <Grid item>
+          <Button variant='contained' color='primary'>Connect Wallet</Button>
+        </Grid>
+        <Grid item>
+          <Typography align='center'>
+            player address: 0xb893D8F6779842959C1dfC3095b1c62ceAA16703
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Button variant='contained' color='primary'>New Game</Button>
+        </Grid>
+        <Grid item>
+          <Button variant='contained' color='primary'>Continue Game</Button>
+        </Grid>
+        <Grid item>
+          <TextField id="outlined-basic" label="Contract Address" variant="outlined" />
+        </Grid>
       </Grid>
     </div>
   )

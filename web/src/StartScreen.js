@@ -24,7 +24,9 @@ function StartScreen() {
             </Typography>
           </Paper>
         </Grid>
-        <GameOptions/>
+        <Grid item>
+          <GameOptions/>
+        </Grid>
       </Grid>
     </div>
   )

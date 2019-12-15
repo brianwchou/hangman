@@ -2,11 +2,30 @@ import React, { useEffect, useContext, useState } from 'react';
 import { Context } from './context';
 import screens from './ScreenTypes';
 import Hangman from './Hangman.js';
+import { makeStyles } from '@material-ui/core/styles';
 import { ethers } from 'ethers';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    height: 500
+  },
+  img: {
+    maxHeight: '100%',
+    maxWidth: '100%'
+  }
+}));
 
 function App() {
   const [context, setContext] = useContext(Context);
   const [currentScreen, setCurrentScreen] = useState(() => screens.START);
+
+  const classes = useStyles();
   
 
   if (typeof window.ethereum !== 'undefined') {
@@ -81,7 +100,7 @@ function App() {
   }, []);
 
   console.log(setCurrentScreen)
-  return currentScreen(setCurrentScreen);
+  return currentScreen(setCurrentScreen, classes);
 }
 
 export default App;

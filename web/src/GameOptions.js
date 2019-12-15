@@ -8,6 +8,7 @@ function GameOptions({setScreen}) {
 
   function setScreenType() {
     console.log("changing screen to GAME")
+    console.log(setScreen)
     setScreen(() => screens.GAME)
   }
 

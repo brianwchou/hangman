@@ -36,7 +36,14 @@ function GameScreen() {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={1}>
+      <Grid container  
+        direction='column'
+        justify='center' 
+        spacing={3}
+        alignItems='center'
+        style={{ minHeight: '100vh' }} 
+        spacing={1}
+      >
         <Grid container item xs={12} spacing={3}>
           <FormRow />
         </Grid>
@@ -47,15 +54,6 @@ function GameScreen() {
           <FormRow />
         </Grid>
       </Grid>
-
-      {/*
-        Ascii Image
-        Visible Word
-        Num of Guesses
-        Char Used
-        Guess Char Input
-        Guess Word Input
-      */}
     </div>
   )
 }

@@ -10,48 +10,34 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1),
     textAlign: 'center',
     color: theme.palette.text.secondary,
+    height: 600
   },
+  img: {
+    maxHeight: '100%',
+    maxWidth: '100%'
+  }
 }));
 
 function GameScreen() {
   const [context, setContext] = useContext(Context)
-
   const classes = useStyles();
-
-  function FormRow() {
-    return (
-      <React.Fragment>
-        <Grid item xs={4}>
-          <Paper className={classes.paper}>item</Paper>
-        </Grid>
-        <Grid item xs={4}>
-          <Paper className={classes.paper}>item</Paper>
-        </Grid>
-        <Grid item xs={4}>
-          <Paper className={classes.paper}>item</Paper>
-        </Grid>
-      </React.Fragment>
-    );
-  }
 
   return (
     <div className={classes.root}>
       <Grid container  
-        direction='column'
         justify='center' 
         spacing={3}
         alignItems='center'
         style={{ minHeight: '100vh' }} 
         spacing={1}
       >
-        <Grid container item xs={12} spacing={3}>
-          <FormRow />
+        <Grid item xs={4}>
+          <Paper className={classes.paper}>
+            <img className={classes.img} src='https://d1nhio0ox7pgb.cloudfront.net/_img/i_collection_png/512x512/plain/guillotine.png' />
+          </Paper>
         </Grid>
-        <Grid container item xs={12} spacing={3}>
-          <FormRow />
-        </Grid>
-        <Grid container item xs={12} spacing={3}>
-          <FormRow />
+        <Grid item xs={4}>
+          <Paper className={classes.paper}>item</Paper>
         </Grid>
       </Grid>
     </div>

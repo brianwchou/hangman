@@ -47,6 +47,12 @@ function GameScreen() {
               alignItems='center'
               style={{ minHeight: '50vh' }}
             >
+              <Typography>
+                Guesses Left 50/50
+              </Typography>
+              <Typography>
+                Used Characters: a b c d e f g h i j k l m n o p q r s t u v w x y z
+              </Typography>
               <Grid item>
                 <TextField id="outlined-basic" label="Guess Word" variant="outlined" />
               </Grid>

@@ -26,7 +26,7 @@ function GameScreen() {
     <div className={classes.root}>
       <Grid container
         justify='center'
-        spacing={3}
+        spacing={1}
         alignItems='center'
         style={{ minHeight: '100vh' }}
       >

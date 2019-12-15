@@ -7,9 +7,10 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
   paper: {
-    padding: theme.spacing(1),
+    padding: theme.spacing(2),
     textAlign: 'center',
     color: theme.palette.text.secondary,
+    height: 500
   },
 }));
 
@@ -18,40 +19,33 @@ function GameScreen() {
 
   const classes = useStyles();
 
-  function FormRow() {
-    return (
-      <React.Fragment>
-        <Grid item xs={4}>
-          <Paper className={classes.paper}>item</Paper>
-        </Grid>
-        <Grid item xs={4}>
-          <Paper className={classes.paper}>item</Paper>
-        </Grid>
-        <Grid item xs={4}>
-          <Paper className={classes.paper}>item</Paper>
-        </Grid>
-      </React.Fragment>
-    );
-  }
-
   return (
     <div className={classes.root}>
-      <Grid container  
-        direction='column'
-        justify='center' 
+      <Grid container
+        justify='center'
         spacing={3}
         alignItems='center'
-        style={{ minHeight: '100vh' }} 
-        spacing={1}
+        style={{ minHeight: '100vh' }}
       >
-        <Grid container item xs={12} spacing={3}>
-          <FormRow />
+        <Grid item xs={6}>
+          <Paper className={classes.paper}>
+            <Typography>
+              Hangman Word Here
+            </Typography>
+         </Paper>
         </Grid>
-        <Grid container item xs={12} spacing={3}>
-          <FormRow />
-        </Grid>
-        <Grid container item xs={12} spacing={3}>
-          <FormRow />
+        <Grid item xs={6}>
+          <Paper className={classes.paper}>
+            <Grid container
+              justify='center'
+              direction='column'
+              spacing={3}
+              alignItems='center'
+            >
+              <TextField id="outlined-basic" label="Guess Word" variant="outlined" />
+              <TextField id="outlined-basic" label="Guess Character" variant="outlined" />
+            </Grid>
+          </Paper>
         </Grid>
       </Grid>
     </div>

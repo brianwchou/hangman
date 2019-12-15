@@ -43,11 +43,16 @@ function GameScreen() {
             <Grid container
               justify='center'
               direction='column'
-              spacing={3}
+              spacing={1}
               alignItems='center'
+              style={{ minHeight: '50vh' }}
             >
-              <TextField id="outlined-basic" label="Guess Word" variant="outlined" />
-              <TextField id="outlined-basic" label="Guess Character" variant="outlined" />
+              <Grid item>
+                <TextField id="outlined-basic" label="Guess Word" variant="outlined" />
+              </Grid>
+              <Grid item>
+                <TextField id="outlined-basic" label="Guess Character" variant="outlined" />
+              </Grid>
             </Grid>
           </Paper>
         </Grid>

@@ -85,8 +85,7 @@ function App() {
     load();
   }, []);
 
-  //context.contract = ""
-  return currentScreen("guillotine");
+  return currentScreen("Guillotine.eth");
 }
 
 export default App;

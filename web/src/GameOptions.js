@@ -1,9 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';	
 import { Context } from './context.js';
+import screens from './ScreenTypes';
 import {Grid, Paper, Typography, Button, List, ListItem, TextField} from '@material-ui/core';
 
-function GameOptions(setScreen) {
+function GameOptions({setScreen}) {
   const [context, setContext] = useContext(Context)
+
+  function setScreenType() {
+    console.log("changing screen to GAME")
+    setScreen(() => screens.GAME)
+  }
 
   return (
     <div>
@@ -22,7 +28,7 @@ function GameOptions(setScreen) {
           </Typography>
         </Grid>
         <Grid item>
-          <Button variant='contained' color='primary'>New Game</Button>
+          <Button variant='contained' color='primary' onClick={setScreenType}>New Game</Button>
         </Grid>
         <Grid item>
           <Button variant='contained' color='primary'>Continue Game</Button>

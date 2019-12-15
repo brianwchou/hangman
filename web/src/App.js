@@ -80,6 +80,7 @@ function App() {
     load();
   }, []);
 
+  console.log(setCurrentScreen)
   return currentScreen(setCurrentScreen);
 }
 

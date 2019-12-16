@@ -1,5 +1,5 @@
-import StartScreen from './StartScreen.js';
-import GameScreen from './GameScreen.js';
+import StartScreen from './StartScreen';
+import GameScreen from './GameScreen';
 
 const screens = {
   START: StartScreen,

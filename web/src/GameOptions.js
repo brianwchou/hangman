@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';	
-import { Context } from './context.js';
+import { Context } from './context';
 import screens from './ScreenTypes';
 import {Grid, Paper, Typography, Button, List, ListItem, TextField} from '@material-ui/core';
 

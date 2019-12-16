@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';	
-import { Context } from './context.js';
+import { Context } from './context';
 import {Grid, Paper, Typography, Button, TextField} from '@material-ui/core';
 
 function GameScreen(setScreen, classes) {

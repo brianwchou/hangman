@@ -20,6 +20,7 @@ function GameOptions({setScreen}) {
   }
 
   return (
+    (!context.address) ?
     <div>
       <Grid container
         justify='center'
@@ -30,6 +31,16 @@ function GameOptions({setScreen}) {
         <Grid item>
           <Button variant='contained' color='primary' onClick={connectWallet}>Connect Wallet</Button>
         </Grid>
+      </Grid>
+    </div>
+    :
+    <div>
+      <Grid container
+        justify='center'
+        direction='column'
+        spacing={1}
+        alignItems='center'
+      >
         <Grid item>
           <Typography align='center'>
             player address: {context.address}

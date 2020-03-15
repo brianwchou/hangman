@@ -5,18 +5,6 @@
   "directories": {
     "test": "test"
   },
-  "scripts": {
-    "version": "truffle version",
-    "migrate": "truffle migrate",
-    "compile": "truffle compile",
-    "test": "yarn clean; yarn migrate && truffle test test/*",
-    "test-integration": "yarn clean; yarn migrate && truffle test test_integration/*",
-    "ganache": "ganache-cli -d",
-    "web:start": "cd ./web; yarn start",
-    "web:test": "cd ./web; yarn test",
-    "web:install": "cd ./web; yarn",
-    "clean": "rm -r ./web/src/contracts"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/brianwchou/Hangman.git"
@@ -29,6 +17,18 @@
   "homepage": "https://github.com/brianwchou/Hangman#readme",
   "keywords": [],
   "description": "",
+  "scripts": {
+    "version": "truffle version",
+    "migrate": "truffle migrate",
+    "compile": "truffle compile",
+    "test": "yarn clean; yarn migrate && truffle test test/*",
+    "test-integration": "yarn clean; yarn migrate && truffle test test_integration/*",
+    "ganache": "ganache-cli -d",
+    "web:start": "cd ./web; yarn start",
+    "web:test": "cd ./web; yarn test",
+    "web:install": "cd ./web; yarn",
+    "clean": "rm -r ./web/src/contracts"
+  },
   "devDependencies": {
     "@gnosis.pm/mock-contract": "2.0.4",
     "chainlink": "^0.6.4",

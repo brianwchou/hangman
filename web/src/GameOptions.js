@@ -12,9 +12,11 @@ function GameOptions({setScreen}) {
     setScreen(() => screens.GAME)
   }
 
-  function connectWallet() {
-    // need to call ethereum.enable()
-    let address = context['ethereum'].enable()
+  const connectWallet = async() => {
+    if (context.address  === '' || context.address === undefined) {
+      let address = await context.ethereum.enable()
+      setContext(state => ({ ...state, address: address[0]}));
+    }
   }
 
   return (
@@ -30,7 +32,7 @@ function GameOptions({setScreen}) {
         </Grid>
         <Grid item>
           <Typography align='center'>
-            player address: 0xb893D8F6779842959C1dfC3095b1c62ceAA16703
+            player address: {context.address}
           </Typography>
         </Grid>
         <Grid item>

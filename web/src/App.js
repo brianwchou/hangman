@@ -3,6 +3,7 @@ import { Context } from './context';
 import screens from './ScreenTypes';
 import Hangman from './Hangman';
 import { makeStyles } from '@material-ui/core/styles';
+import { Container } from '@material-ui/core'
 import { ethers } from 'ethers';
 
 const useStyles = makeStyles(theme => ({
@@ -103,7 +104,11 @@ function App() {
   }, []);
 
   console.log(setCurrentScreen)
-  return currentScreen(setCurrentScreen, classes);
+  return (
+    <Container>
+      {currentScreen(setCurrentScreen, classes)}
+    </Container>
+  ) 
 }
 
 export default App;

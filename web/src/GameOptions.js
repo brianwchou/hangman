@@ -12,6 +12,11 @@ function GameOptions({setScreen}) {
     setScreen(() => screens.GAME)
   }
 
+  function connectWallet() {
+    // need to call ethereum.enable()
+    let address = context['ethereum'].enable()
+  }
+
   return (
     <div>
       <Grid container
@@ -21,7 +26,7 @@ function GameOptions({setScreen}) {
         alignItems='center'
       >
         <Grid item>
-          <Button variant='contained' color='primary'>Connect Wallet</Button>
+          <Button variant='contained' color='primary' onClick={connectWallet}>Connect Wallet</Button>
         </Grid>
         <Grid item>
           <Typography align='center'>

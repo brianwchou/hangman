@@ -47,6 +47,9 @@ function App() {
 //          address = await window.ethereum.enable();
 //          // eslint-disable-next-line no-console
 //          console.log(`address ${address}`);
+
+          // capture window here
+          setContext(state => ({ ...state, ethereum: window.ethereum}));
         } catch (error) {
           setContext(state => ({
             ...state,

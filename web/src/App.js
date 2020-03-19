@@ -1,13 +1,33 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { Context } from './context';
-import StartScreen from './StartScreen.js';
-import GameScreen from './GameScreen.js';
-import Hangman from './Hangman.js';
+import screens from './ScreenTypes';
+import Hangman from './Hangman';
+import { makeStyles } from '@material-ui/core/styles';
+import { Container } from '@material-ui/core'
 import { ethers } from 'ethers';
 
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    height: 500
+  },
+  img: {
+    maxHeight: '100%',
+    maxWidth: '100%'
+  }
+}));
 
 function App() {
   const [context, setContext] = useContext(Context);
+  const [currentScreen, setCurrentScreen] = useState(() => screens.START);
+
+  const classes = useStyles();
+  
 
   if (typeof window.ethereum !== 'undefined') {
     window.ethereum.on('accountsChanged', accounts => {
@@ -28,6 +48,9 @@ function App() {
 //          address = await window.ethereum.enable();
 //          // eslint-disable-next-line no-console
 //          console.log(`address ${address}`);
+
+          // capture window here
+          setContext(state => ({ ...state, ethereum: window.ethereum}));
         } catch (error) {
           setContext(state => ({
             ...state,
@@ -80,11 +103,12 @@ function App() {
     load();
   }, []);
 
+  console.log(setCurrentScreen)
   return (
-    <div>
-    {(context.contract == undefined) ? <StartScreen/> : <GameScreen/>}
-    </div>
-  );
+    <Container>
+      {currentScreen(setCurrentScreen, classes)}
+    </Container>
+  ) 
 }
 
 export default App;

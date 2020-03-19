@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';	
 import { Context } from './context.js';
 import GameOptions from './GameOptions.js';
-import { makeStyles } from '@material-ui/core/styles';
 import {Grid, Paper, Typography} from '@material-ui/core';
 
-function StartScreen() {
+function StartScreen(setScreen, classes) {
   const [context, setContext] = useContext(Context);
-
+  console.log(classes)
   return (
     <div>
       <Grid   
@@ -20,11 +19,13 @@ function StartScreen() {
         <Grid item>
           <Paper elevation={0}>
             <Typography variant="h1">
-              Hangman
+              Guillotine.eth
             </Typography>
           </Paper>
         </Grid>
-        <GameOptions/>
+        <Grid item>
+          <GameOptions setScreen={setScreen}/>
+        </Grid>
       </Grid>
     </div>
   )

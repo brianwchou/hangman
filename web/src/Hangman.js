@@ -16,7 +16,7 @@ class Hangman {
     return this.Game
   }
 
-  async newGame(userAddress) {
+  async newGame(jobId, userAddress) {
     // call factory
     // listen for event
     // return new game address

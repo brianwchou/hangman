@@ -31,8 +31,11 @@ function App() {
   // update address when accounts change
   if (typeof window.ethereum !== 'undefined') {
     window.ethereum.on('accountsChanged', accounts => {
+      console.log("Accounts changed, log user out and bring back to connect wallet screen")
+      // log user out
       setContext(state => ({ ...state, isLoggedIn: false }));
-      console.log("Accounts changed, user logged out")
+      // bring user back to start screen
+      setCurrentScreen(() => screens.START)
       // eslint-disable-next-line no-console
     });
   }

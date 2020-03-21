@@ -5,6 +5,7 @@ const Oracle = artifacts.require("Oracle");
 const LinkToken = artifacts.require("LinkToken");
 const helper = require('ganache-time-traveler');
 const truffleAssert = require('truffle-assertions');
+const ethers = require('ethers');
 
 const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
 const CHAINLINK_HTTP_GET_JOB_ID = "013f25963613411badc2ece3a92d0800"; //this is mainnet jobid

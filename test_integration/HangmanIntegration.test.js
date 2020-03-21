@@ -22,7 +22,7 @@ const PAYMENT = 1;
 contract('Hangman Integration Tests', async (accounts) => {
   let hangmanFactory;
   let requestId;
-  let player = accounts[0]; //TODO: does this access the actual account?
+  let player = accounts[0];
   //probably need to use truffle-hdwallet-provider
 
   before('deploy HangmanFactory', async() => {

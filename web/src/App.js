@@ -24,8 +24,6 @@ const useStyles = makeStyles(theme => ({
 
 function App() {
   const [context, setContext] = useContext(Context);
-  const [currentScreen, setCurrentScreen] = useState(() => screens.START);
-
   const classes = useStyles();
   
   // update address when accounts change
@@ -42,11 +40,13 @@ function App() {
     let hangman = null;
     let walletProvider = null;
     let isLoggedIn = false;
+    let currentScreen = screens.START;
     setContext(state => ({
       ...state,
       hangman,
       walletProvider,
-      isLoggedIn
+      isLoggedIn,
+      currentScreen
     }));
 
     async function load() {
@@ -67,11 +67,15 @@ function App() {
   }, []);
 
   console.log(context)
-  console.log(setCurrentScreen)
   return (
+    (context.currentScreen) ?
     <Container>
-      {currentScreen(setCurrentScreen, classes)}
+        {context.currentScreen(classes)}
     </Container>
+    :
+    <div>
+      Loading...
+    </div>
   ) 
 }
 

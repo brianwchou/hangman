@@ -3,13 +3,16 @@ import { Context } from './context';
 import screens from './ScreenTypes';
 import {Grid, Paper, Typography, Button, List, ListItem, TextField} from '@material-ui/core';
 
-function GameOptions({setScreen}) {
+function GameOptions() {
   const [context, setContext] = useContext(Context)
 
   function setScreenType() {
     console.log("changing screen to GAME")
-    console.log(setScreen)
-    setScreen(() => screens.GAME)
+    let currentScreen = () => screens.GAME
+    setContext(state => ({
+      ...state,
+      currentScreen
+    }));
   }
 
   const connectWallet = async() => {

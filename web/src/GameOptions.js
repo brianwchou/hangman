@@ -16,6 +16,8 @@ function GameOptions({setScreen}) {
     if (!context.isLoggedIn) {
       await context.walletProvider.provider.enable()
       setContext(state => ({ ...state, isLoggedIn: true}));
+
+      // context.hangman can be initialized here
     }
   }
 

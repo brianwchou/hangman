@@ -27,18 +27,6 @@ function App() {
   const [currentScreen, setCurrentScreen] = useState(() => screens.START);
 
   const classes = useStyles();
-  
-  // update address when accounts change
-  if (typeof window.ethereum !== 'undefined') {
-    window.ethereum.on('accountsChanged', accounts => {
-      console.log("Accounts changed, log user out and bring back to connect wallet screen")
-      // log user out
-      setContext(state => ({ ...state, isLoggedIn: false }));
-      // bring user back to start screen
-      setCurrentScreen(() => screens.START)
-      // eslint-disable-next-line no-console
-    });
-  }
 
   useEffect(() => {
     // define all needed context variables here:
@@ -54,6 +42,16 @@ function App() {
 
     async function load() {
       if (typeof window.ethereum !== 'undefined') {
+        // detect when accounts changes
+        window.ethereum.on('accountsChanged', accounts => {
+          console.log("Accounts changed, log user out and bring back to connect wallet screen")
+          // log user out
+          setContext(state => ({ ...state, isLoggedIn: false }));
+          // bring user back to start screen
+          setCurrentScreen(() => screens.START)
+          // eslint-disable-next-line no-console
+        });
+
         try {
           // capture wallet provider
           let provider = new ethers.providers.Web3Provider(window.ethereum);

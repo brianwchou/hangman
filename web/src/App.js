@@ -69,6 +69,7 @@ function App() {
     load();
   }, []);
 
+  console.log(context)
   console.log(setCurrentScreen)
   return (
     <Container>

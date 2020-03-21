@@ -5,8 +5,6 @@ const Oracle = artifacts.require("Oracle");
 const LinkToken = artifacts.require("LinkToken");
 const helper = require('ganache-time-traveler');
 const truffleAssert = require('truffle-assertions');
-const utils = require('./utils.js');
-const web3 = utils.getWeb3();
 
 const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
 const CHAINLINK_HTTP_GET_JOB_ID = "013f25963613411badc2ece3a92d0800"; //this is mainnet jobid
@@ -29,7 +27,7 @@ contract('HangmanFactory', async (accounts) => {
       //mock LinkToken.transferAndCall()
       let mockLink_transferAndCall = 
         linkTokenTemplate.contract.methods
-          .transferAndCall(EMPTY_ADDRESS, 0, web3.fromAscii("0"))
+          .transferAndCall(EMPTY_ADDRESS, 0, ethers.utils.toUtf8Bytes("0"))
           .encodeABI();
       await mockLinkToken.givenMethodReturnBool(mockLink_transferAndCall, true);
 
@@ -83,7 +81,7 @@ contract('HangmanFactory', async (accounts) => {
 
   describe("Test creation of hangman contract game", async () => {
     it("Test requestCreateGame is successful in requesting to start a game", async() => {
-        let trx = await hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT);
+        let trx = await hangmanFactory.requestCreateGame(ethers.utils.toUtf8Bytes(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT);
 
         //listen for event and capture the requestId
         let requestId
@@ -108,7 +106,7 @@ contract('HangmanFactory', async (accounts) => {
       await mockLinkToken.givenMethodReturnUint(mockLink_allowance, 0);
 
       await truffleAssert.reverts(
-        hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT),
+        hangmanFactory.requestCreateGame(ethers.utils.toUtf8Bytes(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT),
         "CONTRACT_APPROVAL_ERROR"
       );
     });
@@ -121,7 +119,7 @@ contract('HangmanFactory', async (accounts) => {
         await mockLinkToken.givenMethodReturnUint(mockLink_balanceOf, 0);
 
         await truffleAssert.reverts(
-          hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT),
+          hangmanFactory.requestCreateGame(ethers.utils.toUtf8Bytes(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT),
           "USER_INSUFFICIENT_FUNDS"
         );
     });
@@ -134,13 +132,13 @@ contract('HangmanFactory', async (accounts) => {
         await mockLinkToken.givenMethodReturnBool(mockLink_transferFrom, false);
 
         await truffleAssert.reverts(
-          hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT),
+          hangmanFactory.requestCreateGame(ethers.utils.toUtf8Bytes(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT),
           "TRANSFER_FUNDS_ERROR"
         );
     });
 
     it("Test fullfillCreateGame is successful in creating a Hangman contract", async() => {
-        let trx = await hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT);
+        let trx = await hangmanFactory.requestCreateGame(ethers.utils.toUtf8Bytes(CHAINLINK_HTTP_GET_JOB_ID), PAYMENT);
 
         //listen for event and capture the requestId
         let requestId
@@ -154,7 +152,7 @@ contract('HangmanFactory', async (accounts) => {
       
         //call the fullfillCreateGame with data that mocks
         let givenWord = "testing";
-        let bytesVal = web3.fromAscii(givenWord);
+        let bytesVal = ethers.utils.toUtf8Bytes(givenWord);
         trx = await hangmanFactory.fullfillCreateGame(requestId, bytesVal, { from: mockOracle });
 
         //listen for event and capture new game
@@ -170,7 +168,7 @@ contract('HangmanFactory', async (accounts) => {
         let owner = await hangman.owner.call();
         assert.equal(owner, player, "player is not the owner of hangman contract");
 
-        trx = await hangman.makeWordGuess(web3.fromAscii("testing"));
+        trx = await hangman.makeWordGuess(ethers.utils.toUtf8Bytes("testing"));
         truffleAssert.eventEmitted(trx, "GameWin");
     });
   });

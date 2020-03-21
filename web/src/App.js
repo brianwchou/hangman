@@ -1,7 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { Context } from './context';
 import screens from './ScreenTypes';
-import Hangman from './Hangman';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container } from '@material-ui/core'
 import { ethers } from 'ethers';

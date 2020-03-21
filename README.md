@@ -51,3 +51,21 @@ HangmanFactory is a Chainlink Client that will fetch a random word from the [Wik
  # = non-constant function
 ```
 
+### Running Unit Tests
+```
+yarn test
+```
+
+### Running Integration Tests
+```
+yarn test-integration --network ropsten
+```
+If there is a failure check
+```
+//ROPSTEN TESTNET ADDRESS
+const chainlinkTokenAddress = "0x20fE562d797A42Dcb3399062AE9546cd06f63280";
+const chainlinkOracleAddress = "0xc99B3D447826532722E41bc36e644ba3479E4365";
+const CHAINLINK_HTTP_GET_JSON_PARSE_JOB_ID = "76ca51361e4e444f8a9b18ae350a5725";
+const PAYMENT = 1;
+```
+https://ropsten.explorer.chain.link/

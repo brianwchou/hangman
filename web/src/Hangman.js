@@ -5,6 +5,7 @@ class Hangman {
   constructor(HangmanFactoryContract) {
     this.Factory = HangmanFactoryContract;
     this.Game = null;
+    this.paymentAmount = 1;
   }
 
   setGame(userAddress, gameAddress) {
@@ -17,7 +18,7 @@ class Hangman {
   }
 
   async newGame(jobId, userAddress) {
-    // call factory
+    await this.Factory.requestCreateGame(ethers.utils.toUtf8Bytes(jobId), this.paymentAmount);
     // listen for event
     // return new game address
   }

@@ -57,6 +57,12 @@ yarn test
 ```
 
 ### Running Integration Tests
+Make sure you have `.env` file set up
+```
+MNEMONIC=""
+INFURA_API_KEY=""
+```
+Then run:
 ```
 yarn test-integration --network ropsten
 ```

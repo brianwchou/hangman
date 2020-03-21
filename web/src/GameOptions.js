@@ -40,7 +40,9 @@ function GameOptions({setScreen}) {
     console.log(context)
     let gameCreated = await context.hangman.newGame(
       "76ca51361e4e444f8a9b18ae350a5725", 
-      context.walletProvider.provider.selectedAddress)
+      context.walletProvider.provider.selectedAddress,
+      context.walletProvider.getSigner()
+    )
 
     if (gameCreated) {
       setScreenType()

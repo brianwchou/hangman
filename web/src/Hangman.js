@@ -1,6 +1,7 @@
+import HangmanJSON from './contracts/Hangman.json';
 const ethers = require("ethers");
 
-class Hangman {
+export default class Hangman {
 
   constructor(HangmanFactoryContract) {
     this.Factory = HangmanFactoryContract;
@@ -17,10 +18,33 @@ class Hangman {
     return this.Game
   }
 
-  async newGame(jobId, userAddress) {
+  async newGame(jobId, userAddress, signer) {
     await this.Factory.requestCreateGame(ethers.utils.toUtf8Bytes(jobId), this.paymentAmount);
-    // listen for event
-    // return new game address
+    await this.Factory.once("RequestCreateGame", async (owner, requestId) => {
+      console.log("RequestCreateGame: request sent, awaiting response")
+      console.log(owner)
+      console.log(requestId)
+    })
+    await this.Factory.once("FulfillCreateGame", async (owner, requestId) => {
+      console.log("FulfillCreateGame: request fulfilled, game is playable")
+      console.log(owner)
+      console.log(requestId)
+
+      let gameStruct = await this.Factory.requestIdToGame(requestId)
+      if (ethers.utils.getAddress(gameStruct[0]) !== ethers.utils.getAddress(userAddress)) {
+        console.log("INVALID USER FOR GAME")
+      }
+
+      console.log(gameStruct)
+      const game = new ethers.Contract(
+        gameStruct[1],
+        HangmanJSON.abi,
+        signer
+      );
+
+      this.Game = game
+      console.log(this.Game)
+    })
   }
 
   async getNumberOfChars() {
@@ -51,6 +75,3 @@ class Hangman {
     return await this.Game.maxAllowedMisses();
   }
 }
-
-
-module.exports = Hangman;

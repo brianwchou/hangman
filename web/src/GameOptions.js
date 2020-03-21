@@ -13,7 +13,7 @@ function GameOptions({setScreen}) {
   }
 
   const connectWallet = async() => {
-    if (context.walletProvider && context.walletProvider.address === undefined) {
+    if (context.walletProvider && !context.walletProvider.provider.selectedAddress) {
       let address = await context.walletProvider.provider.enable()
       setContext(state => ({ ...state, address: address[0]}));
     }

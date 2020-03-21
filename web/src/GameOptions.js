@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';	
+import React, { useContext } from 'react';	
 import { Context } from './context';
 import screens from './ScreenTypes';
-import {Grid, Paper, Typography, Button, List, ListItem, TextField} from '@material-ui/core';
+import {Grid, Typography, Button, TextField} from '@material-ui/core';
 
 function GameOptions({setScreen}) {
   const [context, setContext] = useContext(Context)

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';	
+import React, { useContext } from 'react';	
 import { Context } from './context.js';
 import GameOptions from './GameOptions.js';
 import {Grid, Paper, Typography} from '@material-ui/core';

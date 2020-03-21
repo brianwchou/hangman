@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';	
+import React, { useContext } from 'react';	
 import { Context } from './context';
 import screens from './ScreenTypes';
-import {Grid, Paper, Typography, Button, List, ListItem, TextField} from '@material-ui/core';
+import {Grid, Typography, Button, TextField} from '@material-ui/core';
 
 function GameOptions({setScreen}) {
   const [context, setContext] = useContext(Context)
@@ -13,14 +13,21 @@ function GameOptions({setScreen}) {
   }
 
   const connectWallet = async() => {
-    if (context.address  === '' || context.address === undefined) {
-      let address = await context.ethereum.enable()
-      setContext(state => ({ ...state, address: address[0]}));
+    if (!context.isLoggedIn) {
+      await context.walletProvider.provider.enable()
+      setContext(state => ({ ...state, isLoggedIn: true}));
+
+      // context.hangman can be initialized here
     }
   }
 
+  const newGame = async() => {
+    console.log(context)
+    setScreenType()
+  }
+
   return (
-    (!context.address) ?
+    (!context.isLoggedIn) ?
     <div>
       <Grid container
         justify='center'
@@ -43,11 +50,11 @@ function GameOptions({setScreen}) {
       >
         <Grid item>
           <Typography align='center'>
-            player address: {context.address}
+            player address: {context.walletProvider.provider.selectedAddress}
           </Typography>
         </Grid>
         <Grid item>
-          <Button variant='contained' color='primary' onClick={setScreenType}>New Game</Button>
+          <Button variant='contained' color='primary' onClick={newGame}>New Game</Button>
         </Grid>
         <Grid item>
           <Button variant='contained' color='primary'>Continue Game</Button>

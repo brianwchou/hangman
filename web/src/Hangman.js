@@ -4,11 +4,11 @@ class Hangman {
 
   constructor(HangmanFactoryContract) {
     this.Factory = HangmanFactoryContract;
-    this.Game = None;
+    this.Game = null;
   }
 
-  function setGame(userAddress) {
-    this.Game = Game
+  setGame(userAddress, gameAddress) {
+    this.Game = gameAddress
   }
 
   async getGame(userAddress) {

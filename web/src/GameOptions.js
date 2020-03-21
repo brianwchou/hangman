@@ -13,10 +13,15 @@ function GameOptions({setScreen}) {
   }
 
   const connectWallet = async() => {
-    if (context.address  === '' || context.address === undefined) {
-      let address = await context.ethereum.enable()
+    if (context.walletProvider && context.walletProvider.address === undefined) {
+      let address = await context.walletProvider.provider.enable()
       setContext(state => ({ ...state, address: address[0]}));
     }
+  }
+
+  const newGame = async() => {
+    console.log(context)
+    setScreenType()
   }
 
   return (
@@ -47,7 +52,7 @@ function GameOptions({setScreen}) {
           </Typography>
         </Grid>
         <Grid item>
-          <Button variant='contained' color='primary' onClick={setScreenType}>New Game</Button>
+          <Button variant='contained' color='primary' onClick={newGame}>New Game</Button>
         </Grid>
         <Grid item>
           <Button variant='contained' color='primary'>Continue Game</Button>

@@ -1,7 +1,6 @@
 /node_modules
 /build
 package-lock.json
-yarn.lock
 *.swp
 *.orig
 .env

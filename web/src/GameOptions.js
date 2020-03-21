@@ -13,9 +13,9 @@ function GameOptions({setScreen}) {
   }
 
   const connectWallet = async() => {
-    if (context.walletProvider && !context.walletProvider.provider.selectedAddress) {
-      let address = await context.walletProvider.provider.enable()
-      setContext(state => ({ ...state, address: address[0]}));
+    if (!context.isLoggedIn) {
+      await context.walletProvider.provider.enable()
+      setContext(state => ({ ...state, isLoggedIn: true}));
     }
   }
 
@@ -25,7 +25,7 @@ function GameOptions({setScreen}) {
   }
 
   return (
-    (!context.address) ?
+    (!context.isLoggedIn) ?
     <div>
       <Grid container
         justify='center'
@@ -48,7 +48,7 @@ function GameOptions({setScreen}) {
       >
         <Grid item>
           <Typography align='center'>
-            player address: {context.address}
+            player address: {context.walletProvider.provider.selectedAddress}
           </Typography>
         </Grid>
         <Grid item>

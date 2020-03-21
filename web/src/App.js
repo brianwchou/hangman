@@ -31,12 +31,9 @@ function App() {
   // update address when accounts change
   if (typeof window.ethereum !== 'undefined') {
     window.ethereum.on('accountsChanged', accounts => {
-      // should update context when user change is detected
-      if (context.address && context.address !== accounts[0]) {
-        setContext(state => ({ ...state, address: accounts[0] }));
-        // eslint-disable-next-line no-console
-        console.log(`Address was updated ${accounts[0]}`);
-      }
+      setContext(state => ({ ...state, isLoggedIn: false }));
+      console.log("Accounts changed, user logged out")
+      // eslint-disable-next-line no-console
     });
   }
 
@@ -44,12 +41,12 @@ function App() {
     // define all needed context variables here:
     let hangman = null;
     let walletProvider = null;
-    let address = '';
+    let isLoggedIn = false;
     setContext(state => ({
       ...state,
       hangman,
       walletProvider,
-      address
+      isLoggedIn
     }));
 
     async function load() {

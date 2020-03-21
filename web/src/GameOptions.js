@@ -8,11 +8,11 @@ function GameOptions() {
 
   function setScreenType() {
     console.log("changing screen to GAME")
-    let currentScreen = screens.GAME
+    let currentScreen = () => screens.GAME
     setContext(state => ({
       ...state,
       currentScreen
-    }))
+    }));
   }
 
   const connectWallet = async() => {

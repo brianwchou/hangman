@@ -19,31 +19,31 @@ export default class Hangman {
   }
 
   async newGame(jobId, userAddress, signer) {
+    // Step 1: Request
     await this.Factory.requestCreateGame(ethers.utils.toUtf8Bytes(jobId), this.paymentAmount);
+    // Step 2: Listen for Request
     await this.Factory.once("RequestCreateGame", async (owner, requestId) => {
       console.log("RequestCreateGame: request sent, awaiting response")
       console.log(owner)
       console.log(requestId)
     })
+    // Step 3: Wait for Request to be answered
     await this.Factory.once("FulfillCreateGame", async (owner, requestId) => {
       console.log("FulfillCreateGame: request fulfilled, game is playable")
       console.log(owner)
       console.log(requestId)
 
+      // Step 4: Initialize connect to Game Contract
       let gameStruct = await this.Factory.requestIdToGame(requestId)
       if (ethers.utils.getAddress(gameStruct[0]) !== ethers.utils.getAddress(userAddress)) {
         console.log("INVALID USER FOR GAME")
       }
-
-      console.log(gameStruct)
       const game = new ethers.Contract(
         gameStruct[1],
         HangmanJSON.abi,
         signer
       );
-
       this.Game = game
-      console.log(this.Game)
     })
   }
 

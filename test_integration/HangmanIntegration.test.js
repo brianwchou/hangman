@@ -3,8 +3,7 @@ const Hangman = artifacts.require("Hangman");
 const Oracle = artifacts.require("Oracle");
 const LinkToken = artifacts.require("LinkToken");
 const truffleAssert = require('truffle-assertions');
-const utils = require('./utils.js');
-const web3 = utils.getWeb3();
+const ethers = require('ethers');
 const BigNumber = require('bignumber.js');
 const delay = m => new Promise(r => setTimeout(r, m));
 
@@ -72,7 +71,7 @@ contract('Hangman Integration Tests', async (accounts) => {
         let paymentAmount = new BigNumber(PAYMENT * Math.pow(10, decimals));
         await token.approve(hangmanFactory.address, paymentAmount);
 
-        let trx = await hangmanFactory.requestCreateGame(web3.fromAscii(CHAINLINK_HTTP_GET_JSON_PARSE_JOB_ID), paymentAmount);
+        let trx = await hangmanFactory.requestCreateGame(ethers.utils.toUtf8Bytes(CHAINLINK_HTTP_GET_JSON_PARSE_JOB_ID), paymentAmount);
 
         //listen for event and capture the requestId
         truffleAssert.eventEmitted(trx, 'RequestCreateGame', (e) => {
@@ -118,7 +117,7 @@ contract('Hangman Integration Tests', async (accounts) => {
     it("Test the Hangman Game is playable and the correct solution has been set", async () => {
         let game = await hangmanFactory.requestIdToGame(requestId);
         let hangman = await Hangman.at(game[1]);
-        trx = await hangman.makeWordGuess(web3.fromAscii("Investing"));
+        trx = await hangman.makeWordGuess(ethers.utils.toUtf8Bytes("Investing"));
         truffleAssert.eventEmitted(trx, 'GameWin'); 
     });
   });

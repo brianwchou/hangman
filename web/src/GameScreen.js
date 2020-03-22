@@ -1,10 +1,16 @@
 import React, { useContext } from 'react';	
 import { Context } from './context';
-import {Grid, Paper, Typography, TextField} from '@material-ui/core';
+import {Grid, Paper, Typography, Button, TextField} from '@material-ui/core';
 
 function GameScreen(setScreen, classes) {
   const [context, setContext] = useContext(Context)
-  console.log(classes); 
+
+  const submitWord = async() => {
+  }
+
+  const submitChar = async() => {
+  }
+
   return (
     <div className={classes.root}>
       <Grid container
@@ -38,9 +44,11 @@ function GameScreen(setScreen, classes) {
               </Typography>
               <Grid item>
                 <TextField id="outlined-basic" label="Guess Word" variant="outlined" />
+                <Button variant='contained' color='primary' onClick={submitWord}>Submit Word</Button>
               </Grid>
               <Grid item>
                 <TextField id="outlined-basic" label="Guess Character" variant="outlined" />
+                <Button variant='contained' color='primary' onClick={submitChar}>Submit Char</Button>
               </Grid>
             </Grid>
           </Paper>

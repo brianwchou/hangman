@@ -2,11 +2,9 @@ import React, { useContext, useState } from 'react';
 import { Context } from './context';
 import {Grid, Paper, Typography, Button, TextField} from '@material-ui/core';
 
-function GameScreen(setScreen, classes) {
+function GameScreen(classes) {
   const [context, setContext] = useContext(Context)
-//  const [word, setWord] = useState('')
-//  const [char, setChar] = useState('')
-//
+
   function handleWordGuessChange(e) {
     console.log(e)
     //setWord(e)

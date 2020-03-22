@@ -1,19 +1,12 @@
 import React, { useContext } from 'react';	
 import { Context } from './context';
 import { ethers } from 'ethers';
-import screens from './ScreenTypes';
 import HangmanFactoryJSON from './contracts/HangmanFactory.json';
 import Hangman from './Hangman';
 import {Grid, Typography, Button, TextField} from '@material-ui/core';
 
-function GameOptions({setScreen}) {
+function GameOptions(props) {
   const [context, setContext] = useContext(Context)
-
-  function setScreenType() {
-    console.log("changing screen to GAME")
-    console.log(setScreen)
-    setScreen(() => screens.GAME)
-  }
 
   const connectWallet = async() => {
     if (context.isDebug) {
@@ -42,7 +35,7 @@ function GameOptions({setScreen}) {
 
   const newGame = async() => {
     if (context.isDebug) {
-      setScreenType()
+      props.setScreen('GAME')
     } else {
       console.log(context)
       let gameCreated = await context.hangman.newGame(
@@ -50,9 +43,10 @@ function GameOptions({setScreen}) {
         context.walletProvider.provider.selectedAddress,
         context.walletProvider.getSigner()
       )
-
+      console.log("GAME CREATED")
+      console.log(gameCreated)
       if (gameCreated) {
-        setScreenType()
+        props.setScreen('GAME')
       } else{
         // TODO: Handle failure here
       }

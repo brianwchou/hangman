@@ -7,6 +7,7 @@ export default class Hangman {
     this.Factory = HangmanFactoryContract;
     this.Game = null;
     this.paymentAmount = 1;
+    // TODO: Make payment dynamic based on current required value
   }
 
   setGame(gameAddress, signer) {

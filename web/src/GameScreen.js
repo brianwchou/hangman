@@ -37,7 +37,7 @@ function GameScreen(setScreen, classes) {
                 Used Characters: a b c d e f g h i j k l m n o p q r s t u v w x y z
               </Typography>
 
-              <Grid container justify='left' direction='row' spacing={1} alignItems='center'>
+              <Grid container item justify='left' direction='row' spacing={1} alignItems='center'>
                 <Grid item>
                   <TextField id="outlined-basic" label="Guess Word" variant="outlined" />
                 </Grid>
@@ -46,7 +46,7 @@ function GameScreen(setScreen, classes) {
                 </Grid>
               </Grid>
 
-              <Grid container justify='left' direction='row' spacing={1} alignItems='center'>
+              <Grid container item justify='left' direction='row' spacing={1} alignItems='center'>
                 <Grid item>
                   <TextField id="outlined-basic" label="Guess Character" variant="outlined" />
                 </Grid>

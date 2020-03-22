@@ -9,12 +9,16 @@ export default class Hangman {
     this.paymentAmount = 1;
   }
 
-  setGame(userAddress, gameAddress) {
-    this.Game = gameAddress
+  setGame(gameAddress, signer) {
+    const game = new ethers.Contract(
+      gameAddress,
+      HangmanJSON.abi,
+      signer
+    );
+    this.Game = game
   }
 
   async getGame(userAddress) {
-    // fetches from factory if game is not set
     return this.Game
   }
 

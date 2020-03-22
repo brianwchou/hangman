@@ -37,15 +37,21 @@ function GameOptions({setScreen}) {
   }
 
   const newGame = async() => {
-    console.log(context)
-    let gameCreated = await context.hangman.newGame(
-      "76ca51361e4e444f8a9b18ae350a5725", 
-      context.walletProvider.provider.selectedAddress,
-      context.walletProvider.getSigner()
-    )
-
-    if (gameCreated) {
+    if (context.isDebug) {
       setScreenType()
+    } else {
+      console.log(context)
+      let gameCreated = await context.hangman.newGame(
+        "76ca51361e4e444f8a9b18ae350a5725", 
+        context.walletProvider.provider.selectedAddress,
+        context.walletProvider.getSigner()
+      )
+
+      if (gameCreated) {
+        setScreenType()
+      } else{
+        // TODO: Handle failure here
+      }
     }
   }
 

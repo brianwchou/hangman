@@ -32,11 +32,13 @@ function App() {
     let hangman = null;
     let walletProvider = null;
     let isLoggedIn = false;
+    let isDebug = true;
     setContext(state => ({
       ...state,
       hangman,
       walletProvider,
-      isLoggedIn
+      isLoggedIn,
+      isDebug
     }));
 
     async function load() {

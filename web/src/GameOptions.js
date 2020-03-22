@@ -1,6 +1,9 @@
 import React, { useContext } from 'react';	
 import { Context } from './context';
+import { ethers } from 'ethers';
 import screens from './ScreenTypes';
+import HangmanFactoryJSON from './contracts/HangmanFactory.json';
+import Hangman from './Hangman';
 import {Grid, Typography, Button, TextField} from '@material-ui/core';
 
 function GameOptions({setScreen}) {
@@ -17,13 +20,33 @@ function GameOptions({setScreen}) {
       await context.walletProvider.provider.enable()
       setContext(state => ({ ...state, isLoggedIn: true}));
 
-      // context.hangman can be initialized here
+      // init factory
+      const hangmanFactory = new ethers.Contract(
+        "0xd723d7DE8C0811484dF4FBfa174555a2BCBF8aBA",
+        HangmanFactoryJSON.abi,
+        context.walletProvider.getSigner()
+      );
+
+      // init hangman
+      let hangman = new Hangman(hangmanFactory)
+      setContext(state => ({
+        ...state,
+        hangman
+      }))
     }
   }
 
   const newGame = async() => {
     console.log(context)
-    setScreenType()
+    let gameCreated = await context.hangman.newGame(
+      "76ca51361e4e444f8a9b18ae350a5725", 
+      context.walletProvider.provider.selectedAddress,
+      context.walletProvider.getSigner()
+    )
+
+    if (gameCreated) {
+      setScreenType()
+    }
   }
 
   return (

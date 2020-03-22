@@ -1,25 +1,55 @@
+import HangmanJSON from './contracts/Hangman.json';
 const ethers = require("ethers");
 
-class Hangman {
+export default class Hangman {
 
   constructor(HangmanFactoryContract) {
     this.Factory = HangmanFactoryContract;
     this.Game = null;
+    this.paymentAmount = 1;
+    // TODO: Make payment dynamic based on current required value
   }
 
-  setGame(userAddress, gameAddress) {
-    this.Game = gameAddress
+  setGame(gameAddress, signer) {
+    const game = new ethers.Contract(
+      gameAddress,
+      HangmanJSON.abi,
+      signer
+    );
+    this.Game = game
   }
 
   async getGame(userAddress) {
-    // fetches from factory if game is not set
     return this.Game
   }
 
-  async newGame(jobId, userAddress) {
-    // call factory
-    // listen for event
-    // return new game address
+  async newGame(jobId, userAddress, signer) {
+    // Step 1: Request
+    await this.Factory.requestCreateGame(ethers.utils.toUtf8Bytes(jobId), this.paymentAmount);
+    // Step 2: Listen for Request
+    await this.Factory.once("RequestCreateGame", async (owner, requestId) => {
+      console.log("RequestCreateGame: request sent, awaiting response")
+      console.log(owner)
+      console.log(requestId)
+    })
+    // Step 3: Wait for Request to be answered
+    await this.Factory.once("FulfillCreateGame", async (owner, requestId) => {
+      console.log("FulfillCreateGame: request fulfilled, game is playable")
+      console.log(owner)
+      console.log(requestId)
+
+      // Step 4: Initialize connect to Game Contract
+      let gameStruct = await this.Factory.requestIdToGame(requestId)
+      if (ethers.utils.getAddress(gameStruct[0]) !== ethers.utils.getAddress(userAddress)) {
+        console.log("INVALID USER FOR GAME")
+      }
+      const game = new ethers.Contract(
+        gameStruct[1],
+        HangmanJSON.abi,
+        signer
+      );
+      this.Game = game
+    })
   }
 
   async getNumberOfChars() {
@@ -50,6 +80,3 @@ class Hangman {
     return await this.Game.maxAllowedMisses();
   }
 }
-
-
-module.exports = Hangman;

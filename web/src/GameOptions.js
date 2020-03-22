@@ -16,23 +16,27 @@ function GameOptions({setScreen}) {
   }
 
   const connectWallet = async() => {
-    if (!context.isLoggedIn) {
-      await context.walletProvider.provider.enable()
-      setContext(state => ({ ...state, isLoggedIn: true}));
+    if (context.isDebug) {
+        setContext(state => ({ ...state, isLoggedIn: true}));
+    } else {
+      if (!context.isLoggedIn) {
+        await context.walletProvider.provider.enable()
+        setContext(state => ({ ...state, isLoggedIn: true}));
 
-      // init factory
-      const hangmanFactory = new ethers.Contract(
-        "0xd723d7DE8C0811484dF4FBfa174555a2BCBF8aBA",
-        HangmanFactoryJSON.abi,
-        context.walletProvider.getSigner()
-      );
+        // init factory
+        const hangmanFactory = new ethers.Contract(
+          "0xd723d7DE8C0811484dF4FBfa174555a2BCBF8aBA",
+          HangmanFactoryJSON.abi,
+          context.walletProvider.getSigner()
+        );
 
-      // init hangman
-      let hangman = new Hangman(hangmanFactory)
-      setContext(state => ({
-        ...state,
-        hangman
-      }))
+        // init hangman
+        let hangman = new Hangman(hangmanFactory)
+        setContext(state => ({
+          ...state,
+          hangman
+        }))
+      }
     }
   }
 

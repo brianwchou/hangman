@@ -1,14 +1,28 @@
-import React, { useContext } from 'react';	
+import React, { useContext, useState } from 'react';	
 import { Context } from './context';
 import {Grid, Paper, Typography, Button, TextField} from '@material-ui/core';
 
 function GameScreen(setScreen, classes) {
   const [context, setContext] = useContext(Context)
+  const [word, setWord] = useState('')
+  const [char, setChar] = useState('')
+
+  function handleWordGuessChange(e) {
+    console.log(e)
+    setWord(e)
+  }
+
+  function handleCharGuessChange(e) {
+    console.log(e)
+    setChar(e)
+  }
 
   const submitWord = async() => {
+    await context.hangman.makeWordGuess(word)
   }
 
   const submitChar = async() => {
+    await context.hangman.makeCharGuess(char)
   }
 
   return (
@@ -39,7 +53,7 @@ function GameScreen(setScreen, classes) {
 
               <Grid container item justify='left' direction='row' spacing={1} alignItems='center'>
                 <Grid item>
-                  <TextField id="outlined-basic" label="Guess Word" variant="outlined" />
+                  <TextField id="outlined-basic" label="Guess Word" variant="outlined" onChange={handleWordGuessChange}/>
                 </Grid>
                 <Grid item>
                   <Button variant='contained' color='primary' onClick={submitWord}>Submit Word</Button>
@@ -48,7 +62,7 @@ function GameScreen(setScreen, classes) {
 
               <Grid container item justify='left' direction='row' spacing={1} alignItems='center'>
                 <Grid item>
-                  <TextField id="outlined-basic" label="Guess Character" variant="outlined" />
+                  <TextField id="outlined-basic" label="Guess Character" variant="outlined" onChange={handleCharGuessChange}/>
                 </Grid>
                 <Grid item>
                   <Button variant='contained' color='primary' onClick={submitChar}>Submit Char</Button>

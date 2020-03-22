@@ -29,26 +29,28 @@ function GameScreen(setScreen, classes) {
         </Grid>
         <Grid item xs={6}>
           <Paper className={classes.paper}>
-            <Grid container
-              justify='center'
-              direction='column'
-              spacing={1}
-              alignItems='center'
-              style={{ minHeight: '50vh' }}
-            >
+            <Grid container justify='center' direction='column' spacing={1} alignItems='center' style={{ minHeight: '50vh' }}>
               <Typography>
                 Guesses Left 50/50
               </Typography>
               <Typography>
                 Used Characters: a b c d e f g h i j k l m n o p q r s t u v w x y z
               </Typography>
-              <Grid item>
-                <TextField id="outlined-basic" label="Guess Word" variant="outlined" />
-                <Button variant='contained' color='primary' onClick={submitWord}>Submit Word</Button>
+              <Grid container justify='left' direction='row' spacing={1} alignItems='center'>
+                <Grid item>
+                  <TextField id="outlined-basic" label="Guess Word" variant="outlined" />
+                </Grid>
+                <Grid item>
+                  <Button variant='contained' color='primary' onClick={submitWord}>Submit Word</Button>
+                </Grid>
               </Grid>
-              <Grid item>
-                <TextField id="outlined-basic" label="Guess Character" variant="outlined" />
-                <Button variant='contained' color='primary' onClick={submitChar}>Submit Char</Button>
+              <Grid container justify='left' direction='row' spacing={1} alignItems='center'>
+                <Grid item>
+                  <TextField id="outlined-basic" label="Guess Character" variant="outlined" />
+                </Grid>
+                <Grid item>
+                  <Button variant='contained' color='primary' onClick={submitChar}>Submit Char</Button>
+                </Grid>
               </Grid>
             </Grid>
           </Paper>

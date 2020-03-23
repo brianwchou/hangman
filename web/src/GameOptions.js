@@ -42,8 +42,6 @@ function GameOptions({setScreen}) {
       setScreen('GAME')
     } else {
       console.log(`[Hangman]: newGame called`)
-      const {selectedAddress} = context.walletProvider.provider
-      const {getSigner} = context.walletProvider
       const callbackUIActions = {
         setBarCompleted,
         changeScreen: () => { setScreen('GAME') }
@@ -51,8 +49,8 @@ function GameOptions({setScreen}) {
 
       let gameCreated = await context.hangman.newGame(
         "76ca51361e4e444f8a9b18ae350a5725", 
-        selectedAddress,
-        getSigner(),
+        context.walletProvider.provider.selectedAddress,
+        context.walletProvider.getSigner(),
         callbackUIActions
       )
     }

@@ -4,6 +4,7 @@ import {Grid, Paper, Typography, Button, TextField} from '@material-ui/core';
 
 function GameScreen(classes) {
   const [context, setContext] = useContext(Context)
+  const [displayWord, setDisplayWord] = useState()
   const [word, setWord] = useState('')
   const [char, setChar] = useState('')
   console.log(`[UI GameScreen]: load`)
@@ -19,13 +20,18 @@ function GameScreen(classes) {
   }
 
   const submitWord = async () => {
-    await context.hangman.makeWordGuess(word)
-    setWord('')
+    console.log(`[User Action]: Submit word ${word}`)
+    await context.hangman.makeWordGuess(word, async () => {
+      setWord('')
+    })
   }
 
   const submitChar = async () => {
-    await context.hangman.makeCharGuess(char)
-    setChar('')
+    console.log(`[User Action]: Submit character ${char}`)
+    await context.hangman.makeCharGuess(char, async () => {
+      // const currentValue = await context.hangman.getCorrectlyGuessedChars()
+      setChar('')
+    })
   }
 
   return (
@@ -38,7 +44,7 @@ function GameScreen(classes) {
             src='https://d1nhio0ox7pgb.cloudfront.net/_img/i_collection_png/512x512/plain/guillotine.png'
           />
             <Typography>
-              Hangman Word Here
+              {displayWord}
             </Typography>
          </Paper>
         </Grid>

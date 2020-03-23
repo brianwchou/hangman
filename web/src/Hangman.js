@@ -2,7 +2,6 @@ import HangmanJSON from './contracts/Hangman.json';
 const ethers = require("ethers");
 
 export default class Hangman {
-
   constructor(HangmanFactoryContract) {
     this.Factory = HangmanFactoryContract;
     this.Game = null;
@@ -50,6 +49,25 @@ export default class Hangman {
     })
   }
 
+  async makeCharGuess(charInput, callbackAction) {
+    console.log(this.Game)
+    let character = ethers.utils.toUtf8Bytes(charInput)
+    await this.Game.makeCharGuess(character)
+
+    this.Game.once("TurnTaken", async () => {
+      callbackAction()
+    });
+  }
+
+  async makeWordGuess(wordInput, callbackAction) {
+    let word = ethers.utils.toUtf8Bytes(wordInput)
+    await this.Game.makeWordGuess(word)
+
+    this.Game.once("TurnTaken", async () => {
+      callbackAction()
+    });
+  }
+
   async getNumberOfChars() {
     return await this.Game.getNumberOfCharacters();
   }
@@ -60,16 +78,6 @@ export default class Hangman {
 
   async getCorrectlyGuessedChars() {
     return await this.Game.getCorrectlyGuessedCharacters();
-  }
-
-  async makeCharGuess(c) {
-    let character = ethers.utils.toUtf8Bytes(c)
-    await this.Game.makeCharGuess(character);
-  }
-
-  async makeWordGuess(w) {
-    let word = ethers.utils.toUtf8Bytes(w)
-    await this.Game.makeWordGuess(word);
   }
 
   async currentMisses() {

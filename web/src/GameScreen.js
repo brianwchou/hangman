@@ -4,23 +4,23 @@ import {Grid, Paper, Typography, Button, TextField} from '@material-ui/core';
 
 function GameScreen(classes) {
   const [context, setContext] = useContext(Context)
+  const [word, setWord] = useState('')
+  const [char, setChar] = useState('')
 
   function handleWordGuessChange(e) {
-    console.log(e)
-    //setWord(e)
+    setWord(e)
   }
 
   function handleCharGuessChange(e) {
-    console.log(e)
-    //setChar(e)
+    setChar(e)
   }
 
   const submitWord = async() => {
-    await context.hangman.makeWordGuess()
+    await context.hangman.makeWordGuess(word)
   }
 
   const submitChar = async() => {
-    await context.hangman.makeCharGuess()
+    await context.hangman.makeCharGuess(char)
   }
 
   return (

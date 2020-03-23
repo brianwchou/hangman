@@ -26,6 +26,7 @@ function App() {
   const [context, setContext] = useContext(Context);
   const [currentScreen, setCurrentScreen] = useState('START');
   const classes = useStyles();
+  console.log(`[UI App] Application start`)
 
   useEffect(() => {
     // define all needed context variables here:
@@ -45,7 +46,7 @@ function App() {
       if (typeof window.ethereum !== 'undefined') {
         // detect when accounts changes
         window.ethereum.on('accountsChanged', accounts => {
-          console.log("Accounts changed, log user out and bring back to connect wallet screen")
+          console.log(`[Metamask]: Accounts changed to ${accounts[0]}`)
           // log user out
           setContext(state => ({ ...state, isLoggedIn: false }));
           // bring user back to start screen
@@ -58,6 +59,7 @@ function App() {
           let provider = new ethers.providers.Web3Provider(window.ethereum);
           setContext(state => ({ ...state, walletProvider: provider}));
         } catch (error) {
+          console.log(`[Metamask]: ERROR loading provider`)
           setContext(state => ({
             ...state,
             error: `Web3 Loading Error 1: ${error}`

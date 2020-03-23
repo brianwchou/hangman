@@ -3,6 +3,7 @@ import GameOptions from './GameOptions.js';
 import {Grid, Paper, Typography} from '@material-ui/core';
 
 function StartScreen({setScreen}) {
+  console.log(`[UI StartScreen]: load`)
   return (
     <div>
       <Grid   

@@ -6,6 +6,7 @@ function GameScreen(classes) {
   const [context, setContext] = useContext(Context)
   const [word, setWord] = useState('')
   const [char, setChar] = useState('')
+  console.log(`[UI GameScreen]: load`)
 
   function handleWordGuessChange(e) {
     setWord(e.target.value)

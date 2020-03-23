@@ -28,17 +28,12 @@ export default class Hangman {
     await this.Factory.requestCreateGame(ethers.utils.toUtf8Bytes(jobId), this.paymentAmount);
     // Step 2: Listen for Request
     await this.Factory.once("RequestCreateGame", async (owner, requestId) => {
-      console.log("RequestCreateGame: request sent, awaiting response")
-      console.log(owner)
-      console.log(requestId)
+      console.log(`[FactoryContract] RequestCreateGame: (owner: ${owner}), (requestId: ${requestId})`)
       callback.setBarCompleted(50)
     })
     // Step 3: Wait for Request to be answered
     await this.Factory.once("FulfillCreateGame", async (owner, requestId) => {
-      console.log("FulfillCreateGame: request fulfilled, game is playable")
-      console.log(owner)
-      console.log(requestId)
-
+      console.log(`[FactoryContract] FulfillCreateGame: (owner: ${owner}), (requestId: ${requestId})`)
       // Step 4: Initialize connect to Game Contract
       let gameStruct = await this.Factory.requestIdToGame(requestId)
       if (ethers.utils.getAddress(gameStruct[0]) !== ethers.utils.getAddress(userAddress)) {

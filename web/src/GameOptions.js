@@ -10,6 +10,8 @@ function GameOptions({setScreen}) {
   const [barCompleted, setBarCompleted] = useState(0)
 
   const connectWallet = async() => {
+    console.log(`[User Action]: connect wallet pressed`)
+
     if (context.isDebug) {
         setContext(state => ({ ...state, isLoggedIn: true}));
     } else {
@@ -35,10 +37,11 @@ function GameOptions({setScreen}) {
   }
 
   const newGame = async() => {
+    console.log(`[User Action]: New Game button pressed`)
     if (context.isDebug) {
       setScreen('GAME')
     } else {
-      console.log(context)
+      console.log(`[Hangman]: newGame called`)
       const {selectedAddress} = context.walletProvider.provider
       const {getSigner} = context.walletProvider
       const callbackUIActions = {

@@ -53,7 +53,7 @@ contract Hangman is Ownable {
 
         //go through and check if the character has already been guessed
         for (uint i = 0; i < usedCharacters.length; i++) {
-            if (usedCharacters[i] != _character) {
+            if (usedCharacters[i] == _character) {
                 emit TurnTaken(false);
                 return;
             }
@@ -113,8 +113,7 @@ contract Hangman is Ownable {
             currentMisses += 1;
             if (currentMisses >= maxAllowedMisses) {
                 emit GameLose();
-            }
-            else {
+            } else {
                 emit TurnTaken(false);
             }
             return;

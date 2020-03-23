@@ -7,7 +7,6 @@ import {Grid, Typography, Button, TextField} from '@material-ui/core';
 
 function GameOptions(props) {
   const [context, setContext] = useContext(Context)
-  const [hasGame, setHasGame] = useState(false)
 
   const connectWallet = async() => {
     if (context.isDebug) {
@@ -43,16 +42,12 @@ function GameOptions(props) {
         "76ca51361e4e444f8a9b18ae350a5725", 
         context.walletProvider.provider.selectedAddress,
         context.walletProvider.getSigner(),
-        setHasGame
+        () => {
+          props.setScreen('GAME')
+        }
       )
     }
   }
-
-  useEffect(() => {
-    if (hasGame) {
-      props.setScreen('GAME')
-    }
-  }, [hasGame])
 
   return (
     (!context.isLoggedIn) ?

@@ -5,7 +5,7 @@ import {Grid, Paper, Typography} from '@material-ui/core';
 
 function StartScreen(setScreen, classes) {
   const [context, setContext] = useContext(Context);
-  console.log(classes)
+  console.log(`[UI StartScreen]: load`)
   return (
     <div>
       <Grid   

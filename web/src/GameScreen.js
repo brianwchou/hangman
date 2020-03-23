@@ -8,11 +8,11 @@ function GameScreen(classes) {
   const [char, setChar] = useState('')
 
   function handleWordGuessChange(e) {
-    setWord(e)
+    setWord(e.target.value)
   }
 
   function handleCharGuessChange(e) {
-    setChar(e)
+    setChar(e.target.value)
   }
 
   const submitWord = async() => {

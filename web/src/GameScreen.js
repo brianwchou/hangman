@@ -12,15 +12,19 @@ function GameScreen(classes) {
   }
 
   function handleCharGuessChange(e) {
-    setChar(e.target.value)
+    if (e.target.value.length <= 1) { 
+      setChar(e.target.value)
+    }
   }
 
   const submitWord = async () => {
     await context.hangman.makeWordGuess(word)
+    setWord('')
   }
 
   const submitChar = async () => {
     await context.hangman.makeCharGuess(char)
+    setChar('')
   }
 
   return (
@@ -51,7 +55,7 @@ function GameScreen(classes) {
 
               <Grid container item direction='row' spacing={1} alignItems='center'>
                 <Grid item>
-                  <TextField id="outlined-basic" label="Guess Word" variant="outlined" onChange={handleWordGuessChange}/>
+                  <TextField id="outlined-basic" label="Guess Word" variant="outlined" value={word} onChange={handleWordGuessChange}/>
                 </Grid>
                 <Grid item>
                   <Button variant='contained' color='primary' onClick={submitWord}>Submit Word</Button>
@@ -60,7 +64,7 @@ function GameScreen(classes) {
 
               <Grid container item direction='row' spacing={1} alignItems='center'>
                 <Grid item>
-                  <TextField id="outlined-basic" label="Guess Character" variant="outlined" onChange={handleCharGuessChange}/>
+                  <TextField id="outlined-basic" label="Guess Character" variant="outlined" value={char} onChange={handleCharGuessChange}/>
                 </Grid>
                 <Grid item>
                   <Button variant='contained' color='primary' onClick={submitChar}>Submit Char</Button>

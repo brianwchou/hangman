@@ -38,9 +38,9 @@ function GameScreen(classes) {
          </Paper>
         </Grid>
 
-        <Grid item xs={6} spacing={4}>
+        <Grid item xs={6}>
           <Paper className={classes.paper}>
-            <Grid container justify='center' direction='column' spacing={1} alignItems='center' style={{ minHeight: '50vh' }}>
+            <Grid container justify='center' direction='column' spacing={1} alignItems='center' style={{ minHeight: '100vh' }}>
               <Typography>
                 Guesses Left 50/50
               </Typography>
@@ -49,7 +49,7 @@ function GameScreen(classes) {
                 Used Characters: a b c d e f g h i j k l m n o p q r s t u v w x y z
               </Typography>
 
-              <Grid container item justify='left' direction='row' spacing={1} alignItems='center'>
+              <Grid container item direction='row' spacing={1} alignItems='center'>
                 <Grid item>
                   <TextField id="outlined-basic" label="Guess Word" variant="outlined" onChange={handleWordGuessChange}/>
                 </Grid>
@@ -58,7 +58,7 @@ function GameScreen(classes) {
                 </Grid>
               </Grid>
 
-              <Grid container item justify='left' direction='row' spacing={1} alignItems='center'>
+              <Grid container item direction='row' spacing={1} alignItems='center'>
                 <Grid item>
                   <TextField id="outlined-basic" label="Guess Character" variant="outlined" onChange={handleCharGuessChange}/>
                 </Grid>

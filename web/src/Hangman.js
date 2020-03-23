@@ -65,11 +65,13 @@ export default class Hangman {
     return await this.Game.getCorrectlyGuessedCharacters();
   }
 
-  async makeCharGuess(character) {
+  async makeCharGuess(c) {
+    let character = ethers.utils.toUtf8Bytes(c)
     await this.Game.makeCharGuess(character);
   }
 
-  async makeWordGuess(word) {
+  async makeWordGuess(w) {
+    let word = ethers.utils.toUtf8Bytes(w)
     await this.Game.makeWordGuess(word);
   }
 

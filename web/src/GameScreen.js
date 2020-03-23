@@ -4,7 +4,8 @@ import {Grid, Paper, Typography, TextField} from '@material-ui/core';
 
 function GameScreen(setScreen, classes) {
   const [context, setContext] = useContext(Context)
-  console.log(classes); 
+  console.log(`[UI GameScreen]: load`)
+
   return (
     <div className={classes.root}>
       <Grid container

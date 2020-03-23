@@ -10,12 +10,12 @@ function GameOptions({setScreen}) {
   const [context, setContext] = useContext(Context)
 
   function setScreenType() {
-    console.log("changing screen to GAME")
-    console.log(setScreen)
     setScreen(() => screens.GAME)
   }
 
   const connectWallet = async() => {
+    console.log(`[User Action]: connect wallet pressed`)
+
     if (context.isDebug) {
         setContext(state => ({ ...state, isLoggedIn: true}));
     } else {
@@ -41,10 +41,11 @@ function GameOptions({setScreen}) {
   }
 
   const newGame = async() => {
+    console.log(`[User Action]: New Game button pressed`)
     if (context.isDebug) {
       setScreenType()
     } else {
-      console.log(context)
+      console.log(`[Hangman]: newGame called`)
       let gameCreated = await context.hangman.newGame(
         "76ca51361e4e444f8a9b18ae350a5725", 
         context.walletProvider.provider.selectedAddress,

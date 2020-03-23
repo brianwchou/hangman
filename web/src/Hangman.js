@@ -23,7 +23,7 @@ export default class Hangman {
     return this.Game
   }
 
-  async newGame(jobId, userAddress, signer) {
+  async newGame(jobId, userAddress, signer, callbackHasGame) {
     // Step 1: Request
     await this.Factory.requestCreateGame(ethers.utils.toUtf8Bytes(jobId), this.paymentAmount);
     // Step 2: Listen for Request
@@ -49,6 +49,7 @@ export default class Hangman {
         signer
       );
       this.Game = game
+      callbackHasGame(true)
     })
   }
 

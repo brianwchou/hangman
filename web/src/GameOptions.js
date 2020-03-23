@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';	
+import React, { useContext, useEffect, useState } from 'react';	
 import { Context } from './context';
 import { ethers } from 'ethers';
 import HangmanFactoryJSON from './contracts/HangmanFactory.json';
@@ -7,6 +7,7 @@ import {Grid, Typography, Button, TextField} from '@material-ui/core';
 
 function GameOptions(props) {
   const [context, setContext] = useContext(Context)
+  const [hasGame, setHasGame] = useState(false)
 
   const connectWallet = async() => {
     if (context.isDebug) {
@@ -41,17 +42,17 @@ function GameOptions(props) {
       let gameCreated = await context.hangman.newGame(
         "76ca51361e4e444f8a9b18ae350a5725", 
         context.walletProvider.provider.selectedAddress,
-        context.walletProvider.getSigner()
+        context.walletProvider.getSigner(),
+        setHasGame
       )
-      console.log("GAME CREATED")
-      console.log(gameCreated)
-      if (gameCreated) {
-        props.setScreen('GAME')
-      } else{
-        // TODO: Handle failure here
-      }
     }
   }
+
+  useEffect(() => {
+    if (hasGame) {
+      props.setScreen('GAME')
+    }
+  }, [hasGame])
 
   return (
     (!context.isLoggedIn) ?

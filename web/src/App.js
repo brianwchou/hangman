@@ -68,7 +68,6 @@ function App() {
     load();
   }, []);
 
-
   function screenChange(screen) {
     switch(currentScreen) {
       case 'START':

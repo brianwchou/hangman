@@ -1,12 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';	
+import React, { useContext, useState } from 'react';	
 import { Context } from './context';
 import { ethers } from 'ethers';
 import HangmanFactoryJSON from './contracts/HangmanFactory.json';
 import Hangman from './Hangman';
-import {Grid, Typography, Button, TextField} from '@material-ui/core';
+import {Grid, Typography, Button, TextField, LinearProgress} from '@material-ui/core';
 
 function GameOptions({setScreen}) {
   const [context, setContext] = useContext(Context)
+  const [barCompleted, setBarCompleted] = useState(0)
 
   const connectWallet = async() => {
     if (context.isDebug) {
@@ -40,13 +41,16 @@ function GameOptions({setScreen}) {
       console.log(context)
       const {selectedAddress} = context.walletProvider.provider
       const {getSigner} = context.walletProvider
-      const callback = () => { setScreen('GAME') }
-      
+      const callbackUIActions = {
+        setBarCompleted,
+        changeScreen: () => { setScreen('GAME') }
+      }
+
       let gameCreated = await context.hangman.newGame(
         "76ca51361e4e444f8a9b18ae350a5725", 
         selectedAddress,
         getSigner(),
-        callback
+        callbackUIActions
       )
     }
   }
@@ -80,6 +84,7 @@ function GameOptions({setScreen}) {
         </Grid>
         <Grid item>
           <Button variant='contained' color='primary' onClick={newGame}>New Game</Button>
+          <LinearProgress color="secondary" variant="determinate" value={barCompleted}/>
         </Grid>
         <Grid item>
           <Button variant='contained' color='primary'>Continue Game</Button>

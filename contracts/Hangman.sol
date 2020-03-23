@@ -12,7 +12,7 @@ contract Hangman is Ownable {
     //events
     event GameWin();
     event GameLose();
-    event TurnTaken();
+    event TurnTaken(bool isValidInput);
 
     /*
      * @notice Initializes the Hangman Game with a solution
@@ -51,27 +51,34 @@ contract Hangman is Ownable {
         require(currentMisses < maxAllowedMisses, "no more guesses available");
         require(playerInput < 2**(solution.length), "solution is found"); // becareful of overflow
 
-        emit TurnTaken();
-
         //go through and check if the character has already been guessed
         for (uint i = 0; i < usedCharacters.length; i++) {
-            require(usedCharacters[i] != _character, "character has aleady been guessed");
+            if (usedCharacters[i] != _character) {
+                emit TurnTaken(false);
+                return;
+            }
         }
         //add the character if it hasn't been guessed
         usedCharacters.push(_character);
 
         uint playerInputCheckpoint = playerInput;
         // check is the reverse representation of string inputs
+
+        bool characterCheckFlag = false;
+
         for (uint m = 0; m < solution.length; m++) {
             if (solution[m] == _character) {
                 //if they got a character correct
                 playerInput = computeGuess(m);
+                characterCheckFlag = true;
             }
         }
 
+        emit TurnTaken(characterCheckFlag);
+
         //if player input is unchanged then the guess is marked against them
         if (playerInputCheckpoint == playerInput) {
-            currentMisses += 1; 
+            currentMisses += 1;
         }
 
         if (playerInput == 2**(solution.length) - 1) { //if input is ever greater then playerInput is always invalid
@@ -101,15 +108,18 @@ contract Hangman is Ownable {
         require(currentMisses < maxAllowedMisses, "no more guesses available");
         require(playerInput < 2**(solution.length), "solution is found");
 
-        emit TurnTaken();
-
         //compare the strings
         if(keccak256(abi.encodePacked(solution)) != keccak256(abi.encodePacked(_string))) {
             currentMisses += 1;
             if (currentMisses >= maxAllowedMisses) {
                 emit GameLose();
             }
+            else {
+                emit TurnTaken(false);
+            }
             return;
+        } else {
+            emit TurnTaken(true);
         }
         //set the playerInput to answer
         playerInput = 2**(solution.length);

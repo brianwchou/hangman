@@ -88,7 +88,7 @@ contract('Hangman', async (accounts) => {
           it("Test makeCharGuess example 1", async () => {
               await truffleAssert.passes(
                 hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("e")),
-                "Transaction failed");
+                "Transaction makeCharGuess failed");
               var input = await hangmanContract.playerInput.call();
               assert.equal(input.toNumber(), 2, "expected value is incorrect");
           });
@@ -96,7 +96,7 @@ contract('Hangman', async (accounts) => {
           it("Test makeCharGuess example 2", async () => {
               await truffleAssert.passes(
                 hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("l")),
-                "Transaction failed");
+                "Transaction makeCharGuess failed");
               var input = await hangmanContract.playerInput.call();
               assert.equal(input.toNumber(), 12, "expected value is incorrect");
           });
@@ -104,7 +104,7 @@ contract('Hangman', async (accounts) => {
           it("Test makeCharGuess example 3", async () => {
               await truffleAssert.passes(
                 hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("h")),
-                "Transaction failed");
+                "Transaction makeCharGuess failed");
               var input = await hangmanContract.playerInput.call();
               assert.equal(input.toNumber(), 1, "expected value is incorrect");
           });
@@ -112,7 +112,7 @@ contract('Hangman', async (accounts) => {
           it("Test makeCharGuess example o", async () => {
               await truffleAssert.passes(
                 hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("o")),
-                "Transaction failed");
+                "Transaction makeCharGuess failed");
               var input = await hangmanContract.playerInput.call();
               assert.equal(input.toNumber(), 16, "expected value is incorrect");
           });
@@ -173,7 +173,7 @@ contract('Hangman', async (accounts) => {
           it("Test makeWordGuess incorrect word increases misses", async () => {
               await truffleAssert.passes(
                 hangmanContract.makeWordGuess(ethers.utils.toUtf8Bytes("world")),
-                "Transaction failed");
+                "Transaction makeWordGuess failed");
               var input = await hangmanContract.currentMisses.call();
               assert.equal(input.toNumber(), 1, "current misses should have increased");
           });
@@ -181,7 +181,7 @@ contract('Hangman', async (accounts) => {
           it("Test makeWordGuess correct word does not change misses", async () => {
               await truffleAssert.passes(
                 hangmanContract.makeWordGuess(ethers.utils.toUtf8Bytes("hello")),
-                "Transaction failed");
+                "Transaction makeWordGuess failed");
 
               let misses = await hangmanContract.currentMisses.call();
               assert.equal(misses.toNumber(), 0, "current misses should not have increased");
@@ -217,42 +217,42 @@ contract('Hangman', async (accounts) => {
           });
       });
 
-      describe("Test make char and make word combined", async () => {
-          it("Test make char guess then incorrect word guess", async () => {
+      describe("Test makeCharGuess and makeWordGuess combined", async () => {
+          it("Test makeCharGuess with correct char then makeWordGuess with incorrect word", async () => {
               await truffleAssert.passes(
                 hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("e")),
-                "Transaction failed");
+                "Transaction makeCharGuess failed");
 
               await truffleAssert.passes(
                 hangmanContract.makeWordGuess(ethers.utils.toUtf8Bytes("world")),
-                "Transaction failed");
+                "Transaction makeWordGuess failed");
 
               var input = await hangmanContract.currentMisses.call();
               assert.equal(input.toNumber(), 1, "current misses should have increased");
           });
 
-          it("Test make char guess then correct word guess", async () => {
+          it("Test makeCharGuess with correct char then makeWordGuess with correct word", async () => {
               await truffleAssert.passes(
                 hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("e")),
-                "Transaction failed");
+                "Transaction makeCharGuess failed");
 
               await truffleAssert.passes(
                 hangmanContract.makeWordGuess(ethers.utils.toUtf8Bytes("hello")),
-                "Transaction failed");
+                "Transaction makeWordGuess failed");
 
               var input = await hangmanContract.currentMisses.call();
               assert.equal(input.toNumber(), 0, "current misses should not have increased");
           });
       });
 
-      describe("Test used characters", async () => {
-          it("Test get used characters", async () => {
+      describe("Test getUsedCharacters", async () => {
+          it("Test getUsedCharacters contains correct characters", async () => {
               await truffleAssert.passes(
                   hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("e")),
-                  "Transaction failed");
+                  "Transaction makeCharGuess failed");
               await truffleAssert.passes(
                   hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("l")),
-                  "Transaction failed");
+                  "Transaction makeCharGuess failed");
 
               let usedCharacters = await hangmanContract.getUsedCharacters.call();
               assert.equal(usedCharacters.length, 2, "used character count is incorrect")
@@ -264,7 +264,7 @@ contract('Hangman', async (accounts) => {
       describe('Test characters that have been unveiled', async () => {
           it("Test getting correctly guessed characters", async () => {
               let tx = await hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("l"));
-              truffleAssert.passes(tx, "Transaction failed");
+              truffleAssert.passes(tx, "Transaction makeCharGuess failed");
               let guessedCharacters = await hangmanContract.getCorrectlyGuessedCharacters();
 
               assert.equal(ethers.utils.toUtf8String(guessedCharacters[0]), "\0", `guessed character at index 0 is ${guessedCharacters[0]} and not null`);
@@ -279,7 +279,7 @@ contract('Hangman', async (accounts) => {
           it("Test game over and guess char", async () => {
               await truffleAssert.passes(
                   hangmanContract.makeWordGuess(ethers.utils.toUtf8Bytes("hello")),
-                  "Transaction failed");
+                  "Transaction makeWordGuess failed");
 
               await truffleAssert.reverts(
                   hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("p")),
@@ -289,7 +289,7 @@ contract('Hangman', async (accounts) => {
           it("Test game over and guess word", async () => {
               await truffleAssert.passes(
                   hangmanContract.makeWordGuess(ethers.utils.toUtf8Bytes("hello")),
-                  "Transaction failed");
+                  "Transaction makeWordGuess failed");
 
               await truffleAssert.reverts(
                   hangmanContract.makeWordGuess(ethers.utils.toUtf8Bytes("testing")),

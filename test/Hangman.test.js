@@ -85,7 +85,7 @@ contract('Hangman', async (accounts) => {
       });
 
       describe("Test playerInput return values", async() => {
-          it("Test makeChracterGuess example 1", async () => {
+          it("Test makeCharGuess example 1", async () => {
               await truffleAssert.passes(
                 hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("e")),
                 "Transaction failed");
@@ -93,7 +93,7 @@ contract('Hangman', async (accounts) => {
               assert.equal(input.toNumber(), 2, "expected value is incorrect");
           });
 
-          it("Test makeCharacterGuess example 2", async () => {
+          it("Test makeCharGuess example 2", async () => {
               await truffleAssert.passes(
                 hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("l")),
                 "Transaction failed");
@@ -101,7 +101,7 @@ contract('Hangman', async (accounts) => {
               assert.equal(input.toNumber(), 12, "expected value is incorrect");
           });
 
-          it("Test makeChracterGuess example 3", async () => {
+          it("Test makeCharGuess example 3", async () => {
               await truffleAssert.passes(
                 hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("h")),
                 "Transaction failed");
@@ -109,7 +109,7 @@ contract('Hangman', async (accounts) => {
               assert.equal(input.toNumber(), 1, "expected value is incorrect");
           });
 
-          it("Test makeChracterGuess example o", async () => {
+          it("Test makeCharGuess example o", async () => {
               await truffleAssert.passes(
                 hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("o")),
                 "Transaction failed");
@@ -118,8 +118,8 @@ contract('Hangman', async (accounts) => {
           });
       });
 
-      describe("Test makeCharacterGuess", async () => {
-          it("Test makeCharacterGuess with unknown char", async () => {
+      describe("Test makeCharGuess", async () => {
+          it("Test makeCharGuess with unknown char", async () => {
             let tx = await hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("e"))
             await truffleAssert.eventEmitted(tx, 'TurnTaken', {isValidInput: true});
 
@@ -127,7 +127,7 @@ contract('Hangman', async (accounts) => {
             assert.equal(input.toNumber(), 2, "expected value is incorrect");
           });
 
-          it("Test 2 calls to makeCharacterGuess with same char", async () => {
+          it("Test 2 calls to makeCharGuess with same char", async () => {
             let tx = await hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("e"))
             await truffleAssert.eventEmitted(tx, 'TurnTaken', {isValidInput: true});
 
@@ -135,23 +135,23 @@ contract('Hangman', async (accounts) => {
             await truffleAssert.eventEmitted(tx, 'TurnTaken', {isValidInput: false});
           });
 
-          it("Test makeCharacterGuess with not owner", async () => {
+          it("Test makeCharGuess with not owner", async () => {
               await truffleAssert.reverts(hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("e"), { from: notPlayer }));
           })
 
-          it("Test makeCharacterGuess incorrect char", async () => {
+          it("Test makeCharGuess incorrect char", async () => {
               await hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("p"));
               let misses = await hangmanContract.currentMisses.call();
               assert.equal(misses.toNumber(), 1, "current misses should have increased");
           });
 
-          it("Test makeCharacterGuess correct char", async () => {
+          it("Test makeCharGuess correct char", async () => {
               await hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("h"));
               let misses = await hangmanContract.currentMisses.call();
               assert.equal(misses.toNumber(), 0, "current misses should not have increased");
           });
 
-          it("Test make character game lose", async () => {
+          it("Test makeCharGuess emit GameLose", async () => {
               await hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("a"));
               await hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("b"));
               await hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("c"));
@@ -160,7 +160,7 @@ contract('Hangman', async (accounts) => {
               await truffleAssert.eventEmitted(tx, 'GameLose');
           });
 
-          it("Test make character game win", async () => {
+          it("Test makeCharGuess emit GameWin", async () => {
               await hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("h"));
               await hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("e"));
               await hangmanContract.makeCharGuess(ethers.utils.toUtf8Bytes("l"));
@@ -169,8 +169,8 @@ contract('Hangman', async (accounts) => {
           });
       });
 
-      describe("Test make word guess", async () => {
-          it("Test make word guess incorrect word", async () => {
+      describe("Test makeWordGuess", async () => {
+          it("Test makeWordGuess incorrect word", async () => {
               await truffleAssert.passes(
                 hangmanContract.makeWordGuess(ethers.utils.toUtf8Bytes("world")),
                 "Transaction failed");
@@ -178,7 +178,7 @@ contract('Hangman', async (accounts) => {
               assert.equal(input.toNumber(), 1, "current misses should have increased");
           });
 
-          it("Test make word guess correct word", async () => {
+          it("Test makeWordGuess correct word", async () => {
               await truffleAssert.passes(
                 hangmanContract.makeWordGuess(ethers.utils.toUtf8Bytes("hello")),
                 "Transaction failed");
@@ -187,22 +187,22 @@ contract('Hangman', async (accounts) => {
               assert.equal(misses.toNumber(), 0, "current misses should not have increased");
           });
 
-          it("Test make word guess with not owner", async () => {
+          it("Test makeWordGuess with not owner", async () => {
               await truffleAssert.reverts(
                 hangmanContract.makeWordGuess(ethers.utils.toUtf8Bytes("hello"), { from: notPlayer }))
           })
 
-          it("Test make word guess turn event", async () => {
+          it("Test makeWordGuess TurnTaken", async () => {
               let tx = await hangmanContract.makeWordGuess(ethers.utils.toUtf8Bytes("testing"));
               await truffleAssert.eventEmitted(tx, 'TurnTaken');
           });
 
-          it("Test make word guess game win", async () => {
+          it("Test makeWordGuess emits GameWin", async () => {
               let tx = await hangmanContract.makeWordGuess(ethers.utils.toUtf8Bytes("hello"));
               await truffleAssert.eventEmitted(tx, 'GameWin');
           });
 
-          it("Test make word guess game lose", async () => {
+          it("Test makeWordGuess emits GameLose", async () => {
               await hangmanContract.makeWordGuess(ethers.utils.toUtf8Bytes("testing"));
               await hangmanContract.makeWordGuess(ethers.utils.toUtf8Bytes("testing"));
               await hangmanContract.makeWordGuess(ethers.utils.toUtf8Bytes("testing"));

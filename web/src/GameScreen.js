@@ -15,11 +15,11 @@ function GameScreen(classes) {
     setChar(e.target.value)
   }
 
-  const submitWord = async() => {
+  const submitWord = async () => {
     await context.hangman.makeWordGuess(word)
   }
 
-  const submitChar = async() => {
+  const submitChar = async () => {
     await context.hangman.makeCharGuess(char)
   }
 

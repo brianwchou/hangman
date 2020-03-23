@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import GameOptions from './GameOptions.js';
 import {Grid, Paper, Typography} from '@material-ui/core';
 
-function StartScreen(props) {
+function StartScreen({setScreen}) {
   return (
     <div>
       <Grid   
@@ -21,7 +21,7 @@ function StartScreen(props) {
           </Paper>
         </Grid>
         <Grid item>
-          <GameOptions setScreen={props.setScreen}/>
+          <GameOptions setScreen={setScreen}/>
         </Grid>
       </Grid>
     </div>

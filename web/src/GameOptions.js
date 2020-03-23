@@ -5,7 +5,7 @@ import HangmanFactoryJSON from './contracts/HangmanFactory.json';
 import Hangman from './Hangman';
 import {Grid, Typography, Button, TextField} from '@material-ui/core';
 
-function GameOptions(props) {
+function GameOptions({setScreen}) {
   const [context, setContext] = useContext(Context)
 
   const connectWallet = async() => {
@@ -35,16 +35,18 @@ function GameOptions(props) {
 
   const newGame = async() => {
     if (context.isDebug) {
-      props.setScreen('GAME')
+      setScreen('GAME')
     } else {
       console.log(context)
+      const {selectedAddress} = context.walletProvider.provider
+      const {getSigner} = context.walletProvider
+      const callback = () => { setScreen('GAME') }
+      
       let gameCreated = await context.hangman.newGame(
         "76ca51361e4e444f8a9b18ae350a5725", 
-        context.walletProvider.provider.selectedAddress,
-        context.walletProvider.getSigner(),
-        () => {
-          props.setScreen('GAME')
-        }
+        selectedAddress,
+        getSigner(),
+        callback
       )
     }
   }

@@ -68,17 +68,20 @@ function App() {
     load();
   }, []);
 
+
+  function screenChange(screen) {
+    switch(currentScreen) {
+      case 'START':
+        return <StartScreen setScreen={setCurrentScreen}/>
+      case 'GAME':
+        return <GameScreen/>
+    }
+  }
+
   console.log(context)
   return (
     <Container>
-      {(() => {
-        switch(currentScreen) {
-          case 'START':
-            return <StartScreen setScreen={setCurrentScreen}/>
-          case 'GAME':
-            return <GameScreen/>
-        }
-      })()}
+      {screenChange(currentScreen)}
     </Container>
   ) 
 }

@@ -23,6 +23,8 @@ function GameScreen(classes) {
     console.log(`[User Action]: Submit word ${word}`)
     if (!context.isDebug) {
       await context.hangman.makeWordGuess(word, async () => {
+        // getCorrectlyGuessedCharacters()
+        // getUsedCharacters()
         setWord('')
       })
     } else {
@@ -34,6 +36,8 @@ function GameScreen(classes) {
     console.log(`[User Action]: Submit character ${char}`)
     if (!context.isDebug) {
       await context.hangman.makeCharGuess(char, async () => {
+        // getCorrectlyGuessedCharacters()
+        // getUsedCharacters()
         setChar('')
       })
     } else {

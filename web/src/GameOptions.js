@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 function GameOptions({setScreen}) {
   const classes = useStyles();
   const [context, setContext] = useContext(Context)
-  const [statusBar, setStatusBar] = useState(0)
+  const [statusBar, setStatusBar] = useState(false)
 
   const connectWallet = async() => {
     console.log(`[User Action]: connect wallet pressed`)
@@ -52,13 +52,14 @@ function GameOptions({setScreen}) {
     if (context.isDebug) {
       setScreen('GAME')
     } else {
+      setStatusBar(true)
       console.log(`[Hangman]: newGame called`)
       await context.hangman.newGame(
         "76ca51361e4e444f8a9b18ae350a5725", 
         context.walletProvider.provider.selectedAddress,
         context.walletProvider.getSigner(),
         () => {
-          //setStatusBar(1)
+          setStatusBar(false)
           setScreen('GAME')
         }
       )

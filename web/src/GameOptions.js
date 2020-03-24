@@ -86,9 +86,11 @@ function GameOptions({setScreen}) {
         <Grid item>
           <Button variant='contained' color='primary' onClick={newGame}>New Game</Button>
         </Grid>
-        <Grid item className={classes.root}>
-          <LinearProgress color="primary" variant="indeterminate"/>
-        </Grid>
+        { statusBar && 
+          <Grid item className={classes.root}>
+            <LinearProgress color="primary" variant="indeterminate"/>
+          </Grid>
+        }
         <Grid item>
           <Button variant='contained' color='primary'>Continue Game</Button>
         </Grid>

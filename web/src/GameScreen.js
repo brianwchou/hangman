@@ -21,17 +21,24 @@ function GameScreen(classes) {
 
   const submitWord = async () => {
     console.log(`[User Action]: Submit word ${word}`)
-    await context.hangman.makeWordGuess(word, async () => {
+    if (!context.isDebug) {
+      await context.hangman.makeWordGuess(word, async () => {
+        setWord('')
+      })
+    } else {
       setWord('')
-    })
+    }
   }
 
   const submitChar = async () => {
     console.log(`[User Action]: Submit character ${char}`)
-    await context.hangman.makeCharGuess(char, async () => {
-      // const currentValue = await context.hangman.getCorrectlyGuessedChars()
+    if (!context.isDebug) {
+      await context.hangman.makeCharGuess(char, async () => {
+        setChar('')
+      })
+    } else {
       setChar('')
-    })
+    }
   }
 
   return (

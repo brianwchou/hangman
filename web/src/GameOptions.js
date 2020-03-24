@@ -7,7 +7,7 @@ import {Grid, Typography, Button, TextField, LinearProgress} from '@material-ui/
 
 function GameOptions({setScreen}) {
   const [context, setContext] = useContext(Context)
-  const [barCompleted, setBarCompleted] = useState(0)
+  const [statusBar, setStatusBar] = useState(0)
 
   const connectWallet = async() => {
     console.log(`[User Action]: connect wallet pressed`)
@@ -42,16 +42,14 @@ function GameOptions({setScreen}) {
       setScreen('GAME')
     } else {
       console.log(`[Hangman]: newGame called`)
-      const callbackUIActions = {
-        setBarCompleted,
-        changeScreen: () => { setScreen('GAME') }
-      }
-
-      let gameCreated = await context.hangman.newGame(
+      await context.hangman.newGame(
         "76ca51361e4e444f8a9b18ae350a5725", 
         context.walletProvider.provider.selectedAddress,
         context.walletProvider.getSigner(),
-        callbackUIActions
+        () => {
+          //setStatusBar(1)
+          setScreen('GAME')
+        }
       )
     }
   }
@@ -59,12 +57,7 @@ function GameOptions({setScreen}) {
   return (
     (!context.isLoggedIn) ?
     <div>
-      <Grid container
-        justify='center'
-        direction='column'
-        spacing={1}
-        alignItems='center'
-      >
+      <Grid container justify='center' direction='column' spacing={1} alignItems='center'>
         <Grid item>
           <Button variant='contained' color='primary' onClick={connectWallet}>Connect Wallet</Button>
         </Grid>
@@ -72,12 +65,7 @@ function GameOptions({setScreen}) {
     </div>
     :
     <div>
-      <Grid container
-        justify='center'
-        direction='column'
-        spacing={1}
-        alignItems='center'
-      >
+      <Grid container justify='center' direction='column' spacing={1} alignItems='center'>
         <Grid item>
           <Typography align='center'>
             player address: {context.walletProvider.provider.selectedAddress}
@@ -85,7 +73,9 @@ function GameOptions({setScreen}) {
         </Grid>
         <Grid item>
           <Button variant='contained' color='primary' onClick={newGame}>New Game</Button>
-          <LinearProgress color="secondary" variant="determinate" value={barCompleted}/>
+        </Grid>
+        <Grid item>
+          <LinearProgress color="primary" variant="indeterminate"/>
         </Grid>
         <Grid item>
           <Button variant='contained' color='primary'>Continue Game</Button>

@@ -50,10 +50,8 @@ export default class Hangman {
   }
 
   async makeCharGuess(charInput, callback) {
-    console.log(this.Game)
     let character = ethers.utils.toUtf8Bytes(charInput)
     await this.Game.makeCharGuess(character)
-
     this.Game.once("TurnTaken", async () => {
       callback()
     });
@@ -62,7 +60,6 @@ export default class Hangman {
   async makeWordGuess(wordInput, callback) {
     let word = ethers.utils.toUtf8Bytes(wordInput)
     await this.Game.makeWordGuess(word)
-
     this.Game.once("TurnTaken", async () => {
       callback()
     });

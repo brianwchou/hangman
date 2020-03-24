@@ -4,8 +4,19 @@ import { ethers } from 'ethers';
 import HangmanFactoryJSON from './contracts/HangmanFactory.json';
 import Hangman from './Hangman';
 import {Grid, Typography, Button, TextField, LinearProgress} from '@material-ui/core';
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    width: "100%",
+    "& > * + *": {
+      marginTop: theme.spacing(2)
+    }
+  }
+}));
 
 function GameOptions({setScreen}) {
+  const classes = useStyles();
   const [context, setContext] = useContext(Context)
   const [statusBar, setStatusBar] = useState(0)
 
@@ -74,7 +85,7 @@ function GameOptions({setScreen}) {
         <Grid item>
           <Button variant='contained' color='primary' onClick={newGame}>New Game</Button>
         </Grid>
-        <Grid item>
+        <Grid item className={classes.root}>
           <LinearProgress color="primary" variant="indeterminate"/>
         </Grid>
         <Grid item>

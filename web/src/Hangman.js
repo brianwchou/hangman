@@ -28,7 +28,6 @@ export default class Hangman {
     // Step 2: Listen for Request
     await this.Factory.once("RequestCreateGame", async (owner, requestId) => {
       console.log(`[FactoryContract] RequestCreateGame: (owner: ${owner}), (requestId: ${requestId})`)
-      callback.setBarCompleted(50)
     })
     // Step 3: Wait for Request to be answered
     await this.Factory.once("FulfillCreateGame", async (owner, requestId) => {
@@ -44,8 +43,7 @@ export default class Hangman {
         signer
       );
       this.Game = game
-      callback.setBarCompleted(100)
-      callback.changeScreen()
+      callback()
     })
   }
 

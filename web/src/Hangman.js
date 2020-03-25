@@ -10,6 +10,9 @@ export default class Hangman {
   }
 
   setGame(gameAddress, signer) {
+    console.log(`[Hangman]: set game`)
+    console.log(ethers.utils.getAddress(gameAddress))
+    
     const game = new ethers.Contract(
       gameAddress,
       HangmanJSON.abi,
@@ -49,18 +52,18 @@ export default class Hangman {
 
   async makeCharGuess(charInput, callback) {
     let character = ethers.utils.toUtf8Bytes(charInput)
-    await this.Game.makeCharGuess(character)
     this.Game.once("TurnTaken", async () => {
       callback()
     });
+    await this.Game.makeCharGuess(character)
   }
 
   async makeWordGuess(wordInput, callback) {
     let word = ethers.utils.toUtf8Bytes(wordInput)
-    await this.Game.makeWordGuess(word)
     this.Game.once("TurnTaken", async () => {
       callback()
     });
+    await this.Game.makeWordGuess(word)
   }
 
   async getNumberOfChars() {

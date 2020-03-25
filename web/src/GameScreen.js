@@ -23,6 +23,7 @@ function GameScreen(classes) {
     console.log(`[User Action]: Submit word ${word}`)
     if (!context.isDebug) {
       await context.hangman.makeWordGuess(word, async () => {
+        console.log("callback is called")
         // getCorrectlyGuessedCharacters()
         // getUsedCharacters()
         setWord('')

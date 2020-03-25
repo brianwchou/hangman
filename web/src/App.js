@@ -1,6 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { Context } from './context';
-import screens from './ScreenTypes';
+import StartScreen from './StartScreen';
+import GameScreen from './GameScreen';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container } from '@material-ui/core'
 import { ethers } from 'ethers';
@@ -23,17 +24,16 @@ const useStyles = makeStyles(theme => ({
 
 function App() {
   const [context, setContext] = useContext(Context);
-  const [currentScreen, setCurrentScreen] = useState(() => screens.START);
-  console.log(`[UI App] Application start`)
-
+  const [currentScreen, setCurrentScreen] = useState('START');
   const classes = useStyles();
+  console.log(`[UI App] Application start`)
 
   useEffect(() => {
     // define all needed context variables here:
     let hangman = null;
     let walletProvider = null;
     let isLoggedIn = false;
-    let isDebug = true;
+    let isDebug = false;
     setContext(state => ({
       ...state,
       hangman,
@@ -50,7 +50,7 @@ function App() {
           // log user out
           setContext(state => ({ ...state, isLoggedIn: false }));
           // bring user back to start screen
-          setCurrentScreen(() => screens.START)
+          setCurrentScreen('START')
           // eslint-disable-next-line no-console
         });
 
@@ -70,9 +70,19 @@ function App() {
     load();
   }, []);
 
+  function screenChange(screen) {
+    switch(currentScreen) {
+      case 'START':
+        return <StartScreen setScreen={setCurrentScreen}/>
+      case 'GAME':
+        return <GameScreen/>
+    }
+  }
+
+  console.log(context)
   return (
     <Container>
-      {currentScreen(setCurrentScreen, classes)}
+      {screenChange(currentScreen)}
     </Container>
   ) 
 }

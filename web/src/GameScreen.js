@@ -49,8 +49,8 @@ function GameScreen(classes) {
         setMisses(misses);
         setDisplayWord(result);
         setWord('');
-        setIsDisabled(false);
       })
+      setIsDisabled(false);
     } else {
       setWord('');
     }
@@ -69,8 +69,8 @@ function GameScreen(classes) {
         setUsedChars(usedChars);
         setDisplayWord(result);
         setChar('');
-        setIsDisabled(false);
       });
+      setIsDisabled(false);
     } else {
       setChar('');
     }

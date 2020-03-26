@@ -13,7 +13,7 @@ export default class Hangman {
     let address = ethers.utils.getAddress(gameAddress)
     console.log(`[Hangman]: setGame with ${address}`)
     const game = new ethers.Contract(
-      address,
+      gameAddress,
       HangmanJSON.abi,
       signer
     );
@@ -56,7 +56,9 @@ export default class Hangman {
     this.Game.once("TurnTaken", async () => {
       callback()
     });
+    console.log(1)
     await this.Game.makeCharGuess(character)
+    console.log(2)
   }
 
   async makeWordGuess(wordInput, callback) {
@@ -75,12 +77,16 @@ export default class Hangman {
 
   async getUsedChars() {
     console.log(`[Hangman]: getUsedChars called`)
-    return await this.Game.getUsedCharacters();
+    const chars = await this.Game.getUsedCharacters()
+
+    return ethers.utils.toUtf8String(chars);
   }
 
   async getCorrectlyGuessedChars() {
     console.log(`[Hangman]: getCorrectlyGuessedChars called`)
-    return await this.Game.getCorrectlyGuessedCharacters();
+    const chars = await this.Game.getCorrectlyGuessedCharacters();
+
+    return ethers.utils.toUtf8String(chars);
   }
 
   async currentMisses() {

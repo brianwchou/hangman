@@ -7,6 +7,7 @@ function GameScreen(classes) {
   const [displayWord, setDisplayWord] = useState()
   const [word, setWord] = useState('')
   const [char, setChar] = useState('')
+  const [usedChars, setUsedChars] = useState([])
   console.log(`[UI GameScreen]: load`)
 
   function handleWordGuessChange(e) {
@@ -23,9 +24,10 @@ function GameScreen(classes) {
     console.log(`[User Action]: Submit word ${word}`)
     if (!context.isDebug) {
       await context.hangman.makeWordGuess(word, async () => {
-        // getCorrectlyGuessedCharacters()
-        // getUsedCharacters()
-        setWord('')
+        let result = await context.hangman.getCorrectlyGuessedChars();
+        console.log(result);
+        let char_result = await context.hangman.getUsedChars();
+        setWord('');
       })
     } else {
       setWord('')
@@ -36,8 +38,22 @@ function GameScreen(classes) {
     console.log(`[User Action]: Submit character ${char}`)
     if (!context.isDebug) {
       await context.hangman.makeCharGuess(char, async () => {
-        // getCorrectlyGuessedCharacters()
-        // getUsedCharacters()
+        let result = await context.hangman.getCorrectlyGuessedChars()
+        console.log(result)
+        let char_result = await context.hangman.getUsedChars()
+        let char_to_display = ''
+
+        for (let i = 0; i < char_result.length; i++) {
+          if (i == char_result.length - 1) {
+            char_to_display += char_result[i]; 
+          } else {
+            char_to_display += char_result[i] + ' ';
+          }
+        }
+
+        console.log(char_to_display)
+        
+        setUsedChars(char_to_display);
         setChar('')
       })
     } else {
@@ -68,7 +84,7 @@ function GameScreen(classes) {
               </Typography>
 
               <Typography>
-                Used Characters: a b c d e f g h i j k l m n o p q r s t u v w x y z
+                Used Characters: {usedChars}
               </Typography>
 
               <Grid container item direction='row' spacing={1} alignItems='center'>

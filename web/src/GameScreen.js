@@ -1,27 +1,40 @@
-import React, { useContext, useState } from 'react';	
+import React, { useContext, useState, useEffect } from 'react';	
 import { Context } from './context';
 import {Grid, Paper, Typography, Button, TextField} from '@material-ui/core';
 
 function GameScreen(classes) {
-  const [context, setContext] = useContext(Context)
-  const [displayWord, setDisplayWord] = useState()
-  const [word, setWord] = useState('')
-  const [char, setChar] = useState('')
-  const [usedChars, setUsedChars] = useState([])
-  console.log(`[UI GameScreen]: load`)
+  const [context, setContext] = useContext(Context);
+  const [displayWord, setDisplayWord] = useState();
+  const [word, setWord] = useState('');
+  const [char, setChar] = useState('');
+  const [usedChars, setUsedChars] = useState([]);
+  const [misses, setMisses] = useState(0);
+  const [maxMisses, setMaxMisses] = useState();
+  console.log(`[UI GameScreen]: load`);
+
+
+  useEffect(() => {
+    const loadInitalData = async () => {
+      const max = await context.hangman.maxAllowedMisses();
+      setMaxMisses(max)
+    }
+    loadInitalData();
+  }, [])
+
+
 
   function handleWordGuessChange(e) {
-    setWord(e.target.value)
+    setWord(e.target.value);
   }
 
   function handleCharGuessChange(e) {
     if (e.target.value.length <= 1) { 
-      setChar(e.target.value)
+      setChar(e.target.value);
     }
   }
 
   const submitWord = async () => {
-    console.log(`[User Action]: Submit word ${word}`)
+    console.log(`[User Action]: Submit word ${word}`);
     if (!context.isDebug) {
       await context.hangman.makeWordGuess(word, async () => {
         let result = await context.hangman.getCorrectlyGuessedChars();
@@ -30,7 +43,7 @@ function GameScreen(classes) {
         setWord('');
       })
     } else {
-      setWord('')
+      setWord('');
     }
   }
 
@@ -38,10 +51,10 @@ function GameScreen(classes) {
     console.log(`[User Action]: Submit character ${char}`)
     if (!context.isDebug) {
       await context.hangman.makeCharGuess(char, async () => {
-        let result = await context.hangman.getCorrectlyGuessedChars()
-        console.log(result)
-        let char_result = await context.hangman.getUsedChars()
-        let char_to_display = ''
+        let result = await context.hangman.getCorrectlyGuessedChars();
+        console.log(result);
+        let char_result = await context.hangman.getUsedChars();
+        let char_to_display = '';
 
         for (let i = 0; i < char_result.length; i++) {
           if (i == char_result.length - 1) {
@@ -51,13 +64,14 @@ function GameScreen(classes) {
           }
         }
 
-        console.log(char_to_display)
-        
+        const misses = await context.hangman.currentMisses();
+        console.log(char_to_display);
+        console.log(misses);
         setUsedChars(char_to_display);
-        setChar('')
-      })
+        setChar('');
+      });
     } else {
-      setChar('')
+      setChar('');
     }
   }
 
@@ -80,7 +94,7 @@ function GameScreen(classes) {
           <Paper className={classes.paper}>
             <Grid container justify='center' direction='column' spacing={1} alignItems='center' style={{ minHeight: '100vh' }}>
               <Typography>
-                Guesses Left 50/50
+                Guesses Left {misses + '/' + maxMisses}
               </Typography>
 
               <Typography>
@@ -111,6 +125,6 @@ function GameScreen(classes) {
       </Grid>
     </div>
   )
-}
+};
 
 export default GameScreen;

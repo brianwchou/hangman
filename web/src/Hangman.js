@@ -54,7 +54,7 @@ export default class Hangman {
     console.log(`[Hangman]: makeCharGuess called`)
     let character = ethers.utils.toUtf8Bytes(charInput)
     this.Game.once("TurnTaken", async () => {
-      callback()
+      await callback()
     });
     console.log(1)
     await this.Game.makeCharGuess(character)
@@ -65,7 +65,7 @@ export default class Hangman {
     console.log(`[Hangman]: makeWordGuess called`)
     let word = ethers.utils.toUtf8Bytes(wordInput)
     this.Game.once("TurnTaken", async () => {
-      callback()
+      await callback()
     });
     await this.Game.makeWordGuess(word)
   }
@@ -91,7 +91,10 @@ export default class Hangman {
 
   async currentMisses() {
     console.log(`[Hangman]: currentMisses called`)
-    return await this.Game.currentMisses();
+
+    const misses = await this.Game.currentMisses();
+    console.log(misses)
+    return misses;
   }
 
   async maxAllowedMisses() {

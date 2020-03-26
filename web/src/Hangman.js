@@ -17,66 +17,65 @@ export default class Hangman {
       HangmanJSON.abi,
       signer
     );
-    this.Game = game
+    this.Game = game;
   }
 
   async getGame(userAddress) {
-    return this.Game
+    return this.Game;
   }
 
   async newGame(jobId, userAddress, signer, callback) {
-    console.log(`[Hangman]: newGame called`)
+    console.log(`[Hangman]: newGame called`);
     // Step 1: Request
     await this.Factory.requestCreateGame(ethers.utils.toUtf8Bytes(jobId), this.paymentAmount);
     // Step 2: Listen for Request
     await this.Factory.once("RequestCreateGame", async (owner, requestId) => {
-      console.log(`[FactoryContract] RequestCreateGame: (owner: ${owner}), (requestId: ${requestId})`)
+      console.log(`[FactoryContract]: RequestCreateGame: (owner: ${owner}), (requestId: ${requestId})`);
     })
     // Step 3: Wait for Request to be answered
     await this.Factory.once("FulfillCreateGame", async (owner, requestId) => {
-      console.log(`[FactoryContract] FulfillCreateGame: (owner: ${owner}), (requestId: ${requestId})`)
+      console.log(`[FactoryContract]: FulfillCreateGame: (owner: ${owner}), (requestId: ${requestId})`);
       // Step 4: Initialize connect to Game Contract
       let gameStruct = await this.Factory.requestIdToGame(requestId)
       if (ethers.utils.getAddress(gameStruct[0]) !== ethers.utils.getAddress(userAddress)) {
-        console.log("INVALID USER FOR GAME")
+        console.log(`[ERROR]: INVALID USER FOR GAME`);
       }
       const game = new ethers.Contract(
         gameStruct[1],
         HangmanJSON.abi,
         signer
       );
-      this.Game = game
-      callback()
+      this.Game = game;
+      callback();
     })
   }
 
   async makeCharGuess(charInput, callback) {
-    console.log(`[Hangman]: makeCharGuess called`)
-    let character = ethers.utils.toUtf8Bytes(charInput)
+    console.log(`[Hangman]: makeCharGuess called`);
+    let character = ethers.utils.toUtf8Bytes(charInput);
     this.Game.once("TurnTaken", async () => {
-      await callback()
+      await callback();
     });
-    console.log(1)
-    await this.Game.makeCharGuess(character)
-    console.log(2)
+    await this.Game.makeCharGuess(character);
   }
 
   async makeWordGuess(wordInput, callback) {
-    console.log(`[Hangman]: makeWordGuess called`)
-    let word = ethers.utils.toUtf8Bytes(wordInput)
+    console.log(`[Hangman]: makeWordGuess called`);
+    let word = ethers.utils.toUtf8Bytes(wordInput);
     this.Game.once("TurnTaken", async () => {
-      await callback()
+      await callback();
     });
-    await this.Game.makeWordGuess(word)
+    await this.Game.makeWordGuess(word);
   }
 
   async getNumberOfChars() {
-    console.log(`[Hangman]: makeCharGuess called`)
-    return await this.Game.getNumberOfCharacters();
+    const numOfChar = await this.Game.getNumberOfCharacters();
+    console.log(`[Hangman]: getNumberOfChars ${numOfChar}`);
+    return numOfChar;
   }
 
   async getUsedChars() {
-    const chars = await this.Game.getUsedCharacters()
+    const chars = await this.Game.getUsedCharacters();
     const formated_chars = ethers.utils.toUtf8String(chars);
     
     let chars_to_display = '';
@@ -87,22 +86,20 @@ export default class Hangman {
         chars_to_display += formated_chars[i] + ' ';
       }
     }
-    console.log(`[Hangman]: getUsedChars ${chars_to_display}`)
-
+    console.log(`[Hangman]: getUsedChars ${chars_to_display}`);
     return chars_to_display;
   }
 
   async getCorrectlyGuessedChars() {
     const chars = await this.Game.getCorrectlyGuessedCharacters();
     const chars_result = ethers.utils.toUtf8String(chars);
-    console.log(`[Hangman]: getCorrectlyGuessedChars ${chars_result}`)
-    
+    console.log(`[Hangman]: getCorrectlyGuessedChars ${chars_result}`);
     return chars_result;
   }
 
   async currentMisses() {
     const misses = await this.Game.currentMisses();
-    console.log(`[Hangman]: currentMisses ${misses}`)
+    console.log(`[Hangman]: currentMisses ${misses}`);
     return misses;
   }
 

@@ -76,29 +76,39 @@ export default class Hangman {
   }
 
   async getUsedChars() {
-    console.log(`[Hangman]: getUsedChars called`)
     const chars = await this.Game.getUsedCharacters()
+    const formated_chars = ethers.utils.toUtf8String(chars);
+    
+    let chars_to_display = '';
+    for (let i = 0; i < formated_chars.length; i++) {
+      if (i === formated_chars.length - 1) {
+        chars_to_display += formated_chars[i]; 
+      } else {
+        chars_to_display += formated_chars[i] + ' ';
+      }
+    }
+    console.log(`[Hangman]: getUsedChars ${chars_to_display}`)
 
-    return ethers.utils.toUtf8String(chars);
+    return chars_to_display;
   }
 
   async getCorrectlyGuessedChars() {
-    console.log(`[Hangman]: getCorrectlyGuessedChars called`)
     const chars = await this.Game.getCorrectlyGuessedCharacters();
-
-    return ethers.utils.toUtf8String(chars);
+    const chars_result = ethers.utils.toUtf8String(chars);
+    console.log(`[Hangman]: getCorrectlyGuessedChars ${chars_result}`)
+    
+    return chars_result;
   }
 
   async currentMisses() {
-    console.log(`[Hangman]: currentMisses called`)
-
     const misses = await this.Game.currentMisses();
-    console.log(misses)
+    console.log(`[Hangman]: currentMisses ${misses}`)
     return misses;
   }
 
   async maxAllowedMisses() {
-    console.log(`[Hangman]: maxAllowedMisses called`)
-    return await this.Game.maxAllowedMisses();
+    const max = await this.Game.maxAllowedMisses();
+    console.log(`[Hangman]: maxAllowedMisses ${max}`);
+    return max;
   }
 }

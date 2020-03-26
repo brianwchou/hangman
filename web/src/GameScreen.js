@@ -12,16 +12,20 @@ function GameScreen(classes) {
   const [maxMisses, setMaxMisses] = useState();
   console.log(`[UI GameScreen]: load`);
 
-
   useEffect(() => {
     const loadInitalData = async () => {
       const max = await context.hangman.maxAllowedMisses();
-      setMaxMisses(max)
+      const misses = await context.hangman.currentMisses();
+      const result = await context.hangman.getCorrectlyGuessedChars();
+      const usedChars = await context.hangman.getUsedChars();
+
+      setMaxMisses(max);
+      setMisses(misses);
+      setUsedChars(usedChars);
+      setDisplayWord(result);
     }
     loadInitalData();
   }, [])
-
-
 
   function handleWordGuessChange(e) {
     setWord(e.target.value);
@@ -37,9 +41,11 @@ function GameScreen(classes) {
     console.log(`[User Action]: Submit word ${word}`);
     if (!context.isDebug) {
       await context.hangman.makeWordGuess(word, async () => {
-        let result = await context.hangman.getCorrectlyGuessedChars();
-        console.log(result);
-        let char_result = await context.hangman.getUsedChars();
+        const misses = await context.hangman.currentMisses();
+        const result = await context.hangman.getCorrectlyGuessedChars();
+
+        setMisses(misses);
+        setDisplayWord(result);
         setWord('');
       })
     } else {
@@ -51,23 +57,13 @@ function GameScreen(classes) {
     console.log(`[User Action]: Submit character ${char}`)
     if (!context.isDebug) {
       await context.hangman.makeCharGuess(char, async () => {
-        let result = await context.hangman.getCorrectlyGuessedChars();
-        console.log(result);
-        let char_result = await context.hangman.getUsedChars();
-        let char_to_display = '';
-
-        for (let i = 0; i < char_result.length; i++) {
-          if (i == char_result.length - 1) {
-            char_to_display += char_result[i]; 
-          } else {
-            char_to_display += char_result[i] + ' ';
-          }
-        }
-
+        const result = await context.hangman.getCorrectlyGuessedChars();
+        const usedChars = await context.hangman.getUsedChars();
         const misses = await context.hangman.currentMisses();
-        console.log(char_to_display);
-        console.log(misses);
-        setUsedChars(char_to_display);
+
+        setMisses(misses);
+        setUsedChars(usedChars);
+        setDisplayWord(result);
         setChar('');
       });
     } else {

@@ -19,6 +19,7 @@ function GameOptions({setScreen}) {
   const classes = useStyles();
   const [context, setContext] = useContext(Context)
   const [statusBar, setStatusBar] = useState(false)
+  const [continueAddress, setContinueAddress] = useState('')
 
   const connectWallet = async() => {
     console.log(`[User Action]: connect wallet pressed`)
@@ -66,6 +67,24 @@ function GameOptions({setScreen}) {
     }
   }
 
+  const addressOnChange = async (e) => {
+    console.log(e.target.value)
+    setContinueAddress(e.target.value)
+  }
+
+  const continueGame = async () => {
+    console.log(`[User Action]: Continue Game button pressed`)
+    if (context.isDebug) {
+      setScreen('GAME')
+    } else {
+      context.hangman.setGame(
+        continueAddress, 
+        context.walletProvider.getSigner()
+      )
+      setScreen('GAME')
+    }
+  }
+
   return (
     (!context.isLoggedIn) ?
     <div>
@@ -92,10 +111,10 @@ function GameOptions({setScreen}) {
           </Grid>
         }
         <Grid item>
-          <Button variant='contained' color='primary'>Continue Game</Button>
+          <Button variant='contained' color='primary' onClick={continueGame}>Continue Game</Button>
         </Grid>
         <Grid item>
-          <TextField id="outlined-basic" label="Contract Address" variant="outlined" />
+          <TextField id="outlined-basic" label="Contract Address" variant="outlined" onChange={addressOnChange} />
         </Grid>
       </Grid>
     </div>

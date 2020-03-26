@@ -1,15 +1,16 @@
 import React, { useContext, useState, useEffect } from 'react';	
 import { Context } from './context';
-import {Grid, Paper, Typography, Button, TextField} from '@material-ui/core';
+import { Grid, Paper, Typography, Button, TextField } from '@material-ui/core';
 
 function GameScreen(classes) {
   const [context, setContext] = useContext(Context);
-  const [displayWord, setDisplayWord] = useState();
+  const [displayWord, setDisplayWord] = useState('');
   const [word, setWord] = useState('');
   const [char, setChar] = useState('');
   const [usedChars, setUsedChars] = useState([]);
   const [misses, setMisses] = useState(0);
-  const [maxMisses, setMaxMisses] = useState();
+  const [maxMisses, setMaxMisses] = useState(0);
+  const [isDisabled, setIsDisabled] = useState(false);
   console.log(`[UI GameScreen]: load`);
 
   useEffect(() => {
@@ -39,6 +40,7 @@ function GameScreen(classes) {
 
   const submitWord = async () => {
     console.log(`[User Action]: Submit word ${word}`);
+    setIsDisabled(true);
     if (!context.isDebug) {
       await context.hangman.makeWordGuess(word, async () => {
         const misses = await context.hangman.currentMisses();
@@ -47,6 +49,7 @@ function GameScreen(classes) {
         setMisses(misses);
         setDisplayWord(result);
         setWord('');
+        setIsDisabled(false);
       })
     } else {
       setWord('');
@@ -54,7 +57,8 @@ function GameScreen(classes) {
   }
 
   const submitChar = async () => {
-    console.log(`[User Action]: Submit character ${char}`)
+    console.log(`[User Action]: Submit character ${char}`);
+    setIsDisabled(true);
     if (!context.isDebug) {
       await context.hangman.makeCharGuess(char, async () => {
         const result = await context.hangman.getCorrectlyGuessedChars();
@@ -65,6 +69,7 @@ function GameScreen(classes) {
         setUsedChars(usedChars);
         setDisplayWord(result);
         setChar('');
+        setIsDisabled(false);
       });
     } else {
       setChar('');
@@ -102,7 +107,7 @@ function GameScreen(classes) {
                   <TextField id="outlined-basic" label="Guess Word" variant="outlined" value={word} onChange={handleWordGuessChange}/>
                 </Grid>
                 <Grid item>
-                  <Button variant='contained' color='primary' onClick={submitWord}>Submit Word</Button>
+                  <Button variant='contained' color='primary' disabled={isDisabled} onClick={submitWord}>Submit Word</Button>
                 </Grid>
               </Grid>
 
@@ -111,7 +116,7 @@ function GameScreen(classes) {
                   <TextField id="outlined-basic" label="Guess Character" variant="outlined" value={char} onChange={handleCharGuessChange}/>
                 </Grid>
                 <Grid item>
-                  <Button variant='contained' color='primary' onClick={submitChar}>Submit Char</Button>
+                  <Button variant='contained' color='primary' disabled={isDisabled} onClick={submitChar}>Submit Char</Button>
                 </Grid>
               </Grid>
 

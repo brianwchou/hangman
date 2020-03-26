@@ -10,11 +10,10 @@ export default class Hangman {
   }
 
   setGame(gameAddress, signer) {
-    console.log(`[Hangman]: set game`)
-    console.log(ethers.utils.getAddress(gameAddress))
-    
+    let address = ethers.utils.getAddress(gameAddress)
+    console.log(`[Hangman]: setGame with ${address}`)
     const game = new ethers.Contract(
-      gameAddress,
+      address,
       HangmanJSON.abi,
       signer
     );
@@ -26,6 +25,7 @@ export default class Hangman {
   }
 
   async newGame(jobId, userAddress, signer, callback) {
+    console.log(`[Hangman]: newGame called`)
     // Step 1: Request
     await this.Factory.requestCreateGame(ethers.utils.toUtf8Bytes(jobId), this.paymentAmount);
     // Step 2: Listen for Request
@@ -51,6 +51,7 @@ export default class Hangman {
   }
 
   async makeCharGuess(charInput, callback) {
+    console.log(`[Hangman]: makeCharGuess called`)
     let character = ethers.utils.toUtf8Bytes(charInput)
     this.Game.once("TurnTaken", async () => {
       callback()
@@ -59,6 +60,7 @@ export default class Hangman {
   }
 
   async makeWordGuess(wordInput, callback) {
+    console.log(`[Hangman]: makeWordGuess called`)
     let word = ethers.utils.toUtf8Bytes(wordInput)
     this.Game.once("TurnTaken", async () => {
       callback()
@@ -67,22 +69,27 @@ export default class Hangman {
   }
 
   async getNumberOfChars() {
+    console.log(`[Hangman]: makeCharGuess called`)
     return await this.Game.getNumberOfCharacters();
   }
 
   async getUsedChars() {
+    console.log(`[Hangman]: getUsedChars called`)
     return await this.Game.getUsedCharacters();
   }
 
   async getCorrectlyGuessedChars() {
+    console.log(`[Hangman]: getCorrectlyGuessedChars called`)
     return await this.Game.getCorrectlyGuessedCharacters();
   }
 
   async currentMisses() {
+    console.log(`[Hangman]: currentMisses called`)
     return await this.Game.currentMisses();
   }
 
   async maxAllowedMisses() {
+    console.log(`[Hangman]: maxAllowedMisses called`)
     return await this.Game.maxAllowedMisses();
   }
 }

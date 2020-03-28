@@ -20,6 +20,7 @@ function GameOptions({setScreen}) {
   const [context, setContext] = useContext(Context)
   const [statusBar, setStatusBar] = useState(false)
   const [continueAddress, setContinueAddress] = useState('')
+  const [continueDisabled, setContinueDisabled] = useState(true);
 
   const connectWallet = async() => {
     console.log(`[User Action]: connect wallet pressed`)

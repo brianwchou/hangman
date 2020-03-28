@@ -91,10 +91,17 @@ export default class Hangman {
   }
 
   async getCorrectlyGuessedChars() {
-    const chars = await this.Game.getCorrectlyGuessedCharacters();
-    const chars_result = ethers.utils.toUtf8String(chars);
-    console.log(`[Hangman]: getCorrectlyGuessedChars ${chars_result}`);
-    return chars_result;
+    const hexChars = await this.Game.getCorrectlyGuessedCharacters();
+    let displayChars = hexChars.reduce((accumulator, hex) => {
+      if (hex !== "0x00") {
+        accumulator += (" " + ethers.utils.toUtf8String(hex) + " ");
+      } else {
+        accumulator += (" _ ");
+      }
+      return accumulator
+    }, "")
+    console.log(`[Hangman]: getCorrectlyGuessedChars ${displayChars}`);
+    return displayChars;
   }
 
   async currentMisses() {

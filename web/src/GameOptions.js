@@ -69,13 +69,15 @@ function GameOptions({setScreen}) {
   }
 
   const addressOnChange = async (e) => {
-    if (e.target.value.length == 0) {
-      setContinueDisabled(true)
-    } else if (e.target.value.length == 42){
+    // needs to start with 0x and be of length 42
+    if ((e.target.value.substring(0, 2) === '0x') && (e.target.value.length === 42)){
+      console.log(e.target.value)
       setContinueDisabled(false)
+      setContinueAddress(e.target.value)
+    } else {
+      setContinueDisabled(true)
+      setContinueAddress('')
     }
-    console.log(e.target.value)
-    setContinueAddress(e.target.value)
   }
 
   const continueGame = async () => {

@@ -94,7 +94,7 @@ export default class Hangman {
     const hexChars = await this.Game.getCorrectlyGuessedCharacters();
     let displayChars = hexChars.reduce((accumulator, hex) => {
       if (hex !== '0x00') {
-        accumulator += (' ' + ethers.utils.toUtf8String(hex) + ' ');
+        accumulator += (` ${ethers.utils.toUtf8String(hex)} `);
       } else {
         accumulator += (' _ ');
       }

@@ -12,17 +12,19 @@ function GameScreen(classes) {
   const [maxMisses, setMaxMisses] = useState(0);
   const [submitWordDisabled, setSubmitWordDisabled] = useState(true);
   const [submitCharDisabled, setSubmitCharDisabled] = useState(true);
+  const [gameStatus, setGameStatus] = useState(false);
+
   console.log(`[UI GameScreen]: load`);
 
   useEffect(() => {
     const loadInitalData = async () => {
       const max = await context.hangman.maxAllowedMisses();
-      const misses = await context.hangman.currentMisses();
+      const missesMade = await context.hangman.currentMisses();
       const result = await context.hangman.getCorrectlyGuessedChars();
       const usedChars = await context.hangman.getUsedChars();
 
       setMaxMisses(max);
-      setMisses(misses);
+      setMisses(missesMade);
       setUsedChars(usedChars);
       setDisplayWord(result);
     }
@@ -54,10 +56,16 @@ function GameScreen(classes) {
     setSubmitCharDisabled(true);
     if (!context.isDebug) {
       await context.hangman.makeWordGuess(word, async () => {
-        const misses = await context.hangman.currentMisses();
+        const missesMade = await context.hangman.currentMisses();
         const result = await context.hangman.getCorrectlyGuessedChars();
+        
+        if (!result.includes('_')) {
+          console.log("you win")
+        } else if (parseInt(missesMade) === parseInt(maxMisses)) {
+          console.log("you lose")
+        }
 
-        setMisses(misses);
+        setMisses(missesMade);
         setDisplayWord(result);
         setWord('');
       })
@@ -74,9 +82,22 @@ function GameScreen(classes) {
       await context.hangman.makeCharGuess(char, async () => {
         const result = await context.hangman.getCorrectlyGuessedChars();
         const usedChars = await context.hangman.getUsedChars();
-        const misses = await context.hangman.currentMisses();
+        const missesMade = await context.hangman.currentMisses();
+        
+        console.log(`missesMade ${missesMade} maxMisses ${maxMisses}`)
+        console.log(`missesMade == maxMisses ${missesMade == maxMisses}`)
+        console.log(`missesMade === maxMisses ${missesMade === maxMisses}`)
+        console.log(`typeof missesMade ${typeof parseInt(missesMade)}`)
+        console.log(`typeof maxMisses ${typeof parseInt(maxMisses)}`)
+        console.log(`missesMade === maxMisses ${parseInt(missesMade) === parseInt(maxMisses)}`)
 
-        setMisses(misses);
+        if (!result.includes('_')) {
+          console.log("you win")
+        } else if (parseInt(missesMade) === parseInt(maxMisses)) {
+          console.log("you lose")
+        }
+
+        setMisses(missesMade);
         setUsedChars(usedChars);
         setDisplayWord(result);
         setChar('');

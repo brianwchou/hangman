@@ -62,19 +62,13 @@ function GameScreen(classes) {
         const result = await context.hangman.getCorrectlyGuessedChars();
         
         if (!result.includes('_')) {
-<<<<<<< Updated upstream
-          console.log("you win")
-          setWordInputDisabled(true)
-          setCharInputDisabled(true)
-        } else if (parseInt(missesMade) === parseInt(maxMisses)) {
-          console.log("you lose")
-          setWordInputDisabled(true)
-          setCharInputDisabled(true)
-=======
           setGameStatus("Game Win");
+          setWordInputDisabled(true)
+          setCharInputDisabled(true)
         } else if (parseInt(missesMade) === parseInt(maxMisses)) {
           setGameStatus("Game Lose");
->>>>>>> Stashed changes
+          setWordInputDisabled(true)
+          setCharInputDisabled(true)
         }
 
         setMisses(missesMade);
@@ -97,19 +91,13 @@ function GameScreen(classes) {
         const missesMade = await context.hangman.currentMisses();
         
         if (!result.includes('_')) {
-<<<<<<< Updated upstream
-          console.log("you win")
-          setWordInputDisabled(true)
-          setCharInputDisabled(true)
-        } else if (parseInt(missesMade) === parseInt(maxMisses)) {
-          console.log("you lose")
-          setWordInputDisabled(true)
-          setCharInputDisabled(true)
-=======
           setGameStatus("Game Win");
+          setWordInputDisabled(true)
+          setCharInputDisabled(true)
         } else if (parseInt(missesMade) === parseInt(maxMisses)) {
           setGameStatus("Game Lose");
->>>>>>> Stashed changes
+          setWordInputDisabled(true)
+          setCharInputDisabled(true)
         }
 
         setMisses(missesMade);

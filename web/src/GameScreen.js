@@ -10,6 +10,8 @@ function GameScreen(classes) {
   const [usedChars, setUsedChars] = useState([]);
   const [misses, setMisses] = useState(0);
   const [maxMisses, setMaxMisses] = useState(0);
+  const [wordInputDisabled, setWordInputDisabled] = useState(false);
+  const [charInputDisabled, setCharInputDisabled] = useState(false);
   const [submitWordDisabled, setSubmitWordDisabled] = useState(true);
   const [submitCharDisabled, setSubmitCharDisabled] = useState(true);
   const [gameStatus, setGameStatus] = useState(false);
@@ -61,8 +63,12 @@ function GameScreen(classes) {
         
         if (!result.includes('_')) {
           console.log("you win")
+          setWordInputDisabled(true)
+          setCharInputDisabled(true)
         } else if (parseInt(missesMade) === parseInt(maxMisses)) {
           console.log("you lose")
+          setWordInputDisabled(true)
+          setCharInputDisabled(true)
         }
 
         setMisses(missesMade);
@@ -84,17 +90,14 @@ function GameScreen(classes) {
         const usedChars = await context.hangman.getUsedChars();
         const missesMade = await context.hangman.currentMisses();
         
-        console.log(`missesMade ${missesMade} maxMisses ${maxMisses}`)
-        console.log(`missesMade == maxMisses ${missesMade == maxMisses}`)
-        console.log(`missesMade === maxMisses ${missesMade === maxMisses}`)
-        console.log(`typeof missesMade ${typeof parseInt(missesMade)}`)
-        console.log(`typeof maxMisses ${typeof parseInt(maxMisses)}`)
-        console.log(`missesMade === maxMisses ${parseInt(missesMade) === parseInt(maxMisses)}`)
-
         if (!result.includes('_')) {
           console.log("you win")
+          setWordInputDisabled(true)
+          setCharInputDisabled(true)
         } else if (parseInt(missesMade) === parseInt(maxMisses)) {
           console.log("you lose")
+          setWordInputDisabled(true)
+          setCharInputDisabled(true)
         }
 
         setMisses(missesMade);
@@ -135,7 +138,7 @@ function GameScreen(classes) {
 
               <Grid container item direction='row' spacing={1} alignItems='center'>
                 <Grid item>
-                  <TextField id="outlined-basic" label="Guess Word" variant="outlined" value={word} onChange={handleWordGuessChange}/>
+                  <TextField id="outlined-basic" label="Guess Word" variant="outlined" disabled={wordInputDisabled} value={word} onChange={handleWordGuessChange}/>
                 </Grid>
                 <Grid item>
                   <Button variant='contained' color='primary' disabled={submitWordDisabled} onClick={submitWord}>Submit Word</Button>
@@ -144,7 +147,7 @@ function GameScreen(classes) {
 
               <Grid container item direction='row' spacing={1} alignItems='center'>
                 <Grid item>
-                  <TextField id="outlined-basic" label="Guess Character" variant="outlined" value={char} onChange={handleCharGuessChange}/>
+                  <TextField id="outlined-basic" label="Guess Character" variant="outlined" disabled={charInputDisabled} value={char} onChange={handleCharGuessChange}/>
                 </Grid>
                 <Grid item>
                   <Button variant='contained' color='primary' disabled={submitCharDisabled} onClick={submitChar}>Submit Char</Button>

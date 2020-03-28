@@ -60,7 +60,6 @@ function GameScreen(classes) {
         setDisplayWord(result);
         setWord('');
       })
-      setSubmitWordDisabled(false);
     } else {
       setWord('');
     }
@@ -68,7 +67,7 @@ function GameScreen(classes) {
 
   const submitChar = async () => {
     console.log(`[User Action]: Submit character ${char}`);
-    setSubmitWordDisabled(true);
+    setSubmitCharDisabled(true);
     if (!context.isDebug) {
       await context.hangman.makeCharGuess(char, async () => {
         const result = await context.hangman.getCorrectlyGuessedChars();
@@ -80,7 +79,6 @@ function GameScreen(classes) {
         setDisplayWord(result);
         setChar('');
       });
-      setSubmitWordDisabled(false);
     } else {
       setChar('');
     }
@@ -105,7 +103,7 @@ function GameScreen(classes) {
           <Paper className={classes.paper}>
             <Grid container justify='center' direction='column' spacing={1} alignItems='center' style={{ minHeight: '100vh' }}>
               <Typography>
-                Guesses Left {misses + '/' + maxMisses}
+                Guesses Used {misses + '/' + maxMisses}
               </Typography>
 
               <Typography>

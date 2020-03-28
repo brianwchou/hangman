@@ -71,7 +71,7 @@ function GameOptions({setScreen}) {
   const addressOnChange = async (e) => {
     if (e.target.value.length == 0) {
       setContinueDisabled(true)
-    } else {
+    } else if (e.target.value.length == 42){
       setContinueDisabled(false)
     }
     console.log(e.target.value)
@@ -120,7 +120,7 @@ function GameOptions({setScreen}) {
           <Button variant='contained' color='primary' disabled={continueDisabled} onClick={continueGame}>Continue Game</Button>
         </Grid>
         <Grid item>
-          <TextField id="outlined-basic" label="Contract Address" variant="outlined" onChange={addressOnChange} />
+          <TextField id="outlined-basic" label="Contract Address" variant="outlined" placeholder="0x0000000000000000000000000000000000000000" onChange={addressOnChange} />
         </Grid>
       </Grid>
     </div>

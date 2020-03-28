@@ -51,6 +51,7 @@ function GameScreen(classes) {
   const submitWord = async () => {
     console.log(`[User Action]: Submit word ${word}`);
     setSubmitWordDisabled(true);
+    setSubmitCharDisabled(true);
     if (!context.isDebug) {
       await context.hangman.makeWordGuess(word, async () => {
         const misses = await context.hangman.currentMisses();
@@ -67,6 +68,7 @@ function GameScreen(classes) {
 
   const submitChar = async () => {
     console.log(`[User Action]: Submit character ${char}`);
+    setSubmitWordDisabled(true);
     setSubmitCharDisabled(true);
     if (!context.isDebug) {
       await context.hangman.makeCharGuess(char, async () => {

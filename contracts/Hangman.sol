@@ -49,7 +49,7 @@ contract Hangman is Ownable {
      */
     function makeCharGuess(byte _character) external onlyOwner gameReady {
         require(currentMisses < maxAllowedMisses, "no more guesses available");
-        require(playerInput < 2**(solution.length), "solution is found"); // becareful of overflow
+        require(playerInput < 2**(solution.length) - 1, "solution is found"); // becareful of overflow
 
         emit TurnTaken();
 
@@ -99,7 +99,7 @@ contract Hangman is Ownable {
      */
     function makeWordGuess(bytes _string) external onlyOwner gameReady {
         require(currentMisses < maxAllowedMisses, "no more guesses available");
-        require(playerInput < 2**(solution.length), "solution is found");
+        require(playerInput < 2**(solution.length) - 1, "solution is found");
 
         emit TurnTaken();
 

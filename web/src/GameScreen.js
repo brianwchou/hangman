@@ -14,7 +14,7 @@ function GameScreen(classes) {
   const [charInputDisabled, setCharInputDisabled] = useState(false);
   const [submitWordDisabled, setSubmitWordDisabled] = useState(true);
   const [submitCharDisabled, setSubmitCharDisabled] = useState(true);
-  const [gameStatus, setGameStatus] = useState(false);
+  const [gameStatus, setGameStatus] = useState("Game in Progress");
 
   console.log(`[UI GameScreen]: load`);
 
@@ -62,6 +62,7 @@ function GameScreen(classes) {
         const result = await context.hangman.getCorrectlyGuessedChars();
         
         if (!result.includes('_')) {
+<<<<<<< Updated upstream
           console.log("you win")
           setWordInputDisabled(true)
           setCharInputDisabled(true)
@@ -69,6 +70,11 @@ function GameScreen(classes) {
           console.log("you lose")
           setWordInputDisabled(true)
           setCharInputDisabled(true)
+=======
+          setGameStatus("Game Win");
+        } else if (parseInt(missesMade) === parseInt(maxMisses)) {
+          setGameStatus("Game Lose");
+>>>>>>> Stashed changes
         }
 
         setMisses(missesMade);
@@ -91,6 +97,7 @@ function GameScreen(classes) {
         const missesMade = await context.hangman.currentMisses();
         
         if (!result.includes('_')) {
+<<<<<<< Updated upstream
           console.log("you win")
           setWordInputDisabled(true)
           setCharInputDisabled(true)
@@ -98,6 +105,11 @@ function GameScreen(classes) {
           console.log("you lose")
           setWordInputDisabled(true)
           setCharInputDisabled(true)
+=======
+          setGameStatus("Game Win");
+        } else if (parseInt(missesMade) === parseInt(maxMisses)) {
+          setGameStatus("Game Lose");
+>>>>>>> Stashed changes
         }
 
         setMisses(missesMade);
@@ -120,7 +132,7 @@ function GameScreen(classes) {
             src='https://d1nhio0ox7pgb.cloudfront.net/_img/i_collection_png/512x512/plain/guillotine.png'
           />
             <Typography>
-              {displayWord}
+              {`${gameStatus}: ${displayWord}`}
             </Typography>
          </Paper>
         </Grid>

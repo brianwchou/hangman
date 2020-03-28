@@ -69,9 +69,9 @@ function GameOptions({setScreen}) {
   }
 
   const addressOnChange = async (e) => {
+    console.log(`[User Action]: input continue game address field: ${e.target.value}`)
     // needs to start with 0x and be of length 42
     if ((e.target.value.substring(0, 2) === '0x') && (e.target.value.length === 42)){
-      console.log(e.target.value)
       setContinueDisabled(false)
       setContinueAddress(e.target.value)
     } else {

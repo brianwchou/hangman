@@ -33,7 +33,7 @@ function App() {
     let hangman = null;
     let walletProvider = null;
     let isLoggedIn = false;
-    let isDebug = false;
+    let isDebug = true;
     setContext(state => ({
       ...state,
       hangman,

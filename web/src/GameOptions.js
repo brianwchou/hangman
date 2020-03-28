@@ -20,6 +20,7 @@ function GameOptions({setScreen}) {
   const [context, setContext] = useContext(Context)
   const [statusBar, setStatusBar] = useState(false)
   const [continueAddress, setContinueAddress] = useState('')
+  const [continueDisabled, setContinueDisabled] = useState(true);
 
   const connectWallet = async() => {
     console.log(`[User Action]: connect wallet pressed`)
@@ -68,8 +69,15 @@ function GameOptions({setScreen}) {
   }
 
   const addressOnChange = async (e) => {
-    console.log(e.target.value)
-    setContinueAddress(e.target.value)
+    // needs to start with 0x and be of length 42
+    if ((e.target.value.substring(0, 2) === '0x') && (e.target.value.length === 42)){
+      console.log(e.target.value)
+      setContinueDisabled(false)
+      setContinueAddress(e.target.value)
+    } else {
+      setContinueDisabled(true)
+      setContinueAddress('')
+    }
   }
 
   const continueGame = async () => {
@@ -111,10 +119,10 @@ function GameOptions({setScreen}) {
           </Grid>
         }
         <Grid item>
-          <Button variant='contained' color='primary' onClick={continueGame}>Continue Game</Button>
+          <Button variant='contained' color='primary' disabled={continueDisabled} onClick={continueGame}>Continue Game</Button>
         </Grid>
         <Grid item>
-          <TextField id="outlined-basic" label="Contract Address" variant="outlined" onChange={addressOnChange} />
+          <TextField id="outlined-basic" label="Contract Address" variant="outlined" placeholder="0x0000000000000000000000000000000000000000" onChange={addressOnChange} />
         </Grid>
       </Grid>
     </div>

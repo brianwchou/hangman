@@ -54,7 +54,7 @@ function GameOptions({setScreen}) {
       setScreen('GAME')
     } else {
       setStatusBar(true)
-      console.log(`[Hangman]: newGame called`)
+      
       await context.hangman.newGame(
         "76ca51361e4e444f8a9b18ae350a5725", 
         context.walletProvider.provider.selectedAddress,

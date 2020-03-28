@@ -10,79 +10,102 @@ export default class Hangman {
   }
 
   setGame(gameAddress, signer) {
-    console.log(`[Hangman]: set game`)
-    console.log(ethers.utils.getAddress(gameAddress))
-    
+    let address = ethers.utils.getAddress(gameAddress)
+    console.log(`[Hangman]: setGame with ${address}`)
     const game = new ethers.Contract(
       gameAddress,
       HangmanJSON.abi,
       signer
     );
-    this.Game = game
+    this.Game = game;
   }
 
   async getGame(userAddress) {
-    return this.Game
+    return this.Game;
   }
 
   async newGame(jobId, userAddress, signer, callback) {
+    console.log(`[Hangman]: newGame called`);
     // Step 1: Request
     await this.Factory.requestCreateGame(ethers.utils.toUtf8Bytes(jobId), this.paymentAmount);
     // Step 2: Listen for Request
     await this.Factory.once("RequestCreateGame", async (owner, requestId) => {
-      console.log(`[FactoryContract] RequestCreateGame: (owner: ${owner}), (requestId: ${requestId})`)
+      console.log(`[FactoryContract]: RequestCreateGame: (owner: ${owner}), (requestId: ${requestId})`);
     })
     // Step 3: Wait for Request to be answered
     await this.Factory.once("FulfillCreateGame", async (owner, requestId) => {
-      console.log(`[FactoryContract] FulfillCreateGame: (owner: ${owner}), (requestId: ${requestId})`)
+      console.log(`[FactoryContract]: FulfillCreateGame: (owner: ${owner}), (requestId: ${requestId})`);
       // Step 4: Initialize connect to Game Contract
       let gameStruct = await this.Factory.requestIdToGame(requestId)
       if (ethers.utils.getAddress(gameStruct[0]) !== ethers.utils.getAddress(userAddress)) {
-        console.log("INVALID USER FOR GAME")
+        console.log(`[ERROR]: INVALID USER FOR GAME`);
       }
       const game = new ethers.Contract(
         gameStruct[1],
         HangmanJSON.abi,
         signer
       );
-      this.Game = game
-      callback()
+      this.Game = game;
+      callback();
     })
   }
 
   async makeCharGuess(charInput, callback) {
-    let character = ethers.utils.toUtf8Bytes(charInput)
+    console.log(`[Hangman]: makeCharGuess called`);
+    let character = ethers.utils.toUtf8Bytes(charInput);
     this.Game.once("TurnTaken", async () => {
-      callback()
+      await callback();
     });
-    await this.Game.makeCharGuess(character)
+    await this.Game.makeCharGuess(character);
   }
 
   async makeWordGuess(wordInput, callback) {
-    let word = ethers.utils.toUtf8Bytes(wordInput)
+    console.log(`[Hangman]: makeWordGuess called`);
+    let word = ethers.utils.toUtf8Bytes(wordInput);
     this.Game.once("TurnTaken", async () => {
-      callback()
+      await callback();
     });
-    await this.Game.makeWordGuess(word)
+    await this.Game.makeWordGuess(word);
   }
 
   async getNumberOfChars() {
-    return await this.Game.getNumberOfCharacters();
+    const numOfChar = await this.Game.getNumberOfCharacters();
+    console.log(`[Hangman]: getNumberOfChars ${numOfChar}`);
+    return numOfChar;
   }
 
   async getUsedChars() {
-    return await this.Game.getUsedCharacters();
+    const chars = await this.Game.getUsedCharacters();
+    const formated_chars = ethers.utils.toUtf8String(chars);
+    
+    let chars_to_display = '';
+    for (let i = 0; i < formated_chars.length; i++) {
+      if (i === formated_chars.length - 1) {
+        chars_to_display += formated_chars[i]; 
+      } else {
+        chars_to_display += formated_chars[i] + ' ';
+      }
+    }
+    console.log(`[Hangman]: getUsedChars ${chars_to_display}`);
+    return chars_to_display;
   }
 
   async getCorrectlyGuessedChars() {
-    return await this.Game.getCorrectlyGuessedCharacters();
+    const chars = await this.Game.getCorrectlyGuessedCharacters();
+    const chars_result = ethers.utils.toUtf8String(chars);
+    console.log(`[Hangman]: getCorrectlyGuessedChars ${chars_result}`);
+    return chars_result;
   }
 
   async currentMisses() {
-    return await this.Game.currentMisses();
+    const misses = await this.Game.currentMisses();
+    console.log(`[Hangman]: currentMisses ${misses}`);
+    return misses;
   }
 
   async maxAllowedMisses() {
-    return await this.Game.maxAllowedMisses();
+    const max = await this.Game.maxAllowedMisses();
+    console.log(`[Hangman]: maxAllowedMisses ${max}`);
+    return max;
   }
 }

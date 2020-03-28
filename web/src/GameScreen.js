@@ -10,7 +10,7 @@ function GameScreen(classes) {
   const [usedChars, setUsedChars] = useState([]);
   const [misses, setMisses] = useState(0);
   const [maxMisses, setMaxMisses] = useState(0);
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
   console.log(`[UI GameScreen]: load`);
 
   useEffect(() => {

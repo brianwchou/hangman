@@ -20,6 +20,7 @@ function GameOptions({setScreen}) {
   const [context, setContext] = useContext(Context)
   const [statusBar, setStatusBar] = useState(false)
   const [continueAddress, setContinueAddress] = useState('')
+  const [continueDisabled, setContinueDisabled] = useState(true);
 
   const connectWallet = async() => {
     console.log(`[User Action]: connect wallet pressed`)
@@ -68,6 +69,11 @@ function GameOptions({setScreen}) {
   }
 
   const addressOnChange = async (e) => {
+    if (e.target.value.length == 0) {
+      setContinueDisabled(true)
+    } else {
+      setContinueDisabled(false)
+    }
     console.log(e.target.value)
     setContinueAddress(e.target.value)
   }
@@ -111,7 +117,7 @@ function GameOptions({setScreen}) {
           </Grid>
         }
         <Grid item>
-          <Button variant='contained' color='primary' onClick={continueGame}>Continue Game</Button>
+          <Button variant='contained' color='primary' disabled={continueDisabled} onClick={continueGame}>Continue Game</Button>
         </Grid>
         <Grid item>
           <TextField id="outlined-basic" label="Contract Address" variant="outlined" onChange={addressOnChange} />

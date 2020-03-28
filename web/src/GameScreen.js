@@ -10,19 +10,23 @@ function GameScreen(classes) {
   const [usedChars, setUsedChars] = useState([]);
   const [misses, setMisses] = useState(0);
   const [maxMisses, setMaxMisses] = useState(0);
+  const [wordInputDisabled, setWordInputDisabled] = useState(false);
+  const [charInputDisabled, setCharInputDisabled] = useState(false);
   const [submitWordDisabled, setSubmitWordDisabled] = useState(true);
   const [submitCharDisabled, setSubmitCharDisabled] = useState(true);
+  const [gameStatus, setGameStatus] = useState("Game in Progress");
+
   console.log(`[UI GameScreen]: load`);
 
   useEffect(() => {
     const loadInitalData = async () => {
       const max = await context.hangman.maxAllowedMisses();
-      const misses = await context.hangman.currentMisses();
+      const missesMade = await context.hangman.currentMisses();
       const result = await context.hangman.getCorrectlyGuessedChars();
       const usedChars = await context.hangman.getUsedChars();
 
       setMaxMisses(max);
-      setMisses(misses);
+      setMisses(missesMade);
       setUsedChars(usedChars);
       setDisplayWord(result);
     }
@@ -54,10 +58,20 @@ function GameScreen(classes) {
     setSubmitCharDisabled(true);
     if (!context.isDebug) {
       await context.hangman.makeWordGuess(word, async () => {
-        const misses = await context.hangman.currentMisses();
+        const missesMade = await context.hangman.currentMisses();
         const result = await context.hangman.getCorrectlyGuessedChars();
+        
+        if (!result.includes('_')) {
+          setGameStatus("Game Win");
+          setWordInputDisabled(true)
+          setCharInputDisabled(true)
+        } else if (parseInt(missesMade) === parseInt(maxMisses)) {
+          setGameStatus("Game Lose");
+          setWordInputDisabled(true)
+          setCharInputDisabled(true)
+        }
 
-        setMisses(misses);
+        setMisses(missesMade);
         setDisplayWord(result);
         setWord('');
       })
@@ -74,9 +88,19 @@ function GameScreen(classes) {
       await context.hangman.makeCharGuess(char, async () => {
         const result = await context.hangman.getCorrectlyGuessedChars();
         const usedChars = await context.hangman.getUsedChars();
-        const misses = await context.hangman.currentMisses();
+        const missesMade = await context.hangman.currentMisses();
+        
+        if (!result.includes('_')) {
+          setGameStatus("Game Win");
+          setWordInputDisabled(true)
+          setCharInputDisabled(true)
+        } else if (parseInt(missesMade) === parseInt(maxMisses)) {
+          setGameStatus("Game Lose");
+          setWordInputDisabled(true)
+          setCharInputDisabled(true)
+        }
 
-        setMisses(misses);
+        setMisses(missesMade);
         setUsedChars(usedChars);
         setDisplayWord(result);
         setChar('');
@@ -96,7 +120,7 @@ function GameScreen(classes) {
             src='https://d1nhio0ox7pgb.cloudfront.net/_img/i_collection_png/512x512/plain/guillotine.png'
           />
             <Typography>
-              {displayWord}
+              {`${gameStatus}: ${displayWord}`}
             </Typography>
          </Paper>
         </Grid>
@@ -114,7 +138,7 @@ function GameScreen(classes) {
 
               <Grid container item direction='row' spacing={1} alignItems='center'>
                 <Grid item>
-                  <TextField id="outlined-basic" label="Guess Word" variant="outlined" value={word} onChange={handleWordGuessChange}/>
+                  <TextField id="outlined-basic" label="Guess Word" variant="outlined" disabled={wordInputDisabled} value={word} onChange={handleWordGuessChange}/>
                 </Grid>
                 <Grid item>
                   <Button variant='contained' color='primary' disabled={submitWordDisabled} onClick={submitWord}>Submit Word</Button>
@@ -123,7 +147,7 @@ function GameScreen(classes) {
 
               <Grid container item direction='row' spacing={1} alignItems='center'>
                 <Grid item>
-                  <TextField id="outlined-basic" label="Guess Character" variant="outlined" value={char} onChange={handleCharGuessChange}/>
+                  <TextField id="outlined-basic" label="Guess Character" variant="outlined" disabled={charInputDisabled} value={char} onChange={handleCharGuessChange}/>
                 </Grid>
                 <Grid item>
                   <Button variant='contained' color='primary' disabled={submitCharDisabled} onClick={submitChar}>Submit Char</Button>

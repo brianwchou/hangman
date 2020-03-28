@@ -112,7 +112,7 @@ contract Hangman is Ownable {
             return;
         }
         //set the playerInput to answer
-        playerInput = 2**(solution.length);
+        playerInput = 2**(solution.length) - 1;
         emit GameWin();
     }
 

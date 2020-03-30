@@ -8,11 +8,11 @@ module.exports = async function(deployer) {
   const url = "https://en.wikipedia.org/api/rest_v1/page/random/title";
   const path = ["items", "0", "title"];
 
- await deployer.deploy(
-   HangmanFactory,
-   chainlinkTokenAddress, 
-   chainlinkOracleAddress, 
-   url, 
-   path
- );
+//  await deployer.deploy(
+//    HangmanFactory,
+//    chainlinkTokenAddress, 
+//    chainlinkOracleAddress, 
+//    url, 
+//    path
+//  );
 };

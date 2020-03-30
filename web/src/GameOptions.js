@@ -5,6 +5,7 @@ import HangmanFactoryJSON from './contracts/HangmanFactory.json';
 import Hangman from './Hangman';
 import {Grid, Typography, Button, TextField, LinearProgress} from '@material-ui/core';
 import { makeStyles } from "@material-ui/core/styles";
+import { CHAINLINK_JOB_ID, HANGMAN_FACTORY_ADDRESS, NULL_ADDRESS} from './constants'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -34,7 +35,7 @@ function GameOptions({setScreen}) {
 
         // init factory
         const hangmanFactory = new ethers.Contract(
-          "0xd723d7DE8C0811484dF4FBfa174555a2BCBF8aBA",
+          HANGMAN_FACTORY_ADDRESS,
           HangmanFactoryJSON.abi,
           context.walletProvider.getSigner()
         );
@@ -57,7 +58,7 @@ function GameOptions({setScreen}) {
       setStatusBar(true)
       
       await context.hangman.newGame(
-        "76ca51361e4e444f8a9b18ae350a5725", 
+        CHAINLINK_JOB_ID, 
         context.walletProvider.provider.selectedAddress,
         context.walletProvider.getSigner(),
         () => {
@@ -122,7 +123,7 @@ function GameOptions({setScreen}) {
           <Button variant='contained' color='primary' disabled={continueDisabled} onClick={continueGame}>Continue Game</Button>
         </Grid>
         <Grid item>
-          <TextField id="outlined-basic" label="Contract Address" variant="outlined" placeholder="0x0000000000000000000000000000000000000000" onChange={addressOnChange} />
+          <TextField id="outlined-basic" label="Contract Address" variant="outlined" placeholder={ NULL_ADDRESS } onChange={addressOnChange} />
         </Grid>
       </Grid>
     </div>

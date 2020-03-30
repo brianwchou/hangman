@@ -5,7 +5,7 @@ import HangmanFactoryJSON from './contracts/HangmanFactory.json';
 import Hangman from './Hangman';
 import {Grid, Typography, Button, TextField, LinearProgress} from '@material-ui/core';
 import { makeStyles } from "@material-ui/core/styles";
-import { CHAINLINK_JOB_ID, HANGMAN_FACTORY_ADDRESS, NULL_ADDRESS} from './constants'
+import { CHAINLINK_JOB_ID, HANGMAN_FACTORY_ADDRESS, EMPTY_ADDRESS} from './constants'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -123,7 +123,7 @@ function GameOptions({setScreen}) {
           <Button variant='contained' color='primary' disabled={continueDisabled} onClick={continueGame}>Continue Game</Button>
         </Grid>
         <Grid item>
-          <TextField id="outlined-basic" label="Contract Address" variant="outlined" placeholder={ NULL_ADDRESS } onChange={addressOnChange} />
+          <TextField id="outlined-basic" label="Contract Address" variant="outlined" placeholder={ EMPTY_ADDRESS } onChange={addressOnChange} />
         </Grid>
       </Grid>
     </div>

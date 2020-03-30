@@ -1,12 +1,12 @@
 import HangmanJSON from './contracts/Hangman.json';
-const ethers = require("ethers");
+import { ethers } from 'ethers';
+import { CHAINLINK_PAYMENT } from './constants';
 
 export default class Hangman {
   constructor(HangmanFactoryContract) {
     this.Factory = HangmanFactoryContract;
     this.Game = null;
-    this.paymentAmount = 1;
-    // TODO: Make payment dynamic based on current required value
+    this.paymentAmount = CHAINLINK_PAYMENT;
   }
 
   setGame(gameAddress, signer) {

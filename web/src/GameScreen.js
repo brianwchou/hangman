@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';	
 import { Context } from './context';
 import { Grid, Paper, Typography, Button, TextField } from '@material-ui/core';
+import { GUILLOTINE_IMG_URL } from './constants'
 
 function GameScreen(classes) {
   const [context, setContext] = useContext(Context);
@@ -117,7 +118,7 @@ function GameScreen(classes) {
         <Grid item xs={6}>
           <Paper className={classes.paper}>
           <img className={classes.img} 
-            src='https://d1nhio0ox7pgb.cloudfront.net/_img/i_collection_png/512x512/plain/guillotine.png'
+            src={GUILLOTINE_IMG_URL}
           />
             <Typography>
               {`${gameStatus}: ${displayWord}`}

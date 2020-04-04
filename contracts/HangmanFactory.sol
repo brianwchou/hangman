@@ -84,7 +84,8 @@ contract HangmanFactory is ChainlinkClient, Ownable {
             require(gameInstance.player != 0, "Id does not exist");
 
             Hangman hangman = Hangman(address(gameInstance.game));
-            hangman.setSolution(bytes32ToBytes(_data), _data.length);
+            bytes memory data = bytes32ToBytes(_data);
+            hangman.setSolution(data, data.length);
             hangman.transferOwnership(address(gameInstance.player));
 
             //game is now ready to play

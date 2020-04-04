@@ -31,8 +31,11 @@ export default class Hangman {
     return (allowance >= this.paymentAmount)
   }
 
-  async setLinkAllowance() {
+  async setLinkAllowance(callback) {
     await this.LinkToken.approve(this.Factory.address, this.paymentAmount);
+    await this.LinkToken.once("Approval", async () => {
+      callback();
+    })
   }
 
   async newGame(jobId, userAddress, signer, callback) {

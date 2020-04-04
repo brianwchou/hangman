@@ -69,18 +69,28 @@ function GameOptions({setScreen}) {
       // first check if factory is authorized to move link
       let isAuthorized = await context.hangman.isFactoryAuthorized(context.walletProvider.provider.selectedAddress);
       if (!isAuthorized) {
-        await context.hangman.setLinkAllowance()
+        await context.hangman.setLinkAllowance( async () => {
+          await context.hangman.newGame(
+            CHAINLINK_JOB_ID, 
+            context.walletProvider.provider.selectedAddress,
+            context.walletProvider.getSigner(),
+            () => {
+              setStatusBar(false)
+              setScreen('GAME')
+            }
+          )
+        })
+      } else {
+        await context.hangman.newGame(
+          CHAINLINK_JOB_ID, 
+          context.walletProvider.provider.selectedAddress,
+          context.walletProvider.getSigner(),
+          () => {
+            setStatusBar(false)
+            setScreen('GAME')
+          }
+        )
       }
-
-      await context.hangman.newGame(
-        CHAINLINK_JOB_ID, 
-        context.walletProvider.provider.selectedAddress,
-        context.walletProvider.getSigner(),
-        () => {
-          setStatusBar(false)
-          setScreen('GAME')
-        }
-      )
     }
   }
 

@@ -3,8 +3,9 @@ import { ethers } from 'ethers';
 import { CHAINLINK_PAYMENT } from './constants';
 
 export default class Hangman {
-  constructor(HangmanFactoryContract) {
+  constructor(HangmanFactoryContract, LinkTokenContract) {
     this.Factory = HangmanFactoryContract;
+    this.LinkToken = LinkTokenContract;
     this.Game = null;
     this.paymentAmount = CHAINLINK_PAYMENT;
   }
@@ -22,6 +23,16 @@ export default class Hangman {
 
   async getGame(userAddress) {
     return this.Game;
+  }
+
+  async isFactoryAuthorized(userAddress) {
+    console.log(this.Factory.address)
+    let allowance = await this.LinkToken.allowance(userAddress, this.Factory.address);
+    return (allowance >= this.paymentAmount)
+  }
+
+  async setLinkAllowance() {
+    await this.LinkToken.approve(this.Factory.address, this.paymentAmount);
   }
 
   async newGame(jobId, userAddress, signer, callback) {

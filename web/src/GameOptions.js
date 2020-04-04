@@ -58,6 +58,18 @@ function GameOptions({setScreen}) {
     }
   }
 
+  const createNewGame = async () => {
+    await context.hangman.newGame(
+      CHAINLINK_JOB_ID, 
+      context.walletProvider.provider.selectedAddress,
+      context.walletProvider.getSigner(),
+      () => {
+        setStatusBar(false)
+        setScreen('GAME')
+      }
+    )
+  }
+
   const newGame = async() => {
     console.log(`[User Action]: New Game button pressed`)
 
@@ -70,26 +82,10 @@ function GameOptions({setScreen}) {
       let isAuthorized = await context.hangman.isFactoryAuthorized(context.walletProvider.provider.selectedAddress);
       if (!isAuthorized) {
         await context.hangman.setLinkAllowance( async () => {
-          await context.hangman.newGame(
-            CHAINLINK_JOB_ID, 
-            context.walletProvider.provider.selectedAddress,
-            context.walletProvider.getSigner(),
-            () => {
-              setStatusBar(false)
-              setScreen('GAME')
-            }
-          )
+          await createNewGame()
         })
       } else {
-        await context.hangman.newGame(
-          CHAINLINK_JOB_ID, 
-          context.walletProvider.provider.selectedAddress,
-          context.walletProvider.getSigner(),
-          () => {
-            setStatusBar(false)
-            setScreen('GAME')
-          }
-        )
+        await createNewGame()
       }
     }
   }

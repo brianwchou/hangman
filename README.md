@@ -25,6 +25,7 @@ HangmanFactory is a Chainlink Client that will fetch a random word from the [Wik
 - ganache-time-traveler
 - react
 - ethers.js
+- ipfs
 
 ### Contracts
 ```javascript
@@ -75,3 +76,25 @@ const CHAINLINK_HTTP_GET_JSON_PARSE_JOB_ID = "76ca51361e4e444f8a9b18ae350a5725";
 const PAYMENT = 1;
 ```
 https://ropsten.explorer.chain.link/
+
+### Deployment
+register ethereum name on [ENS](https://ens.domains/)
+
+Run the following:
+```
+ipfs daemon
+cd web
+yarn build
+ipfs add -r build/
+```
+```
+added QmaHNhLf89FacunsrZDpHBSvZ8khsm5seCBNJBy8tqHEKr build
+ 2.87 MiB / 2.87 MiB
+ [====================] 100.00%
+```
+
+Take last hash displayed and add it to content on ens public resolver
+
+Followed directions [here](https://medium.com/the-ethereum-name-service/how-to-host-your-dapp-with-ipfs-ens-and-access-it-via-ethdns-c96046059d87)
+
+Upload may take some time to propagate and be available.

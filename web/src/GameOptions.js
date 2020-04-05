@@ -2,10 +2,11 @@ import React, { useContext, useState } from 'react';
 import { Context } from './context';
 import { ethers } from 'ethers';
 import HangmanFactoryJSON from './contracts/HangmanFactory.json';
+import LinkTokenJSON from './contracts/LinkToken.json';
 import Hangman from './Hangman';
-import {Grid, Typography, Button, TextField, LinearProgress} from '@material-ui/core';
+import { Grid, Typography, Button, TextField, LinearProgress } from '@material-ui/core';
 import { makeStyles } from "@material-ui/core/styles";
-import { CHAINLINK_JOB_ID, HANGMAN_FACTORY_ADDRESS, EMPTY_ADDRESS} from './constants'
+import { CHAINLINK_JOB_ID, HANGMAN_FACTORY_ADDRESS, LINK_TOKEN_ADDRESS, EMPTY_ADDRESS } from './constants'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -33,6 +34,13 @@ function GameOptions({setScreen}) {
         await context.walletProvider.provider.enable()
         setContext(state => ({ ...state, isLoggedIn: true}));
 
+        // init linktoken 
+        const linkToken = new ethers.Contract(
+          LINK_TOKEN_ADDRESS,
+          LinkTokenJSON.abi,
+          context.walletProvider.getSigner()
+        );
+
         // init factory
         const hangmanFactory = new ethers.Contract(
           HANGMAN_FACTORY_ADDRESS,
@@ -41,7 +49,7 @@ function GameOptions({setScreen}) {
         );
 
         // init hangman
-        let hangman = new Hangman(hangmanFactory)
+        let hangman = new Hangman(hangmanFactory, linkToken)
         setContext(state => ({
           ...state,
           hangman
@@ -50,22 +58,35 @@ function GameOptions({setScreen}) {
     }
   }
 
+  const createNewGame = async () => {
+    await context.hangman.newGame(
+      CHAINLINK_JOB_ID, 
+      context.walletProvider.provider.selectedAddress,
+      context.walletProvider.getSigner(),
+      () => {
+        setStatusBar(false)
+        setScreen('GAME')
+      }
+    )
+  }
+
   const newGame = async() => {
     console.log(`[User Action]: New Game button pressed`)
+
     if (context.isDebug) {
       setScreen('GAME')
     } else {
       setStatusBar(true)
-      
-      await context.hangman.newGame(
-        CHAINLINK_JOB_ID, 
-        context.walletProvider.provider.selectedAddress,
-        context.walletProvider.getSigner(),
-        () => {
-          setStatusBar(false)
-          setScreen('GAME')
-        }
-      )
+
+      // first check if factory is authorized to move link
+      let isAuthorized = await context.hangman.isFactoryAuthorized(context.walletProvider.provider.selectedAddress);
+      if (!isAuthorized) {
+        await context.hangman.setLinkAllowance( async () => {
+          await createNewGame()
+        })
+      } else {
+        await createNewGame()
+      }
     }
   }
 

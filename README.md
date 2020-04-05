@@ -80,9 +80,22 @@ https://ropsten.explorer.chain.link/
 ### Deployment
 register ethereum name on [ENS](https://ens.domains/)
 requires ipfs
+`cd ./web # locate webfiles`
+`yarn build # build your static files`
+`ipfs add -r build/`
 ```
-run yarn build inside of web/
-ipfs add -r build/
+# EXAMPLE output
+added QmYXMA1W6jX33hEKt6wARNjBJAKpXwXi84L9sfpSH93mD1 build/asset-manifest.json
+added QmcFc6EPhavNSfdjG8byaxxV6KtHZvnDwYXLHvyJQPp3uN build/favicon.ico
+added QmaTUS9hhSA5hcaLQLym4aPpKTmnTqWaLTteHA6hMAyTGi build/index.html
+...
+added QmWwswmrfNVJzatRkEtuf8LZFZUqbNuqzsiwDy4CAjHKfJ build/static/css
+added QmenAh3Tx51Ju9bjWVCyZpwG81TyMTbpJiDVU1JRYXB119 build/static/js
+added QmfK7ag3kUNHedX4Wqj7QG7UDP84RjEBcpUESzPy4rTqzF build/static
+added QmaHNhLf89FacunsrZDpHBSvZ8khsm5seCBNJBy8tqHEKr build
+ 2.87 MiB / 2.87 MiB [======================================================================================================] 100.00%
+```
 take last hash displayed and add it to content
-```
-upload may take some time
+```Followed directions [here](https://medium.com/the-ethereum-name-service/how-to-host-your-dapp-with-ipfs-ens-and-access-it-via-ethdns-c96046059d87)```
+
+upload may take some time to propagate and be available.

@@ -26,7 +26,6 @@ export default class Hangman {
   }
 
   async isFactoryAuthorized(userAddress) {
-    console.log(this.Factory.address)
     let allowance = await this.LinkToken.allowance(userAddress, this.Factory.address);
     return (allowance >= this.paymentAmount)
   }

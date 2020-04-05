@@ -1,5 +1,5 @@
 ## Hangman
-Play hangman on the Ethereum network. 
+Play hangman on the Ethereum network. (Available currently on Ropsten network)
 
 Hangman is a game where a player has limited attempts to guess a secret word. The player is allowed to guess a letter contained in the secret or guess the entire secret. Each incorrect guess uses an attempt. When all attempts have been made or if the word has been guessed correctly the game ends.
 

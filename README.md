@@ -92,7 +92,8 @@ added QmaHNhLf89FacunsrZDpHBSvZ8khsm5seCBNJBy8tqHEKr build
  2.87 MiB / 2.87 MiB
  [====================] 100.00%
 ```
-take last hash displayed and add it to content on ens public resolver
+
+Take last hash displayed and add it to content on ens public resolver
 
 Followed directions [here](https://medium.com/the-ethereum-name-service/how-to-host-your-dapp-with-ipfs-ens-and-access-it-via-ethdns-c96046059d87)
 

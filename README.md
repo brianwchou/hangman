@@ -75,3 +75,13 @@ const CHAINLINK_HTTP_GET_JSON_PARSE_JOB_ID = "76ca51361e4e444f8a9b18ae350a5725";
 const PAYMENT = 1;
 ```
 https://ropsten.explorer.chain.link/
+
+### Deployment
+register ethereum name on *ens link here*
+requires ipfs
+
+* run yarn build inside of web/
+* ipfs add -f build/
+* take last hash displayed and add it to content
+
+upload may take some time
